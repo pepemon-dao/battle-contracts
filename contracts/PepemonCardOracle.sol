@@ -3,12 +3,12 @@
 pragma solidity ^0.8.0;
 pragma experimental ABIEncoderV2;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "./lib/AdminRole.sol";
 
 /**
 This contract acts as the oracle, it contains battling information for both the Pepemon Battle and Support cards
 **/
-contract PepemonCardOracle is Ownable {
+contract PepemonCardOracle is AdminRole {
     enum BattleCardType {
         PLANT,
         FIRE
@@ -64,7 +64,12 @@ contract PepemonCardOracle is Ownable {
 
     struct EffectOne {
         // If power is 0, it is equal to the total of all normal offense/defense cards in the current turn.
-        int256 power;
+        
+        //basePower = power if req not met
+        int256 basePower;
+
+        //triggeredPower = power if req met
+        int256 triggeredPower;
         EffectTo effectTo;
         EffectFor effectFor;
         uint256 reqCode; //requirement code
@@ -86,38 +91,15 @@ contract PepemonCardOracle is Ownable {
     event SupportCardCreated(address sender, uint256 cardId);
     event SupportCardUpdated(address sender, uint256 cardId);
 
-    function addBattleCard(BattleCardStats memory cardData) public onlyOwner {
+    function addBattleCard(BattleCardStats memory cardData) public onlyAdmin {
         require(battleCardStats[cardData.battleCardId].battleCardId == 0, "PepemonCard: BattleCard already exists");
-
-        BattleCardStats storage _card = battleCardStats[cardData.battleCardId];
-        _card.battleCardId = cardData.battleCardId;
-        _card.battleCardType = cardData.battleCardType;
-        _card.name = cardData.name;
-        _card.hp = cardData.hp;
-        _card.spd = cardData.spd;
-        _card.inte = cardData.inte;
-        _card.def = cardData.def;
-        _card.atk = cardData.atk;
-        _card.sDef = cardData.sDef;
-        _card.sAtk = cardData.sAtk;
-
+        battleCardStats[cardData.battleCardId]=cardData;
         emit BattleCardCreated(msg.sender, cardData.battleCardId);
     }
 
-    function updateBattleCard(BattleCardStats memory cardData) public onlyOwner {
+    function updateBattleCard(BattleCardStats memory cardData) public onlyAdmin {
         require(battleCardStats[cardData.battleCardId].battleCardId != 0, "PepemonCard: BattleCard not found");
-
-        BattleCardStats storage _card = battleCardStats[cardData.battleCardId];
-        _card.hp = cardData.hp;
-        _card.battleCardType = cardData.battleCardType;
-        _card.name = cardData.name;
-        _card.spd = cardData.spd;
-        _card.inte = cardData.inte;
-        _card.def = cardData.def;
-        _card.atk = cardData.atk;
-        _card.sDef = cardData.sDef;
-        _card.sAtk = cardData.sAtk;
-
+        battleCardStats[cardData.battleCardId]=cardData;
         emit BattleCardUpdated(msg.sender, cardData.battleCardId);
     }
 
@@ -126,37 +108,15 @@ contract PepemonCardOracle is Ownable {
         return battleCardStats[_id];
     }
 
-    function addSupportCard(SupportCardStats memory cardData) public onlyOwner {
+    function addSupportCard(SupportCardStats memory cardData) public onlyAdmin {
         require(supportCardStats[cardData.supportCardId].supportCardId == 0, "PepemonCard: SupportCard already exists");
-
-        SupportCardStats storage _card = supportCardStats[cardData.supportCardId];
-        _card.supportCardId = cardData.supportCardId;
-        _card.supportCardType = cardData.supportCardType;
-        _card.name = cardData.name;
-        for (uint256 i = 0; i < cardData.effectOnes.length; i++) {
-            _card.effectOnes.push(cardData.effectOnes[i]);
-        }
-        _card.effectMany = cardData.effectMany;
-        _card.unstackable = cardData.unstackable;
-        _card.unresettable = cardData.unresettable;
-
+        supportCardStats[cardData.supportCardId]=cardData;
         emit SupportCardCreated(msg.sender, cardData.supportCardId);
     }
 
-    function updateSupportCard(SupportCardStats memory cardData) public onlyOwner {
+    function updateSupportCard(SupportCardStats memory cardData) public onlyAdmin {
         require(supportCardStats[cardData.supportCardId].supportCardId != 0, "PepemonCard: SupportCard not found");
-
-        SupportCardStats storage _card = supportCardStats[cardData.supportCardId];
-        _card.supportCardId = cardData.supportCardId;
-        _card.supportCardType = cardData.supportCardType;
-        _card.name = cardData.name;
-        for (uint256 i = 0; i < cardData.effectOnes.length; i++) {
-            _card.effectOnes.push(cardData.effectOnes[i]);
-        }
-        _card.effectMany = cardData.effectMany;
-        _card.unstackable = cardData.unstackable;
-        _card.unresettable = cardData.unresettable;
-
+        supportCardStats[cardData.supportCardId]=cardData;
         emit SupportCardUpdated(msg.sender, cardData.supportCardId);
     }
 
