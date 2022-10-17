@@ -31,7 +31,7 @@ jobs:
       
       # Build contracts
       - name: Build solidity contracts
-        run: npx hardhat build
+        run: npx hardhat compile
       
       # Test contracts
       - name: Run contract tests
