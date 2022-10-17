@@ -1,0 +1,40 @@
+name: Run hardhat tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+    branches: [ '*' ]
+
+permissions:
+  contents: write
+  checks: write
+
+jobs:
+  build:
+    name: Build the Pepemon Unity Project 
+    runs-on: ubuntu-latest
+    concurrency: ci-${{ github.ref }}
+    steps:
+      # Checkout
+      - uses: actions/checkout@v3
+      
+      # Install Node JS
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+      
+      # Install dependencies
+      - name: Install dependencies
+        run: npm ci
+      
+      # Build contracts
+      - name: Build contracts
+        run: npx hardhat build
+      
+      # Test contracts
+      - name: Test contracts
+        run: npx hardhat test
