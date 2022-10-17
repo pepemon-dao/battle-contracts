@@ -9,7 +9,7 @@ import "./lib/ChainLinkRngOracle.sol";
 
 contract PepemonBattle is AdminRole {
     
-    event BattleCreated(uint256 battleId, address player1Addr, address player2Addr);
+    event BattleCreated(address indexed player1Addr, address indexed player2Addr, uint256 battleId);
 
     mapping (uint => uint) public battleIdRNGSeed;
 
@@ -150,7 +150,7 @@ contract PepemonBattle is AdminRole {
         //Write battle into mapping
         battles[_nextBattleId] = newBattle;
         //Emit event
-        emit BattleCreated(_nextBattleId, p1Addr, p2Addr);
+        emit BattleCreated(p1Addr, p2Addr, _nextBattleId);
         _nextBattleId++;
     }
 
