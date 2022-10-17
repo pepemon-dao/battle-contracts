@@ -1,6 +1,6 @@
 import { getProvider } from './helpers/contract';
-import RNGArtifact from '../artifacts/contracts/RandomNumberGenerator.sol/RandomNumberGenerator.json';
-import { RandomNumberGenerator } from '../typechain';
+import RNGArtifact from '../artifacts/contracts/SampleChainLinkRngOracle.sol/SampleChainLinkRngOracle.json';
+import { ChainLinkRngOracle } from '../typechain';
 import { expect } from 'chai';
 import { deployContract } from 'ethereum-waffle';
 import { Contract } from 'ethers';
@@ -8,10 +8,10 @@ import { Contract } from 'ethers';
 const [alice, bob] = getProvider().getWallets();
 
 describe('Chainlink Random Numnber', () => {
-  let randomNumberContract: RandomNumberGenerator;
+  let randomNumberContract: ChainLinkRngOracle;
 
   beforeEach(async () => {
-    randomNumberContract = (await deployContract(alice, RNGArtifact)) as RandomNumberGenerator;
+    randomNumberContract = (await deployContract(alice, RNGArtifact)) as ChainLinkRngOracle;
   });
 
   describe('Get Random Number', async () => {
