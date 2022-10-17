@@ -33,7 +33,7 @@ const config: HardhatUserConfig = {
   defaultNetwork: 'hardhat',
   networks: {
     rinkeby: {
-      url: 'https://eth-rinkeby.alchemyapi.io/v2/' + environment.alchemyRinkebyKey,
+      url: 'https://eth-rinkeby.g.alchemy.com/v2/' + environment.alchemyRinkebyKey,
       chainId: 4,
       accounts: {
         mnemonic: 'test test test test test test test test test test test junk',
@@ -45,7 +45,7 @@ const config: HardhatUserConfig = {
     hardhat: {
       forking: {
         enabled: true,
-        url: 'https://eth-mainnet.alchemyapi.io/v2/' + environment.alchemyKey,
+        url: 'https://eth-mainnet.g.alchemy.com/v2/' + environment.alchemyKey,
       },
       accounts: {
         mnemonic: '',
