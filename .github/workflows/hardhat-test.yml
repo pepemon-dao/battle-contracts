@@ -1,20 +1,8 @@
 name: Run hardhat tests
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-  workflow_dispatch:
-    branches: [ '*' ]
-
-permissions:
-  contents: write
-  checks: write
-
+on: [push]
 jobs:
   build:
-    name: Build the Pepemon Unity Project 
+    name: Build the Pepemon Battle contracts
     runs-on: ubuntu-latest
     concurrency: ci-${{ github.ref }}
     steps:
@@ -32,9 +20,9 @@ jobs:
         run: npm ci
       
       # Build contracts
-      - name: Build contracts
+      - name: Build solidity contracts
         run: npx hardhat build
       
       # Test contracts
-      - name: Test contracts
+      - name: Run contract tests
         run: npx hardhat test
