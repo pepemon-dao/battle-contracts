@@ -205,6 +205,10 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
     }
 
     // VIEWS
+    function getDeckCount(address player) public view returns (uint256) {
+        return playerToDecks[player].length;
+    }
+
     function getBattleCardInDeck(uint256 _deckId) public view returns (uint256) {
         return decks[_deckId].battleCardId;
     }
