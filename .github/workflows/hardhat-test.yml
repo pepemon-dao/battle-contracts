@@ -35,4 +35,6 @@ jobs:
       
       # Test contracts
       - name: Run contract tests
+        env:
+          ALCHEMY_API_KEY: ${{secrets.ALCHEMY_API_KEY}}
         run: npx hardhat test
