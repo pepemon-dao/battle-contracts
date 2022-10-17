@@ -1,0 +1,38 @@
+name: Run hardhat tests
+on: [push]
+jobs:
+  build:
+    name: Build the Pepemon Battle contracts
+    runs-on: ubuntu-latest
+    concurrency: ci-${{ github.ref }}
+    steps:
+      # Checkout
+      - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+
+      # Reconfigure git to use HTTP auth.
+      # This is required for installing git-based dependencies on NPM
+      # https://github.com/actions/setup-node/issues/214#issuecomment-810829250
+      - name: Reconfigure git to use HTTP authentication
+        run: >
+          git config --global url."https://github.com/".insteadOf
+          ssh://git@github.com/
+
+      # Install Node JS
+      - name: Use Node.js 14.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+      
+      # Install dependencies
+      - name: Install dependencies
+        run: npm ci
+      
+      # Build contracts
+      - name: Build solidity contracts
+        run: npx hardhat compile
+      
+      # Test contracts
+      - name: Run contract tests
+        run: npx hardhat test
