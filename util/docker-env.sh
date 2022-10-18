@@ -10,5 +10,6 @@ docker run --rm -it --net=host \
 	-v $(pwd):$(pwd) \
 	--user $(id -u):$(id -g) \
 	--workdir $(pwd) \
+	--env-file "${DIR}/../.env" \
 	--entrypoint bash \
 	pepemon-dev

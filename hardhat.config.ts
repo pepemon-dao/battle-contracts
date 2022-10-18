@@ -45,16 +45,16 @@ const config: HardhatUserConfig = {
     hardhat: {
       forking: {
         enabled: true,
-        url: 'https://eth-mainnet.g.alchemy.com/v2/' + environment.alchemyKey,
+        url: 'https://polygon-mainnet.g.alchemy.com/v2/' + environment.alchemyKey,
       },
-      accounts: {
-        mnemonic: '',
-        path: "m/44'/60'/0'/0",
-        initialIndex: 0,
-        count: 0,
-      },
+      // accounts: {
+      //   mnemonic: '',
+      //   path: "m/44'/60'/0'/0",
+      //   initialIndex: 0,
+      //   count: 0,
+      // },
       allowUnlimitedContractSize: true,
-      blockGasLimit: 0x1fffffffffffff,
+      // blockGasLimit: 0x1fffffffffffff,
     },
   },
   namedAccounts: {
