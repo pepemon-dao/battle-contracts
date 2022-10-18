@@ -104,7 +104,7 @@ describe('Card', () => {
               sAtk: 20,
               sDef: 20,
             })
-          ).to.be.revertedWith('revert PepemonCard: BattleCard not found');
+          ).to.be.revertedWith('PepemonCard: BattleCard not found');
         });
       });
     });
@@ -119,7 +119,7 @@ describe('Card', () => {
       describe('reverts if', async () => {
         it('battleCard id is not found', async () => {
           await expect(cardContract.getBattleCardById(2)).to.be.revertedWith(
-            'revert PepemonCard: BattleCard not found'
+            'PepemonCard: BattleCard not found'
           );
         });
       });
@@ -134,7 +134,8 @@ describe('Card', () => {
         name: 'Fast Attack',
         effectOnes: [
           {
-            power: 2,
+            basePower: 2,
+            triggeredPower: 2,
             effectTo: 0,
             effectFor: 0,
             reqCode: 0,
@@ -160,7 +161,8 @@ describe('Card', () => {
           name: 'Mid Attack',
           effectOnes: [
             {
-              power: 3,
+              basePower: 3,
+              triggeredPower: 3,
               effectTo: 0,
               effectFor: 0,
               reqCode: 0,
@@ -190,7 +192,8 @@ describe('Card', () => {
               name: 'Fast Attack',
               effectOnes: [
                 {
-                  power: 2,
+                  basePower: 2,
+                  triggeredPower: 2,
                   effectTo: 0,
                   effectFor: 0,
                   reqCode: 0,
@@ -219,7 +222,8 @@ describe('Card', () => {
           name: 'Fast Attackkkkk',
           effectOnes: [
             {
-              power: 20,
+              basePower: 20,
+              triggeredPower: 20,
               effectTo: 0,
               effectFor: 0,
               reqCode: 0,
@@ -248,7 +252,8 @@ describe('Card', () => {
               name: 'Fast Attackkkkk',
               effectOnes: [
                 {
-                  power: 20,
+                  basePower: 20,
+                  triggeredPower: 20,
                   effectTo: 0,
                   effectFor: 0,
                   reqCode: 0,

@@ -1,9 +1,9 @@
 import { getProvider } from './helpers/contract';
-import { PepemonBattle, PepemonCardOracle, PepemonCardDeck, RandomNumberGenerator } from '../typechain';
+import { PepemonBattle, PepemonCardOracle, PepemonCardDeck, ChainLinkRngOracle } from '../typechain';
 import { deployContract, deployMockContract, MockContract } from 'ethereum-waffle';
 import DeckArtifact from '../artifacts/contracts/PepemonCardDeck.sol/PepemonCardDeck.json';
 import CardArtifact from '../artifacts/contracts/PepemonCardOracle.sol/PepemonCardOracle.json';
-import RNGArtifact from '../artifacts/contracts/RandomNumberGenerator.sol/RandomNumberGenerator.json';
+import RNGArtifact from '../artifacts/contracts/SampleChainLinkRngOracle.sol/SampleChainLinkRngOracle.json';
 import BattleArtifact from '../artifacts/contracts/PepemonBattle.sol/PepemonBattle.json';
 
 import * as Pepesaur from './battle_setups/battle_cards/01.json';
@@ -20,7 +20,7 @@ describe('::Battle', async () => {
   let battleContract: PepemonBattle;
   let pepemonDeckOracle: PepemonCardDeck | MockContract;
   let pepemonCardOracle: PepemonCardOracle | MockContract;
-  let rng: RandomNumberGenerator | MockContract;
+  let rng: ChainLinkRngOracle | MockContract;
 
   beforeEach(async () => {
     pepemonDeckOracle = await deployMockContract(alice, DeckArtifact.abi);
