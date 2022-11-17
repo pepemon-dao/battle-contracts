@@ -64,10 +64,11 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
 
     // MODIFIERS
     modifier sendersDeck(uint256 _deckId) {
-        require(msg.sender == ownerOf(_deckId));
+        require(msg.sender == ownerOf(_deckId), "PepemonCardDeck: Not your deck");
         _;
     }
 
+    // PUBLIC METHODS
     function setBattleCardAddress(address _battleCardAddress) public onlyOwner {
         battleCardAddress = _battleCardAddress;
     }
@@ -90,7 +91,7 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
         nextDeckId = nextDeckId.add(1);
     }
 
-    function addBattleCardToDeck(uint256 deckId, uint256 battleCardId) public {
+    function addBattleCardToDeck(uint256 deckId, uint256 battleCardId) public sendersDeck(deckId) {
         require(
             PepemonFactory(battleCardAddress).balanceOf(msg.sender, battleCardId) >= 1,
             "PepemonCardDeck: Don't own battle card"
@@ -106,9 +107,7 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
         returnBattleCardFromDeck(oldBattleCardId);
     }
 
-    function removeBattleCardFromDeck(uint256 _deckId) public {
-        require(ownerOf(_deckId) == msg.sender, "PepemonCardDeck: Not your deck");
-
+    function removeBattleCardFromDeck(uint256 _deckId) public sendersDeck(_deckId) {
         uint256 oldBattleCardId = decks[_deckId].battleCardId;
 
         decks[_deckId].battleCardId = 0;
@@ -116,13 +115,13 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
         returnBattleCardFromDeck(oldBattleCardId);
     }
 
-    function addSupportCardsToDeck(uint256 deckId, SupportCardRequest[] memory supportCards) public {
+    function addSupportCardsToDeck(uint256 deckId, SupportCardRequest[] memory supportCards) public sendersDeck(deckId) {
         for (uint256 i = 0; i < supportCards.length; i++) {
             addSupportCardToDeck(deckId, supportCards[i].supportCardId, supportCards[i].amount);
         }
     }
 
-    function removeSupportCardsFromDeck(uint256 _deckId, SupportCardRequest[] memory _supportCards) public {
+    function removeSupportCardsFromDeck(uint256 _deckId, SupportCardRequest[] memory _supportCards) public sendersDeck(_deckId) {
         for (uint256 i = 0; i < _supportCards.length; i++) {
             removeSupportCardFromDeck(_deckId, _supportCards[i].supportCardId, _supportCards[i].amount);
         }

@@ -87,10 +87,10 @@ describe('::Deck', () => {
     });
 
     describe('Permissions', async () => {
-      it("Should prevent adding cards you don't have", async () => {
-        await battleCard.mock.balanceOf.withArgs(bob.address, 1).returns(0);
+      it("Should prevent adding battle cards you don't have", async () => {
+        await battleCard.mock.balanceOf.withArgs(alice.address, 1).returns(0);
 
-        await expect(bobSignedDeck.addBattleCardToDeck(1, 1)).to.be.revertedWith(
+        await expect(deck.addBattleCardToDeck(1, 1)).to.be.revertedWith(
           "PepemonCardDeck: Don't own battle card"
         );
       });
@@ -258,10 +258,10 @@ describe('::Deck', () => {
     });
 
     describe('Permissions', async () => {
-      it("Should prevent adding cards you don't have", async () => {
-        await supportCard.mock.balanceOf.withArgs(bob.address, 20).returns(0);
+      it("Should prevent adding support cards you don't have", async () => {
+        await supportCard.mock.balanceOf.withArgs(alice.address, 20).returns(0);
 
-        await expect(bobSignedDeck.addSupportCardsToDeck(1, [{supportCardId: 20, amount: 1}])).to.be.revertedWith(
+        await expect(deck.addSupportCardsToDeck(1, [{supportCardId: 20, amount: 1}])).to.be.revertedWith(
           "PepemonCardDeck: You don't have enough of this card"
         );
       });
