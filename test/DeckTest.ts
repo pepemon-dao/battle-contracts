@@ -94,8 +94,29 @@ describe('::Deck', () => {
         );
       });
 
+      it("Should prevent adding a battle card to a deck which you don't own", async () => {
+        await battleCard.mock.balanceOf.withArgs(bob.address, 1).returns(1);
+        await expect(bobSignedDeck.addBattleCardToDeck(1, 1)).to.be.revertedWith(
+          'PepemonCardDeck: Not your deck'
+        );
+      });
+
       it("Should prevent removing a battle card from a deck which you don't own", async () => {
         await expect(bobSignedDeck.removeBattleCardFromDeck(1)).to.be.revertedWith(
+          'PepemonCardDeck: Not your deck'
+        );
+      });
+
+      it("Should prevent adding a support card to a deck which you don't own", async () => {
+        await supportCard.mock.balanceOf.withArgs(bob.address, 20).returns(1);
+        await expect(bobSignedDeck.addSupportCardsToDeck(1, [{supportCardId: 20, amount: 1}])).to.be.revertedWith(
+          'PepemonCardDeck: Not your deck'
+        );
+      });
+
+      it("Should prevent removing a support card from a deck which you don't own", async () => {
+        await deck.addSupportCardsToDeck(1, [{ supportCardId: 20, amount: 1 }]);
+        await expect(bobSignedDeck.removeSupportCardsFromDeck(1, [{supportCardId: 20, amount: 1}])).to.be.revertedWith(
           'PepemonCardDeck: Not your deck'
         );
       });
@@ -202,7 +223,7 @@ describe('::Deck', () => {
     });
 
     describe('reverts if', async () => {
-      it('support card count is lower than min number', async () => {
+      it('support card count is lower than 0', async () => {
         await supportCard.mock.balanceOf.withArgs(alice.address, 20).returns(50);
         await supportCard.mock.balanceOf.withArgs(alice.address, 12).returns(30);
 
@@ -219,10 +240,10 @@ describe('::Deck', () => {
           deck.removeSupportCardsFromDeck(1, [
             {
               supportCardId: 20,
-              amount: 30,
+              amount: 46,
             },
           ])
-        ).to.be.revertedWith('PepemonCardDeck: Deck underflow');
+        ).to.be.reverted;
       });
 
       it('support card count is greater than max number', async () => {
