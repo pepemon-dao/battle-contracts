@@ -87,10 +87,20 @@ describe('::Deck', () => {
     });
 
     describe('Permissions', async () => {
-      it("Should prevent adding cards you don't have", async () => {
-        await battleCard.mock.balanceOf.withArgs(bob.address, 1).returns(0);
-        await expect(bobSignedDeck.addBattleCardToDeck(1, 1)).to.be.revertedWith(
+      it("Should prevent adding battle cards you don't have", async () => {
+        await battleCard.mock.balanceOf.withArgs(alice.address, 1).returns(0);
+
+        await expect(deck.addBattleCardToDeck(1, 1)).to.be.revertedWith(
           "PepemonCardDeck: Don't own battle card"
+        );
+      });
+
+      it("Should prevent adding a battle card to a deck which you don't own", async () => {
+        await battleCard.mock.balanceOf.withArgs(bob.address, 1).returns(1);
+        await battleCard.mock.safeTransferFrom.withArgs(bob.address, deck.address, 1, 1, '0x').returns();
+
+        await expect(bobSignedDeck.addBattleCardToDeck(1, 1)).to.be.revertedWith(
+          'PepemonCardDeck: Not your deck'
         );
       });
 
@@ -202,7 +212,7 @@ describe('::Deck', () => {
     });
 
     describe('reverts if', async () => {
-      it('support card count is lower than min number', async () => {
+      it('support card count is lower than 0', async () => {
         await supportCard.mock.balanceOf.withArgs(alice.address, 20).returns(50);
         await supportCard.mock.balanceOf.withArgs(alice.address, 12).returns(30);
 
@@ -219,10 +229,10 @@ describe('::Deck', () => {
           deck.removeSupportCardsFromDeck(1, [
             {
               supportCardId: 20,
-              amount: 30,
+              amount: 46,
             },
           ])
-        ).to.be.revertedWith('PepemonCardDeck: Deck underflow');
+        ).to.be.reverted;
       });
 
       it('support card count is greater than max number', async () => {
@@ -244,6 +254,35 @@ describe('::Deck', () => {
             },
           ])
         ).to.be.revertedWith('PepemonCardDeck: Deck overflow');
+      });
+    });
+
+    describe('Permissions', async () => {
+      it("Should prevent adding support cards you don't have", async () => {
+        await supportCard.mock.balanceOf.withArgs(alice.address, 20).returns(0);
+
+        await expect(deck.addSupportCardsToDeck(1, [{supportCardId: 20, amount: 1}])).to.be.revertedWith(
+          "PepemonCardDeck: You don't have enough of this card"
+        );
+      });
+
+      it("Should prevent adding a support card to a deck which you don't own", async () => {
+        await supportCard.mock.balanceOf.withArgs(bob.address, 20).returns(1);
+        await supportCard.mock.safeTransferFrom.withArgs(bob.address, deck.address, 20, 1, '0x').returns();
+
+        await expect(bobSignedDeck.addSupportCardsToDeck(1, [{supportCardId: 20, amount: 1}])).to.be.revertedWith(
+          'PepemonCardDeck: Not your deck'
+        );
+      });
+
+      it("Should prevent removing a support card from a deck which you don't own", async () => {
+        await supportCard.mock.safeTransferFrom.withArgs(deck.address, bob.address, 20, 1, '0x').returns();
+        await supportCard.mock.safeTransferFrom.withArgs(alice.address, deck.address, 20, 1, '0x').returns();
+
+        await deck.addSupportCardsToDeck(1, [{ supportCardId: 20, amount: 1 }]);
+        await expect(bobSignedDeck.removeSupportCardsFromDeck(1, [{supportCardId: 20, amount: 1}])).to.be.revertedWith(
+          'PepemonCardDeck: Not your deck'
+        );
       });
     });
   });
