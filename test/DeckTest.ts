@@ -189,6 +189,46 @@ describe('::Deck', () => {
       });
     });
 
+    it('Should consistently add, remove, and retrieve support cards from deck', async () => {
+      await supportCard.mock.safeTransferFrom.withArgs(alice.address, deck.address, 29, 1, '0x').returns();
+      await supportCard.mock.safeTransferFrom.withArgs(alice.address, deck.address, 30, 1, '0x').returns();
+      await supportCard.mock.safeTransferFrom.withArgs(alice.address, deck.address, 31, 1, '0x').returns();
+      await supportCard.mock.safeTransferFrom.withArgs(alice.address, deck.address, 32, 1, '0x').returns();
+      await supportCard.mock.safeTransferFrom.withArgs(deck.address, alice.address, 30, 1, '0x').returns();
+      await supportCard.mock.safeTransferFrom.withArgs(deck.address, alice.address, 32, 1, '0x').returns();
+
+      await supportCard.mock.balanceOf.withArgs(alice.address, 29).returns(5);
+      await supportCard.mock.balanceOf.withArgs(alice.address, 30).returns(5);
+      await supportCard.mock.balanceOf.withArgs(alice.address, 31).returns(5);
+      await supportCard.mock.balanceOf.withArgs(alice.address, 32).returns(5);
+
+      await deck.addSupportCardsToDeck(1, [
+        { supportCardId: 29, amount: 1 },
+        { supportCardId: 30, amount: 1 },
+        { supportCardId: 31, amount: 1 },
+        { supportCardId: 32, amount: 1 },
+      ]);
+
+      await deck.removeSupportCardsFromDeck(1, [
+        {
+          supportCardId: 30,
+          amount: 1,
+        },
+      ]);
+      await deck.removeSupportCardsFromDeck(1, [
+        {
+          supportCardId: 32,
+          amount: 1,
+        },
+      ]);
+
+      await deck.getAllSupportCardsInDeck(1).then((supportCards: BigNumber[]) => {
+        expect(supportCards.length).to.eq(2);
+        expect(supportCards[0]).to.eq(29);
+        expect(supportCards[1]).to.eq(31);
+      });
+    });
+
     it('Should shuffle deck in random order', async () => {
       await supportCard.mock.balanceOf.withArgs(alice.address, 20).returns(23);
       await supportCard.mock.balanceOf.withArgs(alice.address, 12).returns(15);

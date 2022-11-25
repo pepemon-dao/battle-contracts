@@ -170,7 +170,16 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
         decks[_deckId].supportCardCount = decks[_deckId].supportCardCount.sub(_amount);
 
         if (supportCardList.count == 0) {
+            uint256 lastItemIndex = decks[_deckId].supportCardTypeList.length - 1;
+
+            // update the pointer of the item to be swapped
+            uint256 lastSupportCardId = decks[_deckId].supportCardTypeList[lastItemIndex];
+            decks[_deckId].supportCardTypes[lastSupportCardId].pointer = supportCardList.pointer;
+
+            // swap the last item of the list with the one to be deleted
+            decks[_deckId].supportCardTypeList[supportCardList.pointer] = decks[_deckId].supportCardTypeList[lastItemIndex];
             decks[_deckId].supportCardTypeList.pop();
+
             delete decks[_deckId].supportCardTypes[_supportCardId];
         }
 
