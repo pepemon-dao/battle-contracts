@@ -12,6 +12,8 @@ import 'hardhat-deploy-ethers';
 
 import 'solidity-coverage';
 
+console.log("Forking is " + (environment.disableForking ? "disabled" : "enabled"));
+
 const config: HardhatUserConfig = {
   solidity: {
     version: '0.8.0',
@@ -44,7 +46,7 @@ const config: HardhatUserConfig = {
     },
     hardhat: {
       forking: {
-        enabled: true,
+        enabled: !environment.disableForking,
         url: 'https://polygon-mainnet.g.alchemy.com/v2/' + environment.alchemyKey,
       },
       // accounts: {
@@ -55,7 +57,9 @@ const config: HardhatUserConfig = {
       // },
       allowUnlimitedContractSize: true,
       initialBaseFeePerGas: 100,
-      // blockGasLimit: 0x1fffffffffffff,
+      blockGasLimit: 0x1fffffffffffff,
+      gas: 100000000,
+      gasPrice: 8000000000,
     },
   },
   namedAccounts: {

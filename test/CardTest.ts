@@ -1,13 +1,13 @@
-import { getProvider } from './helpers/contract';
+import { getWallets } from './helpers/contract';
 import { PepemonCardOracle } from '../typechain';
 import CardArtifact from '../artifacts/contracts/PepemonCardOracle.sol/PepemonCardOracle.json';
 
 import { expect } from 'chai';
 import { deployContract } from 'ethereum-waffle';
 
-const [alice, bob] = getProvider().getWallets();
+const [alice, bob] = getWallets();
 
-describe('Card', () => {
+describe('Card', async () => {
   let cardContract: PepemonCardOracle;
 
   beforeEach(async () => {

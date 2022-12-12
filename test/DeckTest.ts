@@ -1,4 +1,4 @@
-import { deployDeckContract, getProvider } from './helpers/contract';
+import { deployDeckContract, getWallets } from './helpers/contract';
 import { PepemonCardDeck } from '../typechain';
 import { PepemonFactory } from '../typechain';
 import { ChainLinkRngOracle } from '../typechain';
@@ -9,9 +9,9 @@ import { expect } from 'chai';
 import { deployMockContract, MockContract } from 'ethereum-waffle';
 import { BigNumber } from 'ethers';
 
-const [alice, bob] = getProvider().getWallets();
+const [alice, bob] = getWallets();
 
-describe('::Deck', () => {
+describe('::Deck', async () => {
   let deck: PepemonCardDeck;
   let bobSignedDeck: PepemonCardDeck;
   let battleCard: PepemonFactory | MockContract;
