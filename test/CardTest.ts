@@ -7,7 +7,7 @@ import { deployContract } from 'ethereum-waffle';
 
 const [alice, bob] = getWallets();
 
-describe('Card', () => {
+describe('Card', async () => {
   let cardContract: PepemonCardOracle;
 
   beforeEach(async () => {

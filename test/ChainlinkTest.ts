@@ -7,7 +7,7 @@ import { Contract } from 'ethers';
 
 const [alice, bob] = getWallets();
 
-describe('Chainlink Random Numnber', () => {
+describe('Chainlink Random Numnber', async () => {
   let randomNumberContract: ChainLinkRngOracle;
 
   beforeEach(async () => {

@@ -11,7 +11,7 @@ import { BigNumber } from 'ethers';
 
 const [alice, bob] = getWallets();
 
-describe('::Deck', () => {
+describe('::Deck', async () => {
   let deck: PepemonCardDeck;
   let bobSignedDeck: PepemonCardDeck;
   let battleCard: PepemonFactory | MockContract;
