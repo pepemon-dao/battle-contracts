@@ -1,3 +1,5 @@
+import {providers, Wallet} from 'ethers';
+import hre from 'hardhat'
 import { deployContract, MockProvider } from 'ethereum-waffle';
 import DeckArtifact from '../../artifacts/contracts/PepemonCardDeck.sol/PepemonCardDeck.json';
 import BattleArtifact from '../../artifacts/contracts/PepemonBattle.sol/PepemonBattle.json';
@@ -5,13 +7,24 @@ import BattleArtifact from '../../artifacts/contracts/PepemonBattle.sol/PepemonB
 import { Signer } from 'ethers';
 import { PepemonCardDeck, PepemonBattle } from '../../typechain';
 
-let provider: MockProvider;
+let provider: providers.JsonRpcProvider;
 
 export function getProvider() {
   if (provider == undefined) {
-    provider = new MockProvider();
+    provider = hre.ethers.provider;
   }
+
   return provider;
+}
+
+export function getWallets() {
+  let p = getProvider();
+  return [
+    new Wallet("0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d", p),
+    new Wallet("0x5de4111afa1a4b94908f83103eb1f1706367c2e68ca870fc3fb9a804cdab365a", p),
+    new Wallet("0x7c852118294e51e653712a81e05800f419141751be58f605c371e15141b007a6", p),
+    new Wallet("0x47e179ec197488593b187f80a00eb0da91f1b9d0b13f8733639f19c30a34926a", p)
+  ];
 }
 
 export async function deployDeckContract(signer: Signer) {

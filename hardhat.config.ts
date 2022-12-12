@@ -55,7 +55,8 @@ const config: HardhatUserConfig = {
       // },
       allowUnlimitedContractSize: true,
       initialBaseFeePerGas: 100,
-      // blockGasLimit: 0x1fffffffffffff,
+      blockGasLimit: 0x1fffffffffffff,
+      gas: 6000000,
     },
   },
   namedAccounts: {

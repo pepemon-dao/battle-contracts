@@ -1,11 +1,11 @@
-import { getProvider } from './helpers/contract';
+import { getWallets } from './helpers/contract';
 import RNGArtifact from '../artifacts/contracts/SampleChainLinkRngOracle.sol/SampleChainLinkRngOracle.json';
 import { ChainLinkRngOracle } from '../typechain';
 import { expect } from 'chai';
 import { deployContract } from 'ethereum-waffle';
 import { Contract } from 'ethers';
 
-const [alice, bob] = getProvider().getWallets();
+const [alice, bob] = getWallets();
 
 describe('Chainlink Random Numnber', () => {
   let randomNumberContract: ChainLinkRngOracle;

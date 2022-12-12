@@ -1,4 +1,4 @@
-import { getProvider } from './helpers/contract';
+import { getWallets } from './helpers/contract';
 import { PepemonBattle, PepemonCardOracle, PepemonCardDeck, ChainLinkRngOracle } from '../typechain';
 
 import DeckArtifact from '../artifacts/contracts/PepemonCardDeck.sol/PepemonCardDeck.json';
@@ -9,7 +9,7 @@ import RNGArtifact from '../artifacts/contracts/SampleChainLinkRngOracle.sol/Sam
 import { deployContract, deployMockContract, MockContract } from 'ethereum-waffle';
 import { BigNumber } from 'ethers';
 
-const [alice, bob] = getProvider().getWallets();
+const [alice, bob] = getWallets();
 
 const EffectTo = ['ATTACK', 'STRONG_ATTACK', 'DEFENSE', 'STRONG_DEFENSE', 'SPEED', 'INTELLIGENCE'];
 const EffectFor = ['ME', 'ENEMY'];
