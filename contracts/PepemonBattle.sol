@@ -122,7 +122,7 @@ contract PepemonBattle is AdminRole {
         uint256 p1DeckId,
         address p2Addr,
         uint256 p2DeckId
-    ) public onlyAdmin {
+    ) public onlyAdmin returns (Battle memory, uint256 battleId)  {
         require(p1Addr != p2Addr, "PepemonBattle: Cannot battle yourself");
 
         (uint256 p1BattleCardId, ) = _deckContract.decks(p1DeckId);
@@ -131,7 +131,7 @@ contract PepemonBattle is AdminRole {
         PepemonCardOracle.BattleCardStats memory p1BattleCard = _cardContract.getBattleCardById(p1BattleCardId);
         PepemonCardOracle.BattleCardStats memory p2BattleCard = _cardContract.getBattleCardById(p2BattleCardId);
 
-        Battle storage newBattle;
+        Battle memory newBattle;
         // Initiate battle ID
         newBattle.battleId = _nextBattleId;
         // Initiate player1
@@ -147,11 +147,9 @@ contract PepemonBattle is AdminRole {
         // Set the RNG seed
         battleIdRNGSeed[_nextBattleId] = _randSeed(newBattle);
 
-        //Write battle into mapping
-        battles[_nextBattleId] = newBattle;
         //Emit event
         emit BattleCreated(p1Addr, p2Addr, _nextBattleId);
-        _nextBattleId++;
+        return (newBattle, _nextBattleId++);
     }
 
     function goForBattle(Battle memory battle) public view returns (Battle memory, address winner) {
@@ -215,6 +213,9 @@ contract PepemonBattle is AdminRole {
         player1.hand.currentBCstats = getCardStats(p1BattleCard);
         player2.hand.currentBCstats = getCardStats(p2BattleCard);
 
+        uint256 p1SupportCardIdsLength = _deckContract.getSupportCardCountInDeck(player1.deckId);
+        uint256 p2SupportCardIdsLength = _deckContract.getSupportCardCountInDeck(player2.deckId);
+
         //Refresh cards every 5 turns
         bool isRefreshTurn = (battle.currentTurn % _refreshTurn == 0);
 
@@ -222,10 +223,8 @@ contract PepemonBattle is AdminRole {
             //Need to refresh decks
 
             // Shuffle player1 support cards
-            uint256 p1SupportCardIdsLength = _deckContract.getSupportCardCountInDeck(player1.deckId);
-
             //Create a pseudorandom seed and shuffle the cards 
-            uint[] memory scrambled = _deckContract.shuffleDeck(player1.deckId, 
+            uint[] memory scrambled = _deckContract.shuffleDeck(player1.deckId, // tbd: use in-place shuffling
                 _randMod(
                     69, battle
                 )
@@ -239,8 +238,6 @@ contract PepemonBattle is AdminRole {
             player1.playedCardCount = 0;
 
             //Shuffling player 2 support cards
-            uint256 p2SupportCardIdsLength = _deckContract.getSupportCardCountInDeck(player2.deckId);
-
             //Create a pseudorandom seed and shuffle the cards
             uint[] memory scrambled2 = _deckContract.shuffleDeck(player2.deckId, 
                 _randMod(
@@ -250,7 +247,7 @@ contract PepemonBattle is AdminRole {
 
             //Copy the support cards back into the list
             for (uint256 i = 0; i < p2SupportCardIdsLength; i++) {
-                player1.totalSupportCardIds[i]=scrambled2[i];
+                player2.totalSupportCardIds[i]=scrambled2[i];
             }
             
             //Reset player2 played card counts
@@ -267,13 +264,13 @@ contract PepemonBattle is AdminRole {
 
         // Draw player1 support cards for the new turn
         for (uint256 i = 0; i < player1.hand.currentBCstats.inte; i++) {
-            player1.hand.supportCardInHandIds[i] = player1.totalSupportCardIds[i + player1.playedCardCount];
+            player1.hand.supportCardInHandIds[i] = player1.totalSupportCardIds[(i + player1.playedCardCount) % p1SupportCardIdsLength];
         }
         player1.playedCardCount += player1.hand.currentBCstats.inte;
 
         // Draw player2 support cards for the new turn
         for (uint256 i = 0; i < player2.hand.currentBCstats.inte; i++) {
-            player2.hand.supportCardInHandIds[i] = player2.totalSupportCardIds[i + player2.playedCardCount];
+            player2.hand.supportCardInHandIds[i] = player2.totalSupportCardIds[(i + player2.playedCardCount) % p2SupportCardIdsLength];
         }
         player2.playedCardCount += player2.hand.currentBCstats.inte;
 
