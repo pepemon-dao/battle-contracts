@@ -3,9 +3,10 @@ import hre from 'hardhat'
 import { deployContract, MockProvider } from 'ethereum-waffle';
 import DeckArtifact from '../../artifacts/contracts/PepemonCardDeck.sol/PepemonCardDeck.json';
 import BattleArtifact from '../../artifacts/contracts/PepemonBattle.sol/PepemonBattle.json';
+import PepemonMatchmakerArtifact from '../../artifacts/contracts/PepemonMatchmaker.sol/PepemonMatchmaker.json';
 
 import { Signer } from 'ethers';
-import { PepemonCardDeck, PepemonBattle } from '../../typechain';
+import { PepemonCardDeck, PepemonBattle, PepemonMatchmaker } from '../../typechain';
 
 let provider: providers.JsonRpcProvider;
 
@@ -33,6 +34,10 @@ export async function deployDeckContract(signer: Signer) {
 
 export async function deployBattleContract(signer: Signer) {
   return (await deployContract(signer, BattleArtifact)) as PepemonBattle;
+}
+
+export async function deployMatchmakerContract(signer: Signer, defaultRanking: Number) {
+  return (await deployContract(signer, PepemonMatchmakerArtifact, [defaultRanking])) as PepemonMatchmaker;
 }
 
 export async function mineBlock() {

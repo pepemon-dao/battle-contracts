@@ -2,14 +2,12 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
-import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./PepemonCardDeck.sol";
 import "./lib/RewardPool.sol";
 import "./lib/Elo.sol";
 import "./PepemonCardOracle.sol";
 import "./PepemonBattle.sol";
-import "hardhat/console.sol";
 
 contract PepemonMatchmaker is ERC1155Holder, Ownable {
     event BattleFinished(address indexed winner, address indexed loser, uint256 battleId);
@@ -23,18 +21,20 @@ contract PepemonMatchmaker is ERC1155Holder, Ownable {
     address private _deckAddress;
     address private _rewardPoolAddress;
 
-    uint16 private _defaultRanking = 2000;
-    uint16 private _matchRange = 300;
-    uint16 private _matchRangePerMinute = 1;
+    uint256 private immutable _defaultRanking;
+    uint256 private _matchRange = 300;
+    uint256 private _matchRangePerMinute = 1;
+    uint256 private _kFactor = 16;
 
-    mapping(uint256 => uint16) _waitingDecksIndex;
+    mapping(uint256 => uint256) _waitingDecksIndex; // _waitingDecksIndex[deckId] -> index of waitingDecks
     mapping(uint256 => address) public deckOwner;
     waitingDeckData[] public waitingDecks;
 
-    uint256 public _kFactor = 16;
-    mapping(address => uint16) public playerRanking;
+    mapping(address => uint256) public playerRanking;
 
-    // PUBLIC METHODS
+    constructor (uint256 defaultRanking) {
+        _defaultRanking = defaultRanking; // suggested: 2000
+    }
 
     function setDeckContractAddress(address deckContractAddress) public onlyOwner {
         _deckAddress = deckContractAddress;
@@ -48,31 +48,51 @@ contract PepemonMatchmaker is ERC1155Holder, Ownable {
         _rewardPoolAddress = rewardPoolAddress;
     }
 
-    // dictates how much a player wins/loses in the ranking
+    function setMatchRange(uint256 matchRange, uint256 matchRangePerMinute) public onlyOwner {
+        _matchRange = matchRange;
+        _matchRangePerMinute = matchRangePerMinute;
+    }
+
+    /**
+     * @dev Dictates the rate of change, has a direct influence on how much a player wins/loses in the ranking
+     * @param kFactor Value used to calculate the rate of change in getEloRatingChange
+     */
     function setKFactor(uint256 kFactor) public onlyOwner {
         _kFactor = kFactor;
     }
 
+    /**
+     * @notice Tries to initiate a battle using a specified deck. If no opponents are found, the deck
+     * is placed in a wait list.
+     * @param deckId The Deck of who called this function
+     */
     function enter(uint256 deckId) public {
         require(msg.sender == PepemonCardDeck(_deckAddress).ownerOf(deckId), "PepemonMatchmaker: Not your deck");
+
         // If playerRanking is empty, set default ranking
         if (playerRanking[msg.sender] == 0) {
             playerRanking[msg.sender] = _defaultRanking;
         }
-        // Try find matchmaking partner, if one is found then start the battle, otherwise put in a wait list
+        // Try find matchmaking partner
         (uint256 opponentDeckId, bool found) = findMatchmakingOpponent(deckId);
+
+        // If one is found then start the battle, otherwise put in a wait list
         if (found) {
-            console.logString("shouldnt happen");
             processMatch(deckId, opponentDeckId);
         } else {
-            // transfer deck to contract
+            // Transfer deck to contract
             deckOwner[deckId] = msg.sender;
             PepemonCardDeck(_deckAddress).safeTransferFrom(msg.sender, address(this), deckId, "");
-            _waitingDecksIndex[deckId] = uint16(waitingDecks.length);
+
+            // Save its index to allow deletion without for-loops
+            _waitingDecksIndex[deckId] = waitingDecks.length;
             waitingDecks.push(waitingDeckData(deckId, block.timestamp));
         }
     }
 
+    /**
+     * @notice Transfers a deck back to its owner
+     */
     function exit(uint256 deckId) public {
         require(msg.sender == deckOwner[deckId], "PepemonMatchmaker: Not your deck");
 
@@ -88,78 +108,101 @@ contract PepemonMatchmaker is ERC1155Holder, Ownable {
         delete _waitingDecksIndex[deckId];
     }
 
+    /**
+     * @notice Calculates the Elo change based on the winner's and loser's ratings.
+     * @dev The returned number has 2 decimals of precision, so 1501 = 15.01 Elo change
+     */
     function getEloRatingChange(uint256 winnerRating, uint256 loserRating) public view returns (uint256) {
-        (uint256 change,) = Elo.ratingChange(winnerRating, loserRating, 100, _kFactor);
+        (uint256 change, ) = Elo.ratingChange(winnerRating, loserRating, 100, _kFactor);
         return change;
     }
 
+    /**
+     * @notice Retrieves the number of waiting decks
+     */
     function getWaitingCount() public view returns (uint256) {
         return waitingDecks.length;
     }
 
-    // INTERNALS
-
+    /**
+     * @notice Performs the battle between player 1's and player 2's deck, sends a reward for the winner,
+     * and ajust their ranking
+     * @param player1deckId Deck of the first player
+     * @param player2deckId Deck of the second player
+     */
     function processMatch(uint256 player1deckId, uint256 player2deckId) internal {
         // Evaluate the battle winner
         (address winner, address loser, uint256 battleId) = doBattle(player1deckId, player2deckId);
 
-        // Give the winner a reward
+        // Send a reward to the winner
         sendReward(battleId, winner);
 
-        // Declare winner and loser
+        // Declare loser and winner
         emit BattleFinished(winner, loser, battleId);
 
-        // Adjust ranking accordingly
-        uint16 change = uint16(getEloRatingChange(playerRanking[winner], playerRanking[loser]));
+        // Adjust ranking accordingly. Change is adjusted to remove the extra precision from getEloRatingChange
+        uint256 change = getEloRatingChange(playerRanking[winner], playerRanking[loser]) / 100;
         playerRanking[winner] += change;
-        // Prevent underflow or rank reset if it gets below or equal to zero
-        playerRanking[loser] = int16(playerRanking[loser]) - int16(change) > 0 ? playerRanking[loser]-change : 1;
+
+        // Prevent underflow or rank reset if it gets below or equal to zero. Unlikely, but possible.
+        playerRanking[loser] = int256(playerRanking[loser]) - int256(change) > 0 ? playerRanking[loser] - change : 1;
     }
 
+    /**
+     * @dev Tries to find an opponent's deck based off all waiting player's ratings. The acceptable
+     * difference between players ratings is increased over time by an amount defined by _matchRangePerMinute
+     * @param deckId Deck of the current player trying to start a match
+     * @return opponentDeckId Deck of the opponent, if found. 0 when not found
+     * @return found True if an opponent was found, false otherwise
+     */
     function findMatchmakingOpponent(uint256 deckId) internal view returns (uint256, bool) {
         // Find a waiting deck with a ranking that is within matchRange
-        console.logString("findMatchmakingOpponent: begin");
         for (uint256 i = 0; i < waitingDecks.length; ++i) {
-            // skip own deck, as well as other decks of the same owner
-            if (i == deckId || deckOwner[deckId] == deckOwner[i]) {
+            uint256 currentIterDeck = waitingDecks[i].deckId;
+            // Skip own deck, as well as other decks of the same owner
+            if (i == deckId || msg.sender == deckOwner[currentIterDeck]) {
                 continue;
             }
             // increase precision to allow increasing playerMatchRange every second
-            uint256 mins = (120 * (block.timestamp - waitingDecks[_waitingDecksIndex[i]].enterTimestamp)) / 60;
+            uint256 mins = (120 * (block.timestamp - waitingDecks[i].enterTimestamp)) / 60;
             uint256 playerMatchRange = _matchRange + (mins * _matchRangePerMinute) / 120;
+            // Assume deckOwner[deckId] is msg.sender instead of storing msg.sender in deckOwner[deckId], to save gas
             if (
-                playerRanking[deckOwner[deckId]] > (playerRanking[deckOwner[i]] - playerMatchRange) &&
-                playerRanking[deckOwner[deckId]] < (playerRanking[deckOwner[i]] + playerMatchRange)
+                playerRanking[msg.sender] > (playerRanking[deckOwner[currentIterDeck]] - playerMatchRange) &&
+                playerRanking[msg.sender] < (playerRanking[deckOwner[currentIterDeck]] + playerMatchRange)
             ) {
-                console.logString("findMatchmakingOpponent: found one opponent");
                 return (waitingDecks[i].deckId, true);
             }
         }
-        console.logString("findMatchmakingOpponent: no opponent");
         return (0, false);
     }
 
+    /**
+     * @dev Sends a reward for the winner
+     * @param battleRngSeed Random seed of the battle
+     * @param winner Address of the winner
+     */
     function sendReward(uint256 battleRngSeed, address winner) internal {
-        (address rewardTokenAddress, uint256 rewardTokenId) = RewardPool(_rewardPoolAddress).getNextReward(
-            battleRngSeed
-        );
-        ERC1155(rewardTokenAddress).safeTransferFrom(_rewardPoolAddress, winner, rewardTokenId, 1, "");
+        RewardPool(_rewardPoolAddress).sendReward(battleRngSeed, winner);
     }
 
+    /**
+     * @dev Creates a new battle in the PepemonBattle contract and executes the battle logic
+     * @param player1deckId Deck of the first player
+     * @param player2deckId Deck of the second player
+     * @return winner Address of the winner
+     * @return loser Address of the loser
+     * @return battleId Random seed generated for the battle
+     */
     function doBattle(uint256 player1deckId, uint256 player2deckId) internal returns (address, address, uint256) {
-        require(player1deckId != player2deckId, "PepemonMatchmaker: Cannot battle using the same decks");
-
         (PepemonBattle.Battle memory battle, uint256 battleId) = PepemonBattle(_battleAddress).createBattle(
             deckOwner[player1deckId],
             player1deckId,
             deckOwner[player2deckId],
             player2deckId
         );
-
         (, address winner) = PepemonBattle(_battleAddress).goForBattle(battle);
-
         address loser = (winner == deckOwner[player1deckId] ? deckOwner[player1deckId] : deckOwner[player2deckId]);
-
         return (winner, loser, battleId);
     }
 }
