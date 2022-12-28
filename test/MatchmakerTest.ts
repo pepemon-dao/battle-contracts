@@ -102,9 +102,9 @@ describe('::Matchmaker', async () => {
         'Ownable: caller is not the owner'
       );
     });
-    it('Should prevent anyone but the admins from changing the default', async () => {
+    it('Should prevent anyone but the admins from changing the MatchRange', async () => {
       await matchmaker.enter(aliceDeck);
-      await expect(bobSignedMatchmaker.setKFactor(34)).to.be.revertedWith(
+      await expect(bobSignedMatchmaker.setMatchRange(34, 68)).to.be.revertedWith(
         'Ownable: caller is not the owner'
       );
     });
@@ -116,7 +116,7 @@ describe('::Matchmaker', async () => {
       await matchmaker.setKFactor(16);
       // Divided by 100 to remove the extra precision from getEloRatingChange
       let scoreChange = (await matchmaker.getEloRatingChange(2000, 2000)).toNumber() / 100;
-      console.log(`\tScore change: ${scoreChange}`);
+      //console.log(`\tScore change: ${scoreChange}`);
       expect(scoreChange).to.be.equal(8);
     });
 
@@ -124,9 +124,8 @@ describe('::Matchmaker', async () => {
       const playerHiRank = 2300, playerLoRank = 2000;
       let loRankWinScoreChange = await matchmaker.getEloRatingChange(playerLoRank, playerHiRank); // player with lower ranking won
       let hiRankWinScoreChange = await matchmaker.getEloRatingChange(playerHiRank, playerLoRank); // player with higher ranking won
-      // Divided by 100 to remove the extra precision from getEloRatingChange
-      console.log(`\tloRankWinScoreChange: ${loRankWinScoreChange.toNumber() / 100.0}`);
-      console.log(`\thiRankWinScoreChange: ${hiRankWinScoreChange.toNumber() / 100.0}`);
+      //console.log(`\tloRankWinScoreChange: ${loRankWinScoreChange.toNumber() / 100.0}`);
+      //console.log(`\thiRankWinScoreChange: ${hiRankWinScoreChange.toNumber() / 100.0}`);
       expect(loRankWinScoreChange.toNumber()).to.be.greaterThan(hiRankWinScoreChange.toNumber());
     });
 
@@ -141,6 +140,42 @@ describe('::Matchmaker', async () => {
 
       expect(aliceRanking.toNumber()).to.be.equal(defaultRanking);
       expect(bobRanking.toNumber()).to.be.equal(defaultRanking);
+    });
+
+    it('Should prevent rankings from resetting when going to 0', async () => {
+      // Get an instance of the "Battle" object, which is too big to be created inline
+      let emptyBattleData = await getEmptyBattleInstance();
+
+      // Mock battleContract and RewardPool calls
+      await battle.mock.createBattle.returns(emptyBattleData, 1);
+      await rewardPool.mock.sendReward.returns();
+
+      // set an absurd K-factor so that Bob loses 2000 points in the ranking, because we cant set rankings manually.
+      await matchmaker.setKFactor(4000);
+      await battle.mock.goForBattle.returns(emptyBattleData, alice.address); // alice will win
+      await matchmaker.enter(aliceDeck);
+      await bobSignedMatchmaker.enter(bobDeck); // battle begins here. bob loses 2000 rating points
+
+      let bobRanking = await matchmaker.playerRanking(bob.address);
+      expect(bobRanking.toNumber()).to.be.equal(1);
+    });
+
+    it('Should prevent rankings from going below 0', async () => {
+      // Get an instance of the "Battle" object, which is too big to be created inline
+      let emptyBattleData = await getEmptyBattleInstance();
+
+      // Mock battleContract and RewardPool calls
+      await battle.mock.createBattle.returns(emptyBattleData, 1);
+      await rewardPool.mock.sendReward.returns();
+
+      // set an absurd K-factor so that Bob loses 2000 points in the ranking, because we cant set rankings manually.
+      await matchmaker.setKFactor(4200);
+      await battle.mock.goForBattle.returns(emptyBattleData, alice.address); // alice will win
+      await matchmaker.enter(aliceDeck);
+      await bobSignedMatchmaker.enter(bobDeck); // battle begins here. bob loses 2000 rating points
+
+      let bobRanking = await matchmaker.playerRanking(bob.address);
+      expect(bobRanking.toNumber()).to.be.equal(1);
     });
   });
 
@@ -194,6 +229,29 @@ describe('::Matchmaker', async () => {
       // without the extra precision in findMatchmakingOpponent the match range would be 996 (12*58+300) and fail;
       opponent = await bobSignedMatchmaker.xfindMatchmakingOpponent(bobDeck);
       expect(opponent.toNumber()).to.be.equal(aliceDeck);
+    });
+
+    it('Should prevent a battle between players with large ranking difference if matchRangePerMinute is zero', async () => {
+      // Get an instance of the "Battle" object, which is too big to be created inline
+      let emptyBattleData = await getEmptyBattleInstance();
+
+      // Mock battleContract and RewardPool calls
+      await battle.mock.createBattle.returns(emptyBattleData, 1);
+      await rewardPool.mock.sendReward.returns();
+
+      // set an absurd K-factor so that Bob loses 500 points in the ranking, because we cant set rankings manually.
+      await matchmaker.setKFactor(1000);
+      await battle.mock.goForBattle.returns(emptyBattleData, alice.address); // alice will win
+      await matchmaker.enter(aliceDeck);
+      await bobSignedMatchmaker.enter(bobDeck); // battle begins here. bob loses 500 rating points
+
+      await matchmaker.setMatchRange(300, 0); // disable matchRangePerMinute
+
+      // change the time.
+      await incrementBlockTimestamp(4*60*60) // 4 hours. after this, the block will have 04h00m00s as its timestamp
+
+      let opponent = await bobSignedMatchmaker.xfindMatchmakingOpponent(bobDeck); // hardhat-exposed
+      expect(opponent.toNumber()).to.be.equal(0);
     });
   });
 });
