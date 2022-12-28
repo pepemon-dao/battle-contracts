@@ -7,6 +7,7 @@ import PepemonRewardPoolArtifact from '../artifacts/contracts-exposed/PepemonRew
 import { expect } from 'chai';
 import { deployMockContract, MockContract, deployContract } from 'ethereum-waffle';
 import { BigNumber } from 'ethers';
+import { ethers } from 'hardhat';
 
 const [alice, bob] = getWallets();
 
@@ -49,6 +50,13 @@ describe('::Matchmaker', async () => {
     // safeTransferFrom with 3 arguments fails to be mocked for some reason, maybe overloads cant be mocked
     await cardDeck.mock.safeTransferFrom.withArgs(matchmaker.address, alice.address, aliceDeck, '0x').returns();
     await cardDeck.mock.safeTransferFrom.withArgs(matchmaker.address, bob.address, bobDeck, '0x').returns();
+  };
+
+  const incrementBlockTimestamp = async (addedSecs: Number) => {
+      // https://ethereum.stackexchange.com/questions/86633/time-dependent-tests-with-hardhat https://tinyurl.com/2yuf32vd
+      await ethers.provider.send("evm_increaseTime", [addedSecs]); // 50min
+      // @ts-ignore
+      await ethers.provider.send("evm_mine");
   };
 
   const getEmptyBattleInstance = async () => {
@@ -103,8 +111,16 @@ describe('::Matchmaker', async () => {
   });
 
   describe('#Ranking', async () => {
-    it('Should give higher score for players with lower ranking', async () => {
+    it('Should calculate Elo rating change correctly', async () => {
       // refer to this for the precise values (must set Custom K-factor): https://www.omnicalculator.com/sports/elo
+      await matchmaker.setKFactor(16);
+      // Divided by 100 to remove the extra precision from getEloRatingChange
+      let scoreChange = (await matchmaker.getEloRatingChange(2000, 2000)).toNumber() / 100;
+      console.log(`\tScore change: ${scoreChange}`);
+      expect(scoreChange).to.be.equal(8);
+    });
+
+    it('Should give higher score for players with lower ranking', async () => {
       const playerHiRank = 2300, playerLoRank = 2000;
       let loRankWinScoreChange = await matchmaker.getEloRatingChange(playerLoRank, playerHiRank); // player with lower ranking won
       let hiRankWinScoreChange = await matchmaker.getEloRatingChange(playerHiRank, playerLoRank); // player with higher ranking won
@@ -123,27 +139,61 @@ describe('::Matchmaker', async () => {
       let aliceRanking = await matchmaker.playerRanking(alice.address);
       let bobRanking = await matchmaker.playerRanking(bob.address);
 
-      expect(aliceRanking.toNumber()).to.be.greaterThan(0);
-      expect(bobRanking.toNumber()).to.be.greaterThan(0);
+      expect(aliceRanking.toNumber()).to.be.equal(defaultRanking);
+      expect(bobRanking.toNumber()).to.be.equal(defaultRanking);
     });
   });
 
   describe('#Battle', async () => {
-    it('Should allow a battle between 2 players', async () => {
+    it('Should allow a battle between 2 players to update their ranking', async () => {
       // Get an instance of the "Battle" object, which is too big to be created inline
       let emptyBattleData = await getEmptyBattleInstance();
       // Mock battleContract and RewardPool calls
       await battle.mock.createBattle.returns(emptyBattleData, 1);
-      await battle.mock.goForBattle.returns(emptyBattleData, alice.address);
+      await battle.mock.goForBattle.returns(emptyBattleData, alice.address); // alice wins
       await rewardPool.mock.sendReward.returns();
 
       await matchmaker.enter(aliceDeck);
       await bobSignedMatchmaker.enter(bobDeck); // battle begins here
 
-      let aliceRanking = await matchmaker.playerRanking(alice.address);
-      let bobRanking = await matchmaker.playerRanking(bob.address);
-      expect(aliceRanking.toNumber()).to.be.greaterThan(0);
-      expect(bobRanking.toNumber()).to.be.greaterThan(0);
+      let aliceRanking = await bobSignedMatchmaker.playerRanking(alice.address);
+      let bobRanking = await bobSignedMatchmaker.playerRanking(bob.address);
+      expect(aliceRanking.toNumber()).to.be.greaterThan(bobRanking.toNumber());
+    });
+
+    it('Should allow a battle between players with large ranking difference after waiting some time', async () => {
+      // Get an instance of the "Battle" object, which is too big to be created inline
+      let emptyBattleData = await getEmptyBattleInstance();
+
+      // Mock battleContract and RewardPool calls
+      await battle.mock.createBattle.returns(emptyBattleData, 1);
+      await rewardPool.mock.sendReward.returns();
+
+      // set an absurd K-factor so that Bob loses 500 points in the ranking, because we cant set rankings manually.
+      await matchmaker.setKFactor(1000);
+      await battle.mock.goForBattle.returns(emptyBattleData, alice.address); // alice will win
+      await matchmaker.enter(aliceDeck);
+      await bobSignedMatchmaker.enter(bobDeck); // battle begins here. bob loses 500 rating points
+      // alice is still in the waitlist. supposedly.
+
+      await matchmaker.setMatchRange(300, 1); // 1 per min
+
+      // change the time.
+      await incrementBlockTimestamp(50*60) // 50min. after this, the block will have 00h50m00s as its timestamp
+
+      // after 50min, matchrange will be 350 (1*50+300). not enough for bob to match with alice this time.
+      let opponent = await bobSignedMatchmaker.xfindMatchmakingOpponent(bobDeck); // hardhat-exposed
+      expect(opponent.toNumber()).to.be.equal(0);
+
+      await matchmaker.setMatchRange(300, 12); // 12 per min
+
+      // change the time again.
+      await incrementBlockTimestamp(8*60 + 30) // 8min and 30 seconds. after this, the block will have 00h58m30s as its timestamp
+
+      // after 8min and 30 seconds, matchrange will be 1002 (12*58.5+300). enough for bob to match with alice.
+      // without the extra precision in findMatchmakingOpponent the match range would be 996 (12*58+300) and fail;
+      opponent = await bobSignedMatchmaker.xfindMatchmakingOpponent(bobDeck);
+      expect(opponent.toNumber()).to.be.equal(aliceDeck);
     });
   });
 });
