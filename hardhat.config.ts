@@ -11,6 +11,7 @@ import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
 
 import 'solidity-coverage';
+import 'hardhat-exposed';
 
 console.log("Forking is " + (environment.disableForking ? "disabled" : "enabled"));
 
@@ -24,6 +25,10 @@ const config: HardhatUserConfig = {
         runs: 200,
       },
     },
+  },
+  // @ts-ignore  // vscode linter can't find this property. but it works, so ignore the warning 
+  exposed: {
+    prefix: 'x' // hardhat-exposed config. the default prefix "$" doesn't works well. Use "hardhat compile --force" after changing this
   },
   paths: {
     root: './',

@@ -3,7 +3,7 @@ import hre from 'hardhat'
 import { deployContract, MockProvider } from 'ethereum-waffle';
 import DeckArtifact from '../../artifacts/contracts/PepemonCardDeck.sol/PepemonCardDeck.json';
 import BattleArtifact from '../../artifacts/contracts/PepemonBattle.sol/PepemonBattle.json';
-import PepemonMatchmakerArtifact from '../../artifacts/contracts/PepemonMatchmaker.sol/PepemonMatchmaker.json';
+import PepemonMatchmakerArtifact from '../../artifacts/contracts-exposed/PepemonMatchmaker.sol/XPepemonMatchmaker.json';
 
 import { Signer } from 'ethers';
 import { PepemonCardDeck, PepemonBattle, PepemonMatchmaker } from '../../typechain';

@@ -1,8 +1,8 @@
 import { deployMatchmakerContract, getWallets } from './helpers/contract';
 import { PepemonMatchmaker, PepemonCardDeck, PepemonBattle, PepemonRewardPool } from '../typechain';
-import PepemonBattleArtifact from '../artifacts/contracts/PepemonBattle.sol/PepemonBattle.json';
-import PepemonCardDeckArtifact from '../artifacts/contracts/PepemonCardDeck.sol/PepemonCardDeck.json';
-import PepemonRewardPoolArtifact from '../artifacts/contracts/PepemonRewardPool.sol/PepemonRewardPool.json';
+import PepemonBattleArtifact from '../artifacts/contracts-exposed/PepemonBattle.sol/XPepemonBattle.json';
+import PepemonCardDeckArtifact from '../artifacts/contracts-exposed/PepemonCardDeck.sol/XPepemonCardDeck.json';
+import PepemonRewardPoolArtifact from '../artifacts/contracts-exposed/PepemonRewardPool.sol/XPepemonRewardPool.json';
 
 import { expect } from 'chai';
 import { deployMockContract, MockContract, deployContract } from 'ethereum-waffle';
