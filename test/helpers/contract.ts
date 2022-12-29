@@ -4,9 +4,10 @@ import { deployContract, MockProvider } from 'ethereum-waffle';
 import DeckArtifact from '../../artifacts/contracts/PepemonCardDeck.sol/PepemonCardDeck.json';
 import BattleArtifact from '../../artifacts/contracts/PepemonBattle.sol/PepemonBattle.json';
 import PepemonMatchmakerArtifact from '../../artifacts/contracts-exposed/PepemonMatchmaker.sol/XPepemonMatchmaker.json';
+import PepemonRewardPoolArtifact from '../../artifacts/contracts-exposed/PepemonRewardPool.sol/XPepemonRewardPool.json';
 
 import { Signer } from 'ethers';
-import { PepemonCardDeck, PepemonBattle, PepemonMatchmaker } from '../../typechain';
+import { PepemonCardDeck, PepemonBattle, PepemonMatchmaker, PepemonRewardPool } from '../../typechain';
 
 let provider: providers.JsonRpcProvider;
 
@@ -38,6 +39,10 @@ export async function deployBattleContract(signer: Signer) {
 
 export async function deployMatchmakerContract(signer: Signer, defaultRanking: Number) {
   return (await deployContract(signer, PepemonMatchmakerArtifact, [defaultRanking])) as PepemonMatchmaker;
+}
+
+export async function deployRewardPoolContract(signer: Signer) {
+  return (await deployContract(signer, PepemonRewardPoolArtifact)) as PepemonRewardPool;
 }
 
 export async function mineBlock() {

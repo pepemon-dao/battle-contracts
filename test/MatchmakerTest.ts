@@ -6,7 +6,6 @@ import PepemonRewardPoolArtifact from '../artifacts/contracts-exposed/PepemonRew
 
 import { expect } from 'chai';
 import { deployMockContract, MockContract, deployContract } from 'ethereum-waffle';
-import { BigNumber } from 'ethers';
 import { ethers } from 'hardhat';
 
 const [alice, bob] = getWallets();
@@ -209,7 +208,8 @@ describe('::Matchmaker', async () => {
       await battle.mock.goForBattle.returns(emptyBattleData, alice.address); // alice will win
       await matchmaker.enter(aliceDeck);
       await bobSignedMatchmaker.enter(bobDeck); // battle begins here. bob loses 500 rating points
-      // alice is still in the waitlist. supposedly.
+      // put alice back in the waitlist.
+      await matchmaker.enter(aliceDeck);
 
       await matchmaker.setMatchRange(300, 1); // 1 per min
 

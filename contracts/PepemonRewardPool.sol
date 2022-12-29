@@ -11,7 +11,7 @@ contract PepemonRewardPool is RewardPool, ERC1155Holder, AdminRole {
         uint256 tokenId;
         address tokenAddress;
     }
-    Reward[] private rewardPool;
+    Reward[] internal rewardPool;
 
     /**
      * @dev Adds a single reward into the pool.
@@ -23,7 +23,6 @@ contract PepemonRewardPool is RewardPool, ERC1155Holder, AdminRole {
             ERC1155(tokenAddress).balanceOf(address(msg.sender), tokenId) > 0,
             "PepemonRewardPool: You don't have enough of this token"
         );
-
         ERC1155(tokenAddress).safeTransferFrom(address(msg.sender), address(this), tokenId, 1, "");
         rewardPool.push(Reward(tokenId, tokenAddress));
     }
@@ -69,7 +68,7 @@ contract PepemonRewardPool is RewardPool, ERC1155Holder, AdminRole {
                 amounts[i],
                 ""
             );
-            for (uint256 j = 0; j < amounts[i]; ++i) {
+            for (uint256 j = 0; j < amounts[i]; ++j) {
                 rewardPool.push(Reward(tokenIds[i], tokenAddresses[i]));
             }
         }

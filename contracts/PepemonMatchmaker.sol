@@ -77,7 +77,10 @@ contract PepemonMatchmaker is ERC1155Holder, Ownable {
 
         // If one is found then start the battle, otherwise put in a wait list
         if (opponentDeckId > 0) {
+            // start battle
             processMatch(deckId, opponentDeckId);
+            // prevent other matches from starting immediately after this one finishes
+            removeWaitingDeck(opponentDeckId);
         } else {
             addWaitingDeck(deckId);
         }
@@ -88,14 +91,9 @@ contract PepemonMatchmaker is ERC1155Holder, Ownable {
      * @param deckId The Deck of the owner
      */
     function exit(uint256 deckId) public {
+        require(waitingDecks.length > 0 && waitingDecks[_waitingDecksIndex[deckId]].deckId != 0, "PepemonMatchmaker: Deck is not in the wait list");
         require(msg.sender == deckOwner[deckId], "PepemonMatchmaker: Not your deck");
-        // Transfer deck back to owner
-        PepemonCardDeck(_deckAddress).safeTransferFrom(address(this), deckOwner[deckId], deckId, "");
-        delete deckOwner[deckId];
-
-        waitingDecks[_waitingDecksIndex[deckId]] = waitingDecks[waitingDecks.length - 1];
-        waitingDecks.pop();
-        delete _waitingDecksIndex[deckId];
+        removeWaitingDeck(deckId);
     }
 
     /**
@@ -127,6 +125,20 @@ contract PepemonMatchmaker is ERC1155Holder, Ownable {
     }
 
     /**
+     * @notice Removes a deck from the wait list
+     * @param deckId The Deck of the owner
+     */
+    function removeWaitingDeck(uint256 deckId) internal {
+        // Transfer deck back to owner
+        PepemonCardDeck(_deckAddress).safeTransferFrom(address(this), deckOwner[deckId], deckId, "");
+        delete deckOwner[deckId];
+
+        waitingDecks[_waitingDecksIndex[deckId]] = waitingDecks[waitingDecks.length - 1];
+        waitingDecks.pop();
+        delete _waitingDecksIndex[deckId];
+    }
+
+    /**
      * @notice Performs the battle between player 1's and player 2's deck, sends a reward for the winner,
      * and ajust their ranking
      * @param player1deckId Deck of the first player
@@ -135,17 +147,13 @@ contract PepemonMatchmaker is ERC1155Holder, Ownable {
     function processMatch(uint256 player1deckId, uint256 player2deckId) internal {
         // Evaluate the battle winner
         (address winner, address loser, uint256 battleId) = doBattle(player1deckId, player2deckId);
-
         // Send a reward to the winner
         RewardPool(_rewardPoolAddress).sendReward(battleId, winner);
-
         // Declare loser and winner
         emit BattleFinished(winner, loser, battleId);
-
         // Adjust ranking accordingly. Change is adjusted to remove the extra precision from getEloRatingChange
         uint256 change = getEloRatingChange(playerRanking[winner], playerRanking[loser]) / 100;
         playerRanking[winner] += change;
-
         // Prevent underflow or rank reset if it gets below or equal to zero. Unlikely, but possible.
         if(int256(playerRanking[loser]) - int256(change) > 0) {
             playerRanking[loser] = playerRanking[loser] - change;
