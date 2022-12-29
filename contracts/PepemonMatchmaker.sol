@@ -32,8 +32,11 @@ contract PepemonMatchmaker is ERC1155Holder, Ownable {
 
     mapping(address => uint256) public playerRanking;
 
-    constructor (uint256 defaultRanking) {
+    constructor (uint256 defaultRanking, address battleAddress, address deckAddress, address rewardPoolAddress) {
         _defaultRanking = defaultRanking; // suggested: 2000
+        _battleAddress = battleAddress;
+        _deckAddress = deckAddress;
+        _rewardPoolAddress = rewardPoolAddress;
     }
 
     function setDeckContractAddress(address deckContractAddress) public onlyOwner {

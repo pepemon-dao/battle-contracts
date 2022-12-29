@@ -1,6 +1,6 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
-import { PEPEMON_DECK, PEPEMON_BATTLE, PEPEMON_CARD_ORACLE, RNG_ORACLE } from './constants';
+import { PEPEMON_DECK, PEPEMON_BATTLE, PEPEMON_CARD_ORACLE, RNG_ORACLE, PEPEMON_MATCHMAKER, PEPEMON_REWARDPOOL, DEFAULT_RANKING } from './constants';
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts } = hre;
@@ -18,7 +18,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   let oracleContract = await deploy(PEPEMON_CARD_ORACLE, { from: deployer, log: true });
 
   log(`Deploying ${PEPEMON_BATTLE} Contract from ${deployer}....`);
-  await deploy(
+  let pepemonBattle = await deploy(
     PEPEMON_BATTLE,
     {
       from: deployer,
@@ -30,8 +30,27 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       ]
     },
   );
+
+  log(`Deploying ${PEPEMON_REWARDPOOL} Contract from ${deployer}....`);
+  let rewardPoolContract = await deploy(PEPEMON_REWARDPOOL, { from: deployer, log: true });
+
+  log(`Deploying ${PEPEMON_MATCHMAKER} Contract from ${deployer}....`);
+  await deploy(
+    PEPEMON_MATCHMAKER,
+    {
+      from: deployer,
+      log: true,
+      args: [
+        DEFAULT_RANKING,
+        pepemonBattle.address,
+        deckContract.address,
+        rewardPoolContract.address
+      ]
+    }
+  );
+
 };
 
 export default func;
 
-func.tags = [PEPEMON_DECK, PEPEMON_BATTLE, PEPEMON_CARD_ORACLE, RNG_ORACLE];
+func.tags = [PEPEMON_DECK, PEPEMON_BATTLE, PEPEMON_CARD_ORACLE, RNG_ORACLE, PEPEMON_MATCHMAKER, PEPEMON_REWARDPOOL];

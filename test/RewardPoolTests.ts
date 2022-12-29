@@ -1,5 +1,5 @@
 import { deployRewardPoolContract, getWallets } from './helpers/contract';
-import { PepemonRewardPool, PepemonCardDeck, Erc1155 } from '../typechain';
+import { PepemonRewardPool, Erc1155 } from '../typechain';
 import Erc1155Artifact from '../artifacts/@openzeppelin/contracts/token/ERC1155/ERC1155.sol/ERC1155.json';
 
 import { expect } from 'chai';

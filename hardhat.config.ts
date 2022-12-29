@@ -66,6 +66,13 @@ const config: HardhatUserConfig = {
       gas: 100000000,
       gasPrice: 8000000000,
     },
+    // for deployment: npx hardhat deploy --network mumbai
+    // make sure to check if scripts under ./deploy are correct!!
+    // checking contract: npx hardhat verify CONTRACT_ADDRESS --network mumbai
+    mumbai: {
+      url: 'https://rpc.ankr.com/polygon_mumbai',
+      accounts: [environment.privateKey]
+    }
   },
   namedAccounts: {
     deployer: {

@@ -6,6 +6,10 @@ export const PEPEMON_DECK = 'PepemonCardDeck';
 export const PEPEMON_CARD_ORACLE = 'PepemonCardOracle';
 export const PEPEMON_BATTLE = 'PepemonBattle';
 export const PEPEMON_FACTORY = 'PepemonFactory';
+export const PEPEMON_MATCHMAKER = 'PepemonMatchmaker';
+export const PEPEMON_REWARDPOOL = 'PepemonRewardPool';
+
+export const DEFAULT_RANKING = 2000;
 
 export const SUPPORT_CARD_ADDRESS = '0xa02e589d5a8e3c0f540ebb931fda0b91d742a79e';
 export const BATTLE_CARD_ADDRESS = '0xa02e589d5a8e3c0f540ebb931fda0b91d742a79e';

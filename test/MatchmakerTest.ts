@@ -22,15 +22,11 @@ describe('::Matchmaker', async () => {
   let rewardPool: PepemonRewardPool | MockContract;
 
   beforeEach(async () => {
-    matchmaker = await deployMatchmakerContract(alice, defaultRanking);
-    bobSignedMatchmaker = matchmaker.connect(bob);
     cardDeck = await deployMockContract(alice, PepemonCardDeckArtifact.abi);
     battle = await deployMockContract(alice, PepemonBattleArtifact.abi);
     rewardPool = await deployMockContract(alice, PepemonRewardPoolArtifact.abi);
-
-    await matchmaker.setDeckContractAddress(cardDeck.address);
-    await matchmaker.setBattleContractAddress(battle.address);
-    await matchmaker.setRewardPoolAddress(rewardPool.address);
+    matchmaker = await deployMatchmakerContract(alice, defaultRanking, battle.address, cardDeck.address, rewardPool.address);
+    bobSignedMatchmaker = matchmaker.connect(bob);
 
     await cardDeck.mock.balanceOf.withArgs(alice.address).returns(1);
     await cardDeck.mock.balanceOf.withArgs(bob.address).returns(1);

@@ -37,8 +37,23 @@ export async function deployBattleContract(signer: Signer) {
   return (await deployContract(signer, BattleArtifact)) as PepemonBattle;
 }
 
-export async function deployMatchmakerContract(signer: Signer, defaultRanking: Number) {
-  return (await deployContract(signer, PepemonMatchmakerArtifact, [defaultRanking])) as PepemonMatchmaker;
+export async function deployMatchmakerContract(
+  signer: Signer,
+  defaultRanking: Number,
+  battleContractAddress: string,
+  cardContractAddress: string,
+  rewardPoolAddress: string
+) {
+  return (await deployContract(
+    signer,
+    PepemonMatchmakerArtifact,
+    [
+      defaultRanking, 
+      battleContractAddress, 
+      cardContractAddress, 
+      rewardPoolAddress
+    ]
+  )) as PepemonMatchmaker;
 }
 
 export async function deployRewardPoolContract(signer: Signer) {
