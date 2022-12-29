@@ -71,7 +71,8 @@ const config: HardhatUserConfig = {
     // checking contract: npx hardhat verify CONTRACT_ADDRESS --network mumbai
     mumbai: {
       url: 'https://rpc.ankr.com/polygon_mumbai',
-      accounts: [environment.privateKey]
+      // silence hardhat error "private key too short, expected 32 bytes" if privateKey is not set
+      accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)]
     }
   },
   namedAccounts: {
