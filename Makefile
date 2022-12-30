@@ -17,7 +17,9 @@ deploy-mumbai:
 	npx hardhat deploy --network mumbai
 
 test:
-	@DISABLE_FORKING=1 npx hardhat --config ./hardhat.config.tests.ts test
+	# re-generate hardhat-exposed ontracts with compile --force
+	npx hardhat --config ./hardhat.config.tests.ts compile --force
+	@DISABLE_FORKING=1 npx hardhat --config ./hardhat.config.tests.ts test --no-compile
 
 run-node:
 	@npx hardhat node
