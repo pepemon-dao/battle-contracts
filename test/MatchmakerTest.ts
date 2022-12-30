@@ -4,11 +4,17 @@ import PepemonBattleArtifact from '../artifacts/contracts-exposed/PepemonBattle.
 import PepemonCardDeckArtifact from '../artifacts/contracts-exposed/PepemonCardDeck.sol/XPepemonCardDeck.json';
 import PepemonRewardPoolArtifact from '../artifacts/contracts-exposed/PepemonRewardPool.sol/XPepemonRewardPool.json';
 
+import PepemonCardOracleArtifact from '../artifacts/contracts-exposed/PepemonCardOracle.sol/XPepemonCardOracle.json';
+import RNGArtifact from '../artifacts/contracts-exposed/SampleChainLinkRngOracle.sol/XSampleChainLinkRngOracle.json';
+
+
 import { expect } from 'chai';
 import { deployMockContract, MockContract, deployContract } from 'ethereum-waffle';
 import { ethers } from 'hardhat';
 
 const [alice, bob] = getWallets();
+
+let cachedDummyBattleInstance: any = undefined;
 
 const aliceDeck = 1;
 const bobDeck = 2;
@@ -54,15 +60,28 @@ describe('::Matchmaker', async () => {
       await ethers.provider.send("evm_mine");
   };
 
-  const getEmptyBattleInstance = async () => {
+  const getDummyBattleInstance = async () => {
+    if (cachedDummyBattleInstance) {
+      return cachedDummyBattleInstance;
+    }
     // the "Battle" object is huge, this is one way to dynamically get an instance of it since theres no way 
     // to tell TypeScript to create an object based off the type defs from typechain (eg. type a = Parameters<typeof battle.functions.fight>)
+
+    let cardContract = await deployMockContract(alice, PepemonCardOracleArtifact.abi);
+    let rng = await deployMockContract(alice, RNGArtifact.abi);
+    
+    await rng.mock.getRandomNumber.returns(0);
+    await cardContract.mock.getBattleCardById.returns([0,0,'',0,0,0,0,0,0,0,]);
+    await cardDeck.mock.decks.returns(0, 0);
+
     let dummyBattleContract = (await deployContract(alice, PepemonBattleArtifact, [
-      alice.address,
-      alice.address,
-      alice.address,
+      cardContract.address,
+      cardDeck.address,
+      rng.address,
     ])) as PepemonBattle;
-    return await dummyBattleContract.battles(0);
+
+    cachedDummyBattleInstance = (await dummyBattleContract.callStatic.createBattle(alice.address, 1, bob.address, 2))[0];
+    return cachedDummyBattleInstance;
   }
 
   describe('#Deck', async () => {
@@ -139,7 +158,7 @@ describe('::Matchmaker', async () => {
 
     it('Should prevent rankings from resetting when going to 0', async () => {
       // Get an instance of the "Battle" object, which is too big to be created inline
-      let emptyBattleData = await getEmptyBattleInstance();
+      let emptyBattleData = await getDummyBattleInstance();
 
       // Mock battleContract and RewardPool calls
       await battle.mock.createBattle.returns(emptyBattleData, 1);
@@ -157,7 +176,7 @@ describe('::Matchmaker', async () => {
 
     it('Should prevent rankings from going below 0', async () => {
       // Get an instance of the "Battle" object, which is too big to be created inline
-      let emptyBattleData = await getEmptyBattleInstance();
+      let emptyBattleData = await getDummyBattleInstance();
 
       // Mock battleContract and RewardPool calls
       await battle.mock.createBattle.returns(emptyBattleData, 1);
@@ -177,7 +196,7 @@ describe('::Matchmaker', async () => {
   describe('#Battle', async () => {
     it('Should allow a battle between 2 players to update their ranking', async () => {
       // Get an instance of the "Battle" object, which is too big to be created inline
-      let emptyBattleData = await getEmptyBattleInstance();
+      let emptyBattleData = await getDummyBattleInstance();
       // Mock battleContract and RewardPool calls
       await battle.mock.createBattle.returns(emptyBattleData, 1);
       await battle.mock.goForBattle.returns(emptyBattleData, alice.address); // alice wins
@@ -193,7 +212,7 @@ describe('::Matchmaker', async () => {
 
     it('Should allow a battle between players with large ranking difference after waiting some time', async () => {
       // Get an instance of the "Battle" object, which is too big to be created inline
-      let emptyBattleData = await getEmptyBattleInstance();
+      let emptyBattleData = await getDummyBattleInstance();
 
       // Mock battleContract and RewardPool calls
       await battle.mock.createBattle.returns(emptyBattleData, 1);
@@ -229,7 +248,7 @@ describe('::Matchmaker', async () => {
 
     it('Should prevent a battle between players with large ranking difference if matchRangePerMinute is zero', async () => {
       // Get an instance of the "Battle" object, which is too big to be created inline
-      let emptyBattleData = await getEmptyBattleInstance();
+      let emptyBattleData = await getDummyBattleInstance();
 
       // Mock battleContract and RewardPool calls
       await battle.mock.createBattle.returns(emptyBattleData, 1);

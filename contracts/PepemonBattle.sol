@@ -90,8 +90,6 @@ contract PepemonBattle is AdminRole {
         PepemonCardOracle.EffectMany effectMany;
     }
 
-    mapping(uint256 => Battle) public battles;
-
     uint256 private _nextBattleId;
 
 
