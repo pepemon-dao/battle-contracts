@@ -104,7 +104,7 @@ contract PepemonMatchmaker is ERC1155Holder, Ownable {
      * @dev The returned number has 2 decimals of precision, so 1501 = 15.01 Elo change
      */
     function getEloRatingChange(uint256 winnerRating, uint256 loserRating) public view returns (uint256) {
-        (uint256 change, ) = Elo.ratingChange(winnerRating, loserRating, 100, _kFactor);
+        (uint256 change,) = Elo.ratingChange(winnerRating, loserRating, 100, _kFactor);
         return change;
     }
 

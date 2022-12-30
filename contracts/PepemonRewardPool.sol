@@ -84,6 +84,7 @@ contract PepemonRewardPool is RewardPool, ERC1155Holder, AdminRole {
         // get reward
         address rewardTokenAddress = rewardPool[index].tokenAddress;
         uint256 rewardTokenId = rewardPool[index].tokenId;
+        
         // remove reward from pool
         rewardPool[index] = rewardPool[rewardPool.length - 1];
         rewardPool.pop();

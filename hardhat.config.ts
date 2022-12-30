@@ -11,7 +11,6 @@ import 'hardhat-deploy';
 import 'hardhat-deploy-ethers';
 
 import 'solidity-coverage';
-import 'hardhat-exposed';
 
 console.log("Forking is " + (environment.disableForking ? "disabled" : "enabled"));
 
@@ -25,10 +24,6 @@ const config: HardhatUserConfig = {
         runs: 200,
       },
     },
-  },
-  // @ts-ignore  // vscode linter can't find this property. but it works, so ignore the warning 
-  exposed: {
-    prefix: 'x' // hardhat-exposed config. the default prefix "$" doesn't works well. Use "hardhat compile --force" after changing this
   },
   paths: {
     root: './',
@@ -63,10 +58,10 @@ const config: HardhatUserConfig = {
       allowUnlimitedContractSize: true,
       initialBaseFeePerGas: 100,
       blockGasLimit: 0x1fffffffffffff,
-      gas: 100000000,
+      gas: "auto",
       gasPrice: 8000000000,
     },
-    // for deployment: npx hardhat deploy --network mumbai
+    // for deployment: make deploy-mumbai
     // make sure to check if scripts under ./deploy are correct!!
     // checking contract: npx hardhat verify CONTRACT_ADDRESS --network mumbai
     mumbai: {

@@ -8,7 +8,7 @@ import "./PepemonCardOracle.sol";
 import "./lib/ChainLinkRngOracle.sol";
 
 contract PepemonBattle is AdminRole {
-    
+
     event BattleCreated(address indexed player1Addr, address indexed player2Addr, uint256 battleId);
 
     mapping (uint => uint) public battleIdRNGSeed;
