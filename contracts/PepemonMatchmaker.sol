@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
+import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./PepemonCardDeck.sol";
 import "./lib/RewardPool.sol";
@@ -9,7 +10,7 @@ import "./lib/Elo.sol";
 import "./PepemonCardOracle.sol";
 import "./PepemonBattle.sol";
 
-contract PepemonMatchmaker is ERC1155Holder, Ownable {
+contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, Ownable {
     event BattleFinished(address indexed winner, address indexed loser, uint256 battleId);
 
     struct waitingDeckData {
