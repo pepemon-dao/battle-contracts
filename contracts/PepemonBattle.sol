@@ -108,6 +108,18 @@ contract PepemonBattle is AdminRole {
         _nextBattleId = 1;
     }
 
+    function setCardContractAddress(address cardOracleAddress) public onlyAdmin {
+        _cardContract = PepemonCardOracle(cardOracleAddress);
+    }
+
+    function setBattleContractAddress(address deckOracleAddress) public onlyAdmin {
+        _deckContract = PepemonCardDeck(deckOracleAddress);
+    }
+
+    function setRandNrGenContractAddress(address randOracleAddress) public onlyAdmin {
+        _randNrGenContract = ChainLinkRngOracle(randOracleAddress);
+    }
+
     /**
      * @dev Create battle
      * @param p1Addr address player1

@@ -1,0 +1,1249 @@
+{
+  "address": "0x15F4dF42E54aa33c4ec48e9f0Bb7F00535C29bf5",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "AdminAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "AdminRemoved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "cardId",
+          "type": "uint256"
+        }
+      ],
+      "name": "BattleCardCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "cardId",
+          "type": "uint256"
+        }
+      ],
+      "name": "BattleCardUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "cardId",
+          "type": "uint256"
+        }
+      ],
+      "name": "SupportCardCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "cardId",
+          "type": "uint256"
+        }
+      ],
+      "name": "SupportCardUpdated",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "addAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "battleCardId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum PepemonCardOracle.BattleCardType",
+              "name": "battleCardType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "hp",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "spd",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "inte",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "def",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "atk",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "sAtk",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "sDef",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct PepemonCardOracle.BattleCardStats",
+          "name": "cardData",
+          "type": "tuple"
+        }
+      ],
+      "name": "addBattleCard",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "supportCardId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum PepemonCardOracle.SupportCardType",
+              "name": "supportCardType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "int256",
+                  "name": "basePower",
+                  "type": "int256"
+                },
+                {
+                  "internalType": "int256",
+                  "name": "triggeredPower",
+                  "type": "int256"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectTo",
+                  "name": "effectTo",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectFor",
+                  "name": "effectFor",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "reqCode",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct PepemonCardOracle.EffectOne[]",
+              "name": "effectOnes",
+              "type": "tuple[]"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "int256",
+                  "name": "power",
+                  "type": "int256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "numTurns",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectTo",
+                  "name": "effectTo",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectFor",
+                  "name": "effectFor",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "reqCode",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct PepemonCardOracle.EffectMany",
+              "name": "effectMany",
+              "type": "tuple"
+            },
+            {
+              "internalType": "bool",
+              "name": "unstackable",
+              "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "unresettable",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct PepemonCardOracle.SupportCardStats",
+          "name": "cardData",
+          "type": "tuple"
+        }
+      ],
+      "name": "addSupportCard",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "battleCardStats",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "battleCardId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum PepemonCardOracle.BattleCardType",
+          "name": "battleCardType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "hp",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "spd",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "inte",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "def",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "atk",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "sAtk",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "sDef",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "getBattleCardById",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "battleCardId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum PepemonCardOracle.BattleCardType",
+              "name": "battleCardType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "hp",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "spd",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "inte",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "def",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "atk",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "sAtk",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "sDef",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct PepemonCardOracle.BattleCardStats",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "getSupportCardById",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "supportCardId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum PepemonCardOracle.SupportCardType",
+              "name": "supportCardType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "int256",
+                  "name": "basePower",
+                  "type": "int256"
+                },
+                {
+                  "internalType": "int256",
+                  "name": "triggeredPower",
+                  "type": "int256"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectTo",
+                  "name": "effectTo",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectFor",
+                  "name": "effectFor",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "reqCode",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct PepemonCardOracle.EffectOne[]",
+              "name": "effectOnes",
+              "type": "tuple[]"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "int256",
+                  "name": "power",
+                  "type": "int256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "numTurns",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectTo",
+                  "name": "effectTo",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectFor",
+                  "name": "effectFor",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "reqCode",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct PepemonCardOracle.EffectMany",
+              "name": "effectMany",
+              "type": "tuple"
+            },
+            {
+              "internalType": "bool",
+              "name": "unstackable",
+              "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "unresettable",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct PepemonCardOracle.SupportCardStats",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "getSupportCardTypeById",
+      "outputs": [
+        {
+          "internalType": "enum PepemonCardOracle.SupportCardType",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "isAdmin",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "supportCardStats",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "supportCardId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum PepemonCardOracle.SupportCardType",
+          "name": "supportCardType",
+          "type": "uint8"
+        },
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "components": [
+            {
+              "internalType": "int256",
+              "name": "power",
+              "type": "int256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "numTurns",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum PepemonCardOracle.EffectTo",
+              "name": "effectTo",
+              "type": "uint8"
+            },
+            {
+              "internalType": "enum PepemonCardOracle.EffectFor",
+              "name": "effectFor",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "reqCode",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct PepemonCardOracle.EffectMany",
+          "name": "effectMany",
+          "type": "tuple"
+        },
+        {
+          "internalType": "bool",
+          "name": "unstackable",
+          "type": "bool"
+        },
+        {
+          "internalType": "bool",
+          "name": "unresettable",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "battleCardId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum PepemonCardOracle.BattleCardType",
+              "name": "battleCardType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "hp",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "spd",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "inte",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "def",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "atk",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "sAtk",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "sDef",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct PepemonCardOracle.BattleCardStats",
+          "name": "cardData",
+          "type": "tuple"
+        }
+      ],
+      "name": "updateBattleCard",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "supportCardId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum PepemonCardOracle.SupportCardType",
+              "name": "supportCardType",
+              "type": "uint8"
+            },
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "int256",
+                  "name": "basePower",
+                  "type": "int256"
+                },
+                {
+                  "internalType": "int256",
+                  "name": "triggeredPower",
+                  "type": "int256"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectTo",
+                  "name": "effectTo",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectFor",
+                  "name": "effectFor",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "reqCode",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct PepemonCardOracle.EffectOne[]",
+              "name": "effectOnes",
+              "type": "tuple[]"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "int256",
+                  "name": "power",
+                  "type": "int256"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "numTurns",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectTo",
+                  "name": "effectTo",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectFor",
+                  "name": "effectFor",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "reqCode",
+                  "type": "uint256"
+                }
+              ],
+              "internalType": "struct PepemonCardOracle.EffectMany",
+              "name": "effectMany",
+              "type": "tuple"
+            },
+            {
+              "internalType": "bool",
+              "name": "unstackable",
+              "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "unresettable",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct PepemonCardOracle.SupportCardStats",
+          "name": "cardData",
+          "type": "tuple"
+        }
+      ],
+      "name": "updateSupportCard",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x70e60f9aeae312c193156350685ce5b12ba5d559e0dd883de17b7c60bf86a169",
+  "receipt": {
+    "to": null,
+    "from": "0xE9600B3025C1291F2aA211a71bC41B6bfb82bFdD",
+    "contractAddress": "0x15F4dF42E54aa33c4ec48e9f0Bb7F00535C29bf5",
+    "transactionIndex": 25,
+    "gasUsed": "1710984",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000400000010000000000000000000000020000000000000000000008000000000000000000000000000000000000000000000000000000000804000000000000000000100000000000000000000000000000000000000000000000000000000000080000000000000000000000004000400000000000000000000000000000000008000000000000000200000000000000000000001000000000000000000000020000000000000004000000000000000000101800000000000000000000000000000100000001000000000000000000000000000000000000000000000000000000000000000100000",
+    "blockHash": "0x3921c3655c66ef103c4a0f681ba3fb1e4423ff78d6276d4966d4801d7a5dadc8",
+    "transactionHash": "0x70e60f9aeae312c193156350685ce5b12ba5d559e0dd883de17b7c60bf86a169",
+    "logs": [
+      {
+        "transactionIndex": 25,
+        "blockNumber": 29212594,
+        "transactionHash": "0x70e60f9aeae312c193156350685ce5b12ba5d559e0dd883de17b7c60bf86a169",
+        "address": "0x15F4dF42E54aa33c4ec48e9f0Bb7F00535C29bf5",
+        "topics": [
+          "0x44d6d25963f097ad14f29f06854a01f575648a1ef82f30e562ccd3889717e339",
+          "0x000000000000000000000000e9600b3025c1291f2aa211a71bc41b6bfb82bfdd"
+        ],
+        "data": "0x",
+        "logIndex": 64,
+        "blockHash": "0x3921c3655c66ef103c4a0f681ba3fb1e4423ff78d6276d4966d4801d7a5dadc8"
+      },
+      {
+        "transactionIndex": 25,
+        "blockNumber": 29212594,
+        "transactionHash": "0x70e60f9aeae312c193156350685ce5b12ba5d559e0dd883de17b7c60bf86a169",
+        "address": "0x0000000000000000000000000000000000001010",
+        "topics": [
+          "0x4dfe1bbbcf077ddc3e01291eea2d5c70c2b422b415d95645b9adcfd678cb1d63",
+          "0x0000000000000000000000000000000000000000000000000000000000001010",
+          "0x000000000000000000000000e9600b3025c1291f2aa211a71bc41b6bfb82bfdd",
+          "0x000000000000000000000000f903ba9e006193c1527bfbe65fe2123704ea3f99"
+        ],
+        "data": "0x00000000000000000000000000000000000000000000000000091e324233dc7800000000000000000000000000000000000000000000000004df6d925611020d0000000000000000000000000000000000000000000008c240cd390f77820cb200000000000000000000000000000000000000000000000004d64f6013dd25950000000000000000000000000000000000000000000008c240d65741b9b5e92a",
+        "logIndex": 65,
+        "blockHash": "0x3921c3655c66ef103c4a0f681ba3fb1e4423ff78d6276d4966d4801d7a5dadc8"
+      }
+    ],
+    "blockNumber": 29212594,
+    "cumulativeGasUsed": "10959695",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "numDeployments": 1,
+  "solcInputHash": "f7b8d4c2dc3df1d233b00cc2f6be4a94",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.0+commit.c7dfd78e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"AdminAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"AdminRemoved\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"cardId\",\"type\":\"uint256\"}],\"name\":\"BattleCardCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"cardId\",\"type\":\"uint256\"}],\"name\":\"BattleCardUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"cardId\",\"type\":\"uint256\"}],\"name\":\"SupportCardCreated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"cardId\",\"type\":\"uint256\"}],\"name\":\"SupportCardUpdated\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"addAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"battleCardId\",\"type\":\"uint256\"},{\"internalType\":\"enum PepemonCardOracle.BattleCardType\",\"name\":\"battleCardType\",\"type\":\"uint8\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"hp\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"spd\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"inte\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"def\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"atk\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"sAtk\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"sDef\",\"type\":\"uint256\"}],\"internalType\":\"struct PepemonCardOracle.BattleCardStats\",\"name\":\"cardData\",\"type\":\"tuple\"}],\"name\":\"addBattleCard\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"supportCardId\",\"type\":\"uint256\"},{\"internalType\":\"enum PepemonCardOracle.SupportCardType\",\"name\":\"supportCardType\",\"type\":\"uint8\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"components\":[{\"internalType\":\"int256\",\"name\":\"basePower\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"triggeredPower\",\"type\":\"int256\"},{\"internalType\":\"enum PepemonCardOracle.EffectTo\",\"name\":\"effectTo\",\"type\":\"uint8\"},{\"internalType\":\"enum PepemonCardOracle.EffectFor\",\"name\":\"effectFor\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"reqCode\",\"type\":\"uint256\"}],\"internalType\":\"struct PepemonCardOracle.EffectOne[]\",\"name\":\"effectOnes\",\"type\":\"tuple[]\"},{\"components\":[{\"internalType\":\"int256\",\"name\":\"power\",\"type\":\"int256\"},{\"internalType\":\"uint256\",\"name\":\"numTurns\",\"type\":\"uint256\"},{\"internalType\":\"enum PepemonCardOracle.EffectTo\",\"name\":\"effectTo\",\"type\":\"uint8\"},{\"internalType\":\"enum PepemonCardOracle.EffectFor\",\"name\":\"effectFor\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"reqCode\",\"type\":\"uint256\"}],\"internalType\":\"struct PepemonCardOracle.EffectMany\",\"name\":\"effectMany\",\"type\":\"tuple\"},{\"internalType\":\"bool\",\"name\":\"unstackable\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"unresettable\",\"type\":\"bool\"}],\"internalType\":\"struct PepemonCardOracle.SupportCardStats\",\"name\":\"cardData\",\"type\":\"tuple\"}],\"name\":\"addSupportCard\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"battleCardStats\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"battleCardId\",\"type\":\"uint256\"},{\"internalType\":\"enum PepemonCardOracle.BattleCardType\",\"name\":\"battleCardType\",\"type\":\"uint8\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"hp\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"spd\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"inte\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"def\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"atk\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"sAtk\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"sDef\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_id\",\"type\":\"uint256\"}],\"name\":\"getBattleCardById\",\"outputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"battleCardId\",\"type\":\"uint256\"},{\"internalType\":\"enum PepemonCardOracle.BattleCardType\",\"name\":\"battleCardType\",\"type\":\"uint8\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"hp\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"spd\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"inte\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"def\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"atk\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"sAtk\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"sDef\",\"type\":\"uint256\"}],\"internalType\":\"struct PepemonCardOracle.BattleCardStats\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_id\",\"type\":\"uint256\"}],\"name\":\"getSupportCardById\",\"outputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"supportCardId\",\"type\":\"uint256\"},{\"internalType\":\"enum PepemonCardOracle.SupportCardType\",\"name\":\"supportCardType\",\"type\":\"uint8\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"components\":[{\"internalType\":\"int256\",\"name\":\"basePower\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"triggeredPower\",\"type\":\"int256\"},{\"internalType\":\"enum PepemonCardOracle.EffectTo\",\"name\":\"effectTo\",\"type\":\"uint8\"},{\"internalType\":\"enum PepemonCardOracle.EffectFor\",\"name\":\"effectFor\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"reqCode\",\"type\":\"uint256\"}],\"internalType\":\"struct PepemonCardOracle.EffectOne[]\",\"name\":\"effectOnes\",\"type\":\"tuple[]\"},{\"components\":[{\"internalType\":\"int256\",\"name\":\"power\",\"type\":\"int256\"},{\"internalType\":\"uint256\",\"name\":\"numTurns\",\"type\":\"uint256\"},{\"internalType\":\"enum PepemonCardOracle.EffectTo\",\"name\":\"effectTo\",\"type\":\"uint8\"},{\"internalType\":\"enum PepemonCardOracle.EffectFor\",\"name\":\"effectFor\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"reqCode\",\"type\":\"uint256\"}],\"internalType\":\"struct PepemonCardOracle.EffectMany\",\"name\":\"effectMany\",\"type\":\"tuple\"},{\"internalType\":\"bool\",\"name\":\"unstackable\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"unresettable\",\"type\":\"bool\"}],\"internalType\":\"struct PepemonCardOracle.SupportCardStats\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_id\",\"type\":\"uint256\"}],\"name\":\"getSupportCardTypeById\",\"outputs\":[{\"internalType\":\"enum PepemonCardOracle.SupportCardType\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"isAdmin\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"supportCardStats\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"supportCardId\",\"type\":\"uint256\"},{\"internalType\":\"enum PepemonCardOracle.SupportCardType\",\"name\":\"supportCardType\",\"type\":\"uint8\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"components\":[{\"internalType\":\"int256\",\"name\":\"power\",\"type\":\"int256\"},{\"internalType\":\"uint256\",\"name\":\"numTurns\",\"type\":\"uint256\"},{\"internalType\":\"enum PepemonCardOracle.EffectTo\",\"name\":\"effectTo\",\"type\":\"uint8\"},{\"internalType\":\"enum PepemonCardOracle.EffectFor\",\"name\":\"effectFor\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"reqCode\",\"type\":\"uint256\"}],\"internalType\":\"struct PepemonCardOracle.EffectMany\",\"name\":\"effectMany\",\"type\":\"tuple\"},{\"internalType\":\"bool\",\"name\":\"unstackable\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"unresettable\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"battleCardId\",\"type\":\"uint256\"},{\"internalType\":\"enum PepemonCardOracle.BattleCardType\",\"name\":\"battleCardType\",\"type\":\"uint8\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"hp\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"spd\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"inte\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"def\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"atk\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"sAtk\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"sDef\",\"type\":\"uint256\"}],\"internalType\":\"struct PepemonCardOracle.BattleCardStats\",\"name\":\"cardData\",\"type\":\"tuple\"}],\"name\":\"updateBattleCard\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"uint256\",\"name\":\"supportCardId\",\"type\":\"uint256\"},{\"internalType\":\"enum PepemonCardOracle.SupportCardType\",\"name\":\"supportCardType\",\"type\":\"uint8\"},{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"components\":[{\"internalType\":\"int256\",\"name\":\"basePower\",\"type\":\"int256\"},{\"internalType\":\"int256\",\"name\":\"triggeredPower\",\"type\":\"int256\"},{\"internalType\":\"enum PepemonCardOracle.EffectTo\",\"name\":\"effectTo\",\"type\":\"uint8\"},{\"internalType\":\"enum PepemonCardOracle.EffectFor\",\"name\":\"effectFor\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"reqCode\",\"type\":\"uint256\"}],\"internalType\":\"struct PepemonCardOracle.EffectOne[]\",\"name\":\"effectOnes\",\"type\":\"tuple[]\"},{\"components\":[{\"internalType\":\"int256\",\"name\":\"power\",\"type\":\"int256\"},{\"internalType\":\"uint256\",\"name\":\"numTurns\",\"type\":\"uint256\"},{\"internalType\":\"enum PepemonCardOracle.EffectTo\",\"name\":\"effectTo\",\"type\":\"uint8\"},{\"internalType\":\"enum PepemonCardOracle.EffectFor\",\"name\":\"effectFor\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"reqCode\",\"type\":\"uint256\"}],\"internalType\":\"struct PepemonCardOracle.EffectMany\",\"name\":\"effectMany\",\"type\":\"tuple\"},{\"internalType\":\"bool\",\"name\":\"unstackable\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"unresettable\",\"type\":\"bool\"}],\"internalType\":\"struct PepemonCardOracle.SupportCardStats\",\"name\":\"cardData\",\"type\":\"tuple\"}],\"name\":\"updateSupportCard\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"getSupportCardTypeById(uint256)\":{\"details\":\"Get supportCardType of supportCard\",\"params\":{\"_id\":\"uint256\"}}},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"notice\":\"This contract acts as the oracle, it contains battling information for both the Pepemon Battle and Support cards*\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/PepemonCardOracle.sol\":\"PepemonCardOracle\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/PepemonCardOracle.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity ^0.8.0;\\npragma experimental ABIEncoderV2;\\n\\nimport \\\"./lib/AdminRole.sol\\\";\\n\\n/**\\nThis contract acts as the oracle, it contains battling information for both the Pepemon Battle and Support cards\\n**/\\ncontract PepemonCardOracle is AdminRole {\\n    enum BattleCardType {\\n        PLANT,\\n        FIRE\\n    }\\n\\n    enum SupportCardType {\\n        OFFENSE,\\n        STRONG_OFFENSE,\\n        DEFENSE,\\n        STRONG_DEFENSE\\n    }\\n\\n    enum EffectTo {\\n        ATTACK,\\n        STRONG_ATTACK,\\n        DEFENSE,\\n        STRONG_DEFENSE,\\n        SPEED,\\n        INTELLIGENCE\\n    }\\n\\n    enum EffectFor {\\n        ME,\\n        ENEMY\\n    }\\n\\n    struct BattleCardStats {\\n        uint256 battleCardId;\\n        BattleCardType battleCardType;\\n        string name;\\n        uint256 hp; // hitpoints\\n        uint256 spd; // speed\\n        uint256 inte; // intelligence\\n        uint256 def; // defense\\n        uint256 atk; // attack\\n        uint256 sAtk; // special attack\\n        uint256 sDef; // special defense\\n    }\\n\\n    struct SupportCardStats {\\n        uint256 supportCardId;\\n        SupportCardType supportCardType;\\n        string name;\\n        EffectOne[] effectOnes;\\n        EffectMany effectMany;\\n        // If true, duplicate copies of the card in the same turn will have no extra effect.\\n        bool unstackable;\\n        // This property is for EffectMany now.\\n        // If true, assume the card is already in effect\\n        // then the same card drawn and used within a number of turns does not extend or reset duration of the effect.\\n        bool unresettable;\\n    }\\n\\n    struct EffectOne {\\n        // If power is 0, it is equal to the total of all normal offense/defense cards in the current turn.\\n        \\n        //basePower = power if req not met\\n        int256 basePower;\\n\\n        //triggeredPower = power if req met\\n        int256 triggeredPower;\\n        EffectTo effectTo;\\n        EffectFor effectFor;\\n        uint256 reqCode; //requirement code\\n    }\\n\\n    struct EffectMany {\\n        int256 power;\\n        uint256 numTurns;\\n        EffectTo effectTo;\\n        EffectFor effectFor;\\n        uint256 reqCode; //requirement code\\n    }\\n\\n    mapping(uint256 => BattleCardStats) public battleCardStats;\\n    mapping(uint256 => SupportCardStats) public supportCardStats;\\n\\n    event BattleCardCreated(address sender, uint256 cardId);\\n    event BattleCardUpdated(address sender, uint256 cardId);\\n    event SupportCardCreated(address sender, uint256 cardId);\\n    event SupportCardUpdated(address sender, uint256 cardId);\\n\\n    function addBattleCard(BattleCardStats memory cardData) public onlyAdmin {\\n        require(battleCardStats[cardData.battleCardId].battleCardId == 0, \\\"PepemonCard: BattleCard already exists\\\");\\n\\n        BattleCardStats storage _card = battleCardStats[cardData.battleCardId];\\n        _card.battleCardId = cardData.battleCardId;\\n        _card.battleCardType = cardData.battleCardType;\\n        _card.name = cardData.name;\\n        _card.hp = cardData.hp;\\n        _card.spd = cardData.spd;\\n        _card.inte = cardData.inte;\\n        _card.def = cardData.def;\\n        _card.atk = cardData.atk;\\n        _card.sDef = cardData.sDef;\\n        _card.sAtk = cardData.sAtk;\\n\\n        emit BattleCardCreated(msg.sender, cardData.battleCardId);\\n    }\\n\\n    function updateBattleCard(BattleCardStats memory cardData) public onlyAdmin {\\n        require(battleCardStats[cardData.battleCardId].battleCardId != 0, \\\"PepemonCard: BattleCard not found\\\");\\n\\n        BattleCardStats storage _card = battleCardStats[cardData.battleCardId];\\n        _card.hp = cardData.hp;\\n        _card.battleCardType = cardData.battleCardType;\\n        _card.name = cardData.name;\\n        _card.spd = cardData.spd;\\n        _card.inte = cardData.inte;\\n        _card.def = cardData.def;\\n        _card.atk = cardData.atk;\\n        _card.sDef = cardData.sDef;\\n        _card.sAtk = cardData.sAtk;\\n\\n        emit BattleCardUpdated(msg.sender, cardData.battleCardId);\\n    }\\n\\n    function getBattleCardById(uint256 _id) public view returns (BattleCardStats memory) {\\n        require(battleCardStats[_id].battleCardId != 0, \\\"PepemonCard: BattleCard not found\\\");\\n        return battleCardStats[_id];\\n    }\\n\\n    function addSupportCard(SupportCardStats memory cardData) public onlyAdmin {\\n        require(supportCardStats[cardData.supportCardId].supportCardId == 0, \\\"PepemonCard: SupportCard already exists\\\");\\n\\n        SupportCardStats storage _card = supportCardStats[cardData.supportCardId];\\n        _card.supportCardId = cardData.supportCardId;\\n        _card.supportCardType = cardData.supportCardType;\\n        _card.name = cardData.name;\\n        for (uint256 i = 0; i < cardData.effectOnes.length; i++) {\\n            _card.effectOnes.push(cardData.effectOnes[i]);\\n        }\\n        _card.effectMany = cardData.effectMany;\\n        _card.unstackable = cardData.unstackable;\\n        _card.unresettable = cardData.unresettable;\\n\\n        emit SupportCardCreated(msg.sender, cardData.supportCardId);\\n    }\\n\\n    function updateSupportCard(SupportCardStats memory cardData) public onlyAdmin {\\n        require(supportCardStats[cardData.supportCardId].supportCardId != 0, \\\"PepemonCard: SupportCard not found\\\");\\n\\n        SupportCardStats storage _card = supportCardStats[cardData.supportCardId];\\n        _card.supportCardId = cardData.supportCardId;\\n        _card.supportCardType = cardData.supportCardType;\\n        _card.name = cardData.name;\\n        for (uint256 i = 0; i < cardData.effectOnes.length; i++) {\\n            _card.effectOnes.push(cardData.effectOnes[i]);\\n        }\\n        _card.effectMany = cardData.effectMany;\\n        _card.unstackable = cardData.unstackable;\\n        _card.unresettable = cardData.unresettable;\\n\\n        emit SupportCardUpdated(msg.sender, cardData.supportCardId);\\n    }\\n\\n    function getSupportCardById(uint256 _id) public view returns (SupportCardStats memory) {\\n        require(supportCardStats[_id].supportCardId != 0, \\\"PepemonCard: SupportCard not found\\\");\\n        return supportCardStats[_id];\\n    }\\n\\n    /**\\n     * @dev Get supportCardType of supportCard\\n     * @param _id uint256\\n     */\\n    function getSupportCardTypeById(uint256 _id) public view returns (SupportCardType) {\\n        return getSupportCardById(_id).supportCardType;\\n    }\\n}\\n\",\"keccak256\":\"0x491c921c6ca5ce63e59a94385e481fb4ae7b7ffa84949bbb4765c34592684cb7\",\"license\":\"MIT\"},\"contracts/lib/AdminRole.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity ^0.8.0;\\n\\nimport \\\"./Roles.sol\\\";\\n\\ncontract AdminRole {\\n  using Roles for Roles.Role;\\n\\n  event AdminAdded(address indexed account);\\n  event AdminRemoved(address indexed account);\\n\\n  Roles.Role private admins;\\n\\n  constructor() {\\n    _addAdmin(msg.sender);\\n  }\\n\\n  modifier onlyAdmin() {\\n    require(isAdmin(msg.sender));\\n    _;\\n  }\\n\\n  function isAdmin(address account) public view returns (bool) {\\n    return admins.has(account);\\n  }\\n\\n  function addAdmin(address account) public onlyAdmin {\\n    _addAdmin(account);\\n  }\\n\\n  function renounceAdmin() public {\\n    _removeAdmin(msg.sender);\\n  }\\n\\n  function _addAdmin(address account) internal {\\n    admins.add(account);\\n    emit AdminAdded(account);\\n  }\\n\\n  function _removeAdmin(address account) internal {\\n    admins.remove(account);\\n    emit AdminRemoved(account);\\n  }\\n}\",\"keccak256\":\"0x087322ecbf7bdc39315bedc5ec603149a119a35910f82ceb131820c1b7bb9804\",\"license\":\"MIT\"},\"contracts/lib/Roles.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @title Roles\\n * @dev Library for managing addresses assigned to a Role.\\n */\\nlibrary Roles {\\n  struct Role {\\n    mapping (address => bool) bearer;\\n  }\\n\\n  /**\\n   * @dev give an account access to this role\\n   */\\n  function add(Role storage role, address account) internal {\\n    require(account != address(0));\\n    require(!has(role, account));\\n\\n    role.bearer[account] = true;\\n  }\\n\\n  /**\\n   * @dev remove an account's access to this role\\n   */\\n  function remove(Role storage role, address account) internal {\\n    require(account != address(0));\\n    require(has(role, account));\\n\\n    role.bearer[account] = false;\\n  }\\n\\n  /**\\n   * @dev check if an account has this role\\n   * @return bool\\n   */\\n  function has(Role storage role, address account)\\n    internal\\n    view\\n    returns (bool)\\n  {\\n    require(account != address(0));\\n    return role.bearer[account];\\n  }\\n}\",\"keccak256\":\"0xd66f1c8050d61971204bf1249496bd98b69fd79b2011a630767f817d7201b56c\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x60806040523480156200001157600080fd5b506200001d3362000023565b620000fb565b6200003e8160006200007560201b6200114a1790919060201c565b6040516001600160a01b038216907f44d6d25963f097ad14f29f06854a01f575648a1ef82f30e562ccd3889717e33990600090a250565b6001600160a01b0381166200008957600080fd5b620000958282620000c5565b15620000a057600080fd5b6001600160a01b0316600090815260209190915260409020805460ff19166001179055565b60006001600160a01b038216620000db57600080fd5b506001600160a01b03166000908152602091909152604090205460ff1690565b611d81806200010b6000396000f3fe608060405234801561001057600080fd5b50600436106100b45760003560e01c8063703c364411610071578063703c36441461016f57806370480275146101825780637ed7f93b1461019557806389c2c7d1146101be5780638bad0c0a146101d1578063994fb2c6146101d9576100b4565b8063150c076d146100b957806324d7806c146100ce5780634645842e146100f75780634aa452861461010a5780634bcb96131461012a5780634e84f9bb1461014a575b600080fd5b6100cc6100c7366004611656565b6101f9565b005b6100e16100dc366004611628565b610332565b6040516100ee91906118fd565b60405180910390f35b6100cc61010536600461172f565b610346565b61011d61011836600461180f565b6105f3565b6040516100ee9190611a26565b61013d61013836600461180f565b610775565b6040516100ee9190611908565b61015d61015836600461180f565b61078a565b6040516100ee96959493929190611c24565b6100cc61017d366004611656565b61091b565b6100cc610190366004611628565b610a3a565b6101a86101a336600461180f565b610a58565b6040516100ee9a99989796959493929190611bc0565b6100cc6101cc36600461172f565b610b32565b6100cc610dde565b6101ec6101e736600461180f565b610de9565b6040516100ee9190611abd565b61020233610332565b61020b57600080fd5b8051600090815260016020526040902054156102425760405162461bcd60e51b815260040161023990611999565b60405180910390fd5b80516000908152600160208181526040909220835181559183015182820180549192909160ff191690838181111561028a57634e487b7160e01b600052602160045260246000fd5b0217905550604082015180516102aa91600284019160209091019061129b565b50606082015160038201556080820151600482015560a0820151600582015560c0820151600682015560e082015160078201556101208201516009820155610100820151600882015581516040517fe834f4a6670c306eda5550bcba979eb1243ea6b822d8ec2fe61c004b08d4668791610326913391906118e4565b60405180910390a15050565b600061033e8183611196565b90505b919050565b61034f33610332565b61035857600080fd5b8051600090815260026020526040902054156103865760405162461bcd60e51b8152600401610239906119df565b80516000908152600260209081526040909120825181559082015160018083018054909160ff19909116908360038111156103d157634e487b7160e01b600052602160045260246000fd5b0217905550604082015180516103f191600284019160209091019061129b565b5060005b8260600151518110156104ef57816003018360600151828151811061042a57634e487b7160e01b600052603260045260246000fd5b60209081029190910181015182546001818101855560009485529383902082516004909202019081559181015182840155604081015160028301805492949192909160ff199091169083600581111561049357634e487b7160e01b600052602160045260246000fd5b0217905550606082015160028201805461ff0019166101008360018111156104cb57634e487b7160e01b600052602160045260246000fd5b021790555060808201518160030155505080806104e790611cdb565b9150506103f5565b50816080015181600401600082015181600001556020820151816001015560408201518160020160006101000a81548160ff0219169083600581111561054557634e487b7160e01b600052602160045260246000fd5b0217905550606082015160028201805461ff00191661010083600181111561057d57634e487b7160e01b600052602160045260246000fd5b02179055506080919091015160039091015560a082015160088201805460c085015115156101000261ff001993151560ff19909216919091179290921691909117905581516040517fcc85dd689af30390542e50d769fe6c03d411de4e50da85ca2b22b6ac1ac6135491610326913391906118e4565b6105fb61131f565b6000828152600160205260409020546106265760405162461bcd60e51b815260040161023990611958565b60008281526001602081815260409283902083516101408101909452805484528083015490929184019160ff9091169081111561067357634e487b7160e01b600052602160045260246000fd5b600181111561069257634e487b7160e01b600052602160045260246000fd5b81526020016002820180546106a690611ca0565b80601f01602080910402602001604051908101604052809291908181526020018280546106d290611ca0565b801561071f5780601f106106f45761010080835404028352916020019161071f565b820191906000526020600020905b81548152906001019060200180831161070257829003601f168201915b505050505081526020016003820154815260200160048201548152602001600582015481526020016006820154815260200160078201548152602001600882015481526020016009820154815250509050919050565b600061078082610de9565b6020015192915050565b6002602081905260009182526040909120805460018201549282018054919360ff1692916107b790611ca0565b80601f01602080910402602001604051908101604052809291908181526020018280546107e390611ca0565b80156108305780601f1061080557610100808354040283529160200191610830565b820191906000526020600020905b81548152906001019060200180831161081357829003601f168201915b50506040805160a081018252600487018054825260058089015460208401526006890154979897929650909450918501925060ff169081111561088357634e487b7160e01b600052602160045260246000fd5b60058111156108a257634e487b7160e01b600052602160045260246000fd5b81526020016002820160019054906101000a900460ff1660018111156108d857634e487b7160e01b600052602160045260246000fd5b60018111156108f757634e487b7160e01b600052602160045260246000fd5b81526003919091015460209091015260089091015460ff8082169161010090041686565b61092433610332565b61092d57600080fd5b805160009081526001602052604090205461095a5760405162461bcd60e51b815260040161023990611958565b80516000908152600160208181526040909220606084015160038201559183015182820180549192909160ff19169083818111156109a857634e487b7160e01b600052602160045260246000fd5b0217905550604082015180516109c891600284019160209091019061129b565b506080820151600482015560a0820151600582015560c0820151600682015560e082015160078201556101208201516009820155610100820151600882015581516040517f1dbe7a4174782e5f8cba924ddeb840e4cc4fff4ef29280b218f571c2c72baa9a91610326913391906118e4565b610a4333610332565b610a4c57600080fd5b610a55816111cf565b50565b600160208190526000918252604090912080549181015460028201805460ff9092169291610a8590611ca0565b80601f0160208091040260200160405190810160405280929190818152602001828054610ab190611ca0565b8015610afe5780601f10610ad357610100808354040283529160200191610afe565b820191906000526020600020905b815481529060010190602001808311610ae157829003601f168201915b505050505090806003015490806004015490806005015490806006015490806007015490806008015490806009015490508a565b610b3b33610332565b610b4457600080fd5b8051600090815260026020526040902054610b715760405162461bcd60e51b815260040161023990611916565b80516000908152600260209081526040909120825181559082015160018083018054909160ff1990911690836003811115610bbc57634e487b7160e01b600052602160045260246000fd5b021790555060408201518051610bdc91600284019160209091019061129b565b5060005b826060015151811015610cda578160030183606001518281518110610c1557634e487b7160e01b600052603260045260246000fd5b60209081029190910181015182546001818101855560009485529383902082516004909202019081559181015182840155604081015160028301805492949192909160ff1990911690836005811115610c7e57634e487b7160e01b600052602160045260246000fd5b0217905550606082015160028201805461ff001916610100836001811115610cb657634e487b7160e01b600052602160045260246000fd5b02179055506080820151816003015550508080610cd290611cdb565b915050610be0565b50816080015181600401600082015181600001556020820151816001015560408201518160020160006101000a81548160ff02191690836005811115610d3057634e487b7160e01b600052602160045260246000fd5b0217905550606082015160028201805461ff001916610100836001811115610d6857634e487b7160e01b600052602160045260246000fd5b02179055506080919091015160039091015560a082015160088201805460c085015115156101000261ff001993151560ff19909216919091179290921691909117905581516040517f7d280cd9a4f3e7ca54532462822a1b64c23c94371bab5f3bc7e16070287046d091610326913391906118e4565b610de733611211565b565b610df1611373565b600082815260026020526040902054610e1c5760405162461bcd60e51b815260040161023990611916565b600082815260026020908152604091829020825160e08101909352805483526001810154909183019060ff166003811115610e6757634e487b7160e01b600052602160045260246000fd5b6003811115610e8657634e487b7160e01b600052602160045260246000fd5b8152602001600282018054610e9a90611ca0565b80601f0160208091040260200160405190810160405280929190818152602001828054610ec690611ca0565b8015610f135780601f10610ee857610100808354040283529160200191610f13565b820191906000526020600020905b815481529060010190602001808311610ef657829003601f168201915b5050505050815260200160038201805480602002602001604051908101604052809291908181526020016000905b8282101561103b57838290600052602060002090600402016040518060a001604052908160008201548152602001600182015481526020016002820160009054906101000a900460ff166005811115610faa57634e487b7160e01b600052602160045260246000fd5b6005811115610fc957634e487b7160e01b600052602160045260246000fd5b81526020016002820160019054906101000a900460ff166001811115610fff57634e487b7160e01b600052602160045260246000fd5b600181111561101e57634e487b7160e01b600052602160045260246000fd5b815260200160038201548152505081526020019060010190610f41565b505050508152602001600482016040518060a001604052908160008201548152602001600182015481526020016002820160009054906101000a900460ff16600581111561109957634e487b7160e01b600052602160045260246000fd5b60058111156110b857634e487b7160e01b600052602160045260246000fd5b81526020016002820160019054906101000a900460ff1660018111156110ee57634e487b7160e01b600052602160045260246000fd5b600181111561110d57634e487b7160e01b600052602160045260246000fd5b8152600391909101546020918201529082526008929092015460ff8082161515938301939093526101009004909116151560409091015292915050565b6001600160a01b03811661115d57600080fd5b6111678282611196565b1561117157600080fd5b6001600160a01b0316600090815260209190915260409020805460ff19166001179055565b60006001600160a01b0382166111ab57600080fd5b506001600160a01b03811660009081526020839052604090205460ff165b92915050565b6111da60008261114a565b6040516001600160a01b038216907f44d6d25963f097ad14f29f06854a01f575648a1ef82f30e562ccd3889717e33990600090a250565b61121c600082611253565b6040516001600160a01b038216907fa3b62bc36326052d97ea62d63c3d60308ed4c3ea8ac079dd8499f1e9c4f80c0f90600090a250565b6001600160a01b03811661126657600080fd5b6112708282611196565b61127957600080fd5b6001600160a01b0316600090815260209190915260409020805460ff19169055565b8280546112a790611ca0565b90600052602060002090601f0160209004810192826112c9576000855561130f565b82601f106112e257805160ff191683800117855561130f565b8280016001018555821561130f579182015b8281111561130f5782518255916020019190600101906112f4565b5061131b9291506113b7565b5090565b60408051610140810190915260008082526020820190815260200160608152602001600081526020016000815260200160008152602001600081526020016000815260200160008152602001600081525090565b6040805160e0810190915260008082526020820190815260200160608152602001606081526020016113a36113cc565b815260006020820181905260409091015290565b5b8082111561131b57600081556001016113b8565b6040518060a0016040528060008152602001600081526020016000600581111561140657634e487b7160e01b600052602160045260246000fd5b815260200160008152602001600081525090565b600082601f83011261142a578081fd5b8135602067ffffffffffffffff8083111561144757611447611d18565b6114548283850201611c76565b8381528281019086840160a0808702890186018a1015611472578788fd5b875b878110156114f65781838c03121561148a578889fd5b6040805183810181811089821117156114a5576114a5611d18565b82528435815288850135898201526114be858301611520565b8282015260609150818501356114d381611d3e565b918101919091526080848101359082015285529386019391810191600101611474565b50919998505050505050505050565b8035801515811461034157600080fd5b803561034181611d3e565b80356006811061034157600080fd5b80356004811061034157600080fd5b600082601f83011261154e578081fd5b813567ffffffffffffffff81111561156857611568611d18565b61157b601f8201601f1916602001611c76565b81815284602083860101111561158f578283fd5b816020850160208301379081016020019190915292915050565b600060a082840312156115ba578081fd5b60405160a0810181811067ffffffffffffffff821117156115dd576115dd611d18565b806040525080915082358152602083013560208201526115ff60408401611520565b6040820152606083013561161281611d3e565b6060820152608092830135920191909152919050565b600060208284031215611639578081fd5b81356001600160a01b038116811461164f578182fd5b9392505050565b600060208284031215611667578081fd5b813567ffffffffffffffff8082111561167e578283fd5b8184019150610140808387031215611694578384fd5b61169d81611c76565b9050823581526116af60208401611515565b60208201526040830135828111156116c5578485fd5b6116d18782860161153e565b604083015250606083013560608201526080830135608082015260a083013560a082015260c083013560c082015260e083013560e0820152610100915081830135828201526101209150818301358282015280935050505092915050565b600060208284031215611740578081fd5b813567ffffffffffffffff80821115611757578283fd5b90830190610160828603121561176b578283fd5b61177560e0611c76565b823581526117856020840161152f565b602082015260408301358281111561179b578485fd5b6117a78782860161153e565b6040830152506060830135828111156117be578485fd5b6117ca8782860161141a565b6060830152506117dd86608085016115a9565b60808201526117ef6101208401611505565b60a08201526118016101408401611505565b60c082015295945050505050565b600060208284031215611820578081fd5b5035919050565b15159052565b61183681611d2e565b9052565b6006811061183657611836611d02565b6004811061183657611836611d02565b60008151808452815b8181101561187f57602081850181015186830182015201611863565b818111156118905782602083870101525b50601f01601f19169290920160200192915050565b805182526020810151602083015260408101516118c5604084018261183a565b5060608101516118d481611d2e565b6060830152608090810151910152565b6001600160a01b03929092168252602082015260400190565b901515815260200190565b602081016111c9828461184a565b60208082526022908201527f506570656d6f6e436172643a20537570706f727443617264206e6f7420666f756040820152611b9960f21b606082015260800190565b60208082526021908201527f506570656d6f6e436172643a20426174746c6543617264206e6f7420666f756e6040820152601960fa1b606082015260800190565b60208082526026908201527f506570656d6f6e436172643a20426174746c654361726420616c72656164792060408201526565786973747360d01b606082015260800190565b60208082526027908201527f506570656d6f6e436172643a20537570706f72744361726420616c72656164796040820152662065786973747360c81b606082015260800190565b600060208252825160208301526020830151611a45604084018261182d565b506040830151610140806060850152611a6261016085018361185a565b915060608501516080850152608085015160a085015260a085015160c085015260c085015160e085015260e0850151610100818187015280870151915050610120818187015280870151838701525050508091505092915050565b60006020808352835181840152808401516040611adc8186018361184a565b80860151915061016060608181880152611afa61018088018561185a565b88820151888203601f190160808a8101919091528151808452918801965088929091908801905b80841015611b7657875180518352898101518a84015287810151611b478985018261183a565b5085810151611b5581611d2e565b8387015283015183830152968801966001939093019260a090910190611b21565b50818b01519750611b8a60a08b01896118a5565b60a08b01519750611b9f6101408b0189611827565b60c08b01519750611bb2858b0189611827565b9a9950505050505050505050565b60006101408c8352611bd18c611d2e565b8b6020840152806040840152611be98184018c61185a565b606084019a909a525050608081019690965260a086019490945260c085019290925260e0840152610100830152610120909101529392505050565b6000610140888352611c39602084018961184a565b806040840152611c4b8184018861185a565b915050611c5b60608301866118a5565b92151561010082015290151561012090910152949350505050565b60405181810167ffffffffffffffff81118282101715611c9857611c98611d18565b604052919050565b600281046001821680611cb457607f821691505b60208210811415611cd557634e487b7160e01b600052602260045260246000fd5b50919050565b6000600019821415611cfb57634e487b7160e01b81526011600452602481fd5b5060010190565b634e487b7160e01b600052602160045260246000fd5b634e487b7160e01b600052604160045260246000fd5b60028110610a5557610a55611d02565b60028110610a5557600080fdfea26469706673582212208d4a4fe1b21d5c2c1bca6204ff9b9094222fbd92ecf0799106f0682b6adacbbe64736f6c63430008000033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100b45760003560e01c8063703c364411610071578063703c36441461016f57806370480275146101825780637ed7f93b1461019557806389c2c7d1146101be5780638bad0c0a146101d1578063994fb2c6146101d9576100b4565b8063150c076d146100b957806324d7806c146100ce5780634645842e146100f75780634aa452861461010a5780634bcb96131461012a5780634e84f9bb1461014a575b600080fd5b6100cc6100c7366004611656565b6101f9565b005b6100e16100dc366004611628565b610332565b6040516100ee91906118fd565b60405180910390f35b6100cc61010536600461172f565b610346565b61011d61011836600461180f565b6105f3565b6040516100ee9190611a26565b61013d61013836600461180f565b610775565b6040516100ee9190611908565b61015d61015836600461180f565b61078a565b6040516100ee96959493929190611c24565b6100cc61017d366004611656565b61091b565b6100cc610190366004611628565b610a3a565b6101a86101a336600461180f565b610a58565b6040516100ee9a99989796959493929190611bc0565b6100cc6101cc36600461172f565b610b32565b6100cc610dde565b6101ec6101e736600461180f565b610de9565b6040516100ee9190611abd565b61020233610332565b61020b57600080fd5b8051600090815260016020526040902054156102425760405162461bcd60e51b815260040161023990611999565b60405180910390fd5b80516000908152600160208181526040909220835181559183015182820180549192909160ff191690838181111561028a57634e487b7160e01b600052602160045260246000fd5b0217905550604082015180516102aa91600284019160209091019061129b565b50606082015160038201556080820151600482015560a0820151600582015560c0820151600682015560e082015160078201556101208201516009820155610100820151600882015581516040517fe834f4a6670c306eda5550bcba979eb1243ea6b822d8ec2fe61c004b08d4668791610326913391906118e4565b60405180910390a15050565b600061033e8183611196565b90505b919050565b61034f33610332565b61035857600080fd5b8051600090815260026020526040902054156103865760405162461bcd60e51b8152600401610239906119df565b80516000908152600260209081526040909120825181559082015160018083018054909160ff19909116908360038111156103d157634e487b7160e01b600052602160045260246000fd5b0217905550604082015180516103f191600284019160209091019061129b565b5060005b8260600151518110156104ef57816003018360600151828151811061042a57634e487b7160e01b600052603260045260246000fd5b60209081029190910181015182546001818101855560009485529383902082516004909202019081559181015182840155604081015160028301805492949192909160ff199091169083600581111561049357634e487b7160e01b600052602160045260246000fd5b0217905550606082015160028201805461ff0019166101008360018111156104cb57634e487b7160e01b600052602160045260246000fd5b021790555060808201518160030155505080806104e790611cdb565b9150506103f5565b50816080015181600401600082015181600001556020820151816001015560408201518160020160006101000a81548160ff0219169083600581111561054557634e487b7160e01b600052602160045260246000fd5b0217905550606082015160028201805461ff00191661010083600181111561057d57634e487b7160e01b600052602160045260246000fd5b02179055506080919091015160039091015560a082015160088201805460c085015115156101000261ff001993151560ff19909216919091179290921691909117905581516040517fcc85dd689af30390542e50d769fe6c03d411de4e50da85ca2b22b6ac1ac6135491610326913391906118e4565b6105fb61131f565b6000828152600160205260409020546106265760405162461bcd60e51b815260040161023990611958565b60008281526001602081815260409283902083516101408101909452805484528083015490929184019160ff9091169081111561067357634e487b7160e01b600052602160045260246000fd5b600181111561069257634e487b7160e01b600052602160045260246000fd5b81526020016002820180546106a690611ca0565b80601f01602080910402602001604051908101604052809291908181526020018280546106d290611ca0565b801561071f5780601f106106f45761010080835404028352916020019161071f565b820191906000526020600020905b81548152906001019060200180831161070257829003601f168201915b505050505081526020016003820154815260200160048201548152602001600582015481526020016006820154815260200160078201548152602001600882015481526020016009820154815250509050919050565b600061078082610de9565b6020015192915050565b6002602081905260009182526040909120805460018201549282018054919360ff1692916107b790611ca0565b80601f01602080910402602001604051908101604052809291908181526020018280546107e390611ca0565b80156108305780601f1061080557610100808354040283529160200191610830565b820191906000526020600020905b81548152906001019060200180831161081357829003601f168201915b50506040805160a081018252600487018054825260058089015460208401526006890154979897929650909450918501925060ff169081111561088357634e487b7160e01b600052602160045260246000fd5b60058111156108a257634e487b7160e01b600052602160045260246000fd5b81526020016002820160019054906101000a900460ff1660018111156108d857634e487b7160e01b600052602160045260246000fd5b60018111156108f757634e487b7160e01b600052602160045260246000fd5b81526003919091015460209091015260089091015460ff8082169161010090041686565b61092433610332565b61092d57600080fd5b805160009081526001602052604090205461095a5760405162461bcd60e51b815260040161023990611958565b80516000908152600160208181526040909220606084015160038201559183015182820180549192909160ff19169083818111156109a857634e487b7160e01b600052602160045260246000fd5b0217905550604082015180516109c891600284019160209091019061129b565b506080820151600482015560a0820151600582015560c0820151600682015560e082015160078201556101208201516009820155610100820151600882015581516040517f1dbe7a4174782e5f8cba924ddeb840e4cc4fff4ef29280b218f571c2c72baa9a91610326913391906118e4565b610a4333610332565b610a4c57600080fd5b610a55816111cf565b50565b600160208190526000918252604090912080549181015460028201805460ff9092169291610a8590611ca0565b80601f0160208091040260200160405190810160405280929190818152602001828054610ab190611ca0565b8015610afe5780601f10610ad357610100808354040283529160200191610afe565b820191906000526020600020905b815481529060010190602001808311610ae157829003601f168201915b505050505090806003015490806004015490806005015490806006015490806007015490806008015490806009015490508a565b610b3b33610332565b610b4457600080fd5b8051600090815260026020526040902054610b715760405162461bcd60e51b815260040161023990611916565b80516000908152600260209081526040909120825181559082015160018083018054909160ff1990911690836003811115610bbc57634e487b7160e01b600052602160045260246000fd5b021790555060408201518051610bdc91600284019160209091019061129b565b5060005b826060015151811015610cda578160030183606001518281518110610c1557634e487b7160e01b600052603260045260246000fd5b60209081029190910181015182546001818101855560009485529383902082516004909202019081559181015182840155604081015160028301805492949192909160ff1990911690836005811115610c7e57634e487b7160e01b600052602160045260246000fd5b0217905550606082015160028201805461ff001916610100836001811115610cb657634e487b7160e01b600052602160045260246000fd5b02179055506080820151816003015550508080610cd290611cdb565b915050610be0565b50816080015181600401600082015181600001556020820151816001015560408201518160020160006101000a81548160ff02191690836005811115610d3057634e487b7160e01b600052602160045260246000fd5b0217905550606082015160028201805461ff001916610100836001811115610d6857634e487b7160e01b600052602160045260246000fd5b02179055506080919091015160039091015560a082015160088201805460c085015115156101000261ff001993151560ff19909216919091179290921691909117905581516040517f7d280cd9a4f3e7ca54532462822a1b64c23c94371bab5f3bc7e16070287046d091610326913391906118e4565b610de733611211565b565b610df1611373565b600082815260026020526040902054610e1c5760405162461bcd60e51b815260040161023990611916565b600082815260026020908152604091829020825160e08101909352805483526001810154909183019060ff166003811115610e6757634e487b7160e01b600052602160045260246000fd5b6003811115610e8657634e487b7160e01b600052602160045260246000fd5b8152602001600282018054610e9a90611ca0565b80601f0160208091040260200160405190810160405280929190818152602001828054610ec690611ca0565b8015610f135780601f10610ee857610100808354040283529160200191610f13565b820191906000526020600020905b815481529060010190602001808311610ef657829003601f168201915b5050505050815260200160038201805480602002602001604051908101604052809291908181526020016000905b8282101561103b57838290600052602060002090600402016040518060a001604052908160008201548152602001600182015481526020016002820160009054906101000a900460ff166005811115610faa57634e487b7160e01b600052602160045260246000fd5b6005811115610fc957634e487b7160e01b600052602160045260246000fd5b81526020016002820160019054906101000a900460ff166001811115610fff57634e487b7160e01b600052602160045260246000fd5b600181111561101e57634e487b7160e01b600052602160045260246000fd5b815260200160038201548152505081526020019060010190610f41565b505050508152602001600482016040518060a001604052908160008201548152602001600182015481526020016002820160009054906101000a900460ff16600581111561109957634e487b7160e01b600052602160045260246000fd5b60058111156110b857634e487b7160e01b600052602160045260246000fd5b81526020016002820160019054906101000a900460ff1660018111156110ee57634e487b7160e01b600052602160045260246000fd5b600181111561110d57634e487b7160e01b600052602160045260246000fd5b8152600391909101546020918201529082526008929092015460ff8082161515938301939093526101009004909116151560409091015292915050565b6001600160a01b03811661115d57600080fd5b6111678282611196565b1561117157600080fd5b6001600160a01b0316600090815260209190915260409020805460ff19166001179055565b60006001600160a01b0382166111ab57600080fd5b506001600160a01b03811660009081526020839052604090205460ff165b92915050565b6111da60008261114a565b6040516001600160a01b038216907f44d6d25963f097ad14f29f06854a01f575648a1ef82f30e562ccd3889717e33990600090a250565b61121c600082611253565b6040516001600160a01b038216907fa3b62bc36326052d97ea62d63c3d60308ed4c3ea8ac079dd8499f1e9c4f80c0f90600090a250565b6001600160a01b03811661126657600080fd5b6112708282611196565b61127957600080fd5b6001600160a01b0316600090815260209190915260409020805460ff19169055565b8280546112a790611ca0565b90600052602060002090601f0160209004810192826112c9576000855561130f565b82601f106112e257805160ff191683800117855561130f565b8280016001018555821561130f579182015b8281111561130f5782518255916020019190600101906112f4565b5061131b9291506113b7565b5090565b60408051610140810190915260008082526020820190815260200160608152602001600081526020016000815260200160008152602001600081526020016000815260200160008152602001600081525090565b6040805160e0810190915260008082526020820190815260200160608152602001606081526020016113a36113cc565b815260006020820181905260409091015290565b5b8082111561131b57600081556001016113b8565b6040518060a0016040528060008152602001600081526020016000600581111561140657634e487b7160e01b600052602160045260246000fd5b815260200160008152602001600081525090565b600082601f83011261142a578081fd5b8135602067ffffffffffffffff8083111561144757611447611d18565b6114548283850201611c76565b8381528281019086840160a0808702890186018a1015611472578788fd5b875b878110156114f65781838c03121561148a578889fd5b6040805183810181811089821117156114a5576114a5611d18565b82528435815288850135898201526114be858301611520565b8282015260609150818501356114d381611d3e565b918101919091526080848101359082015285529386019391810191600101611474565b50919998505050505050505050565b8035801515811461034157600080fd5b803561034181611d3e565b80356006811061034157600080fd5b80356004811061034157600080fd5b600082601f83011261154e578081fd5b813567ffffffffffffffff81111561156857611568611d18565b61157b601f8201601f1916602001611c76565b81815284602083860101111561158f578283fd5b816020850160208301379081016020019190915292915050565b600060a082840312156115ba578081fd5b60405160a0810181811067ffffffffffffffff821117156115dd576115dd611d18565b806040525080915082358152602083013560208201526115ff60408401611520565b6040820152606083013561161281611d3e565b6060820152608092830135920191909152919050565b600060208284031215611639578081fd5b81356001600160a01b038116811461164f578182fd5b9392505050565b600060208284031215611667578081fd5b813567ffffffffffffffff8082111561167e578283fd5b8184019150610140808387031215611694578384fd5b61169d81611c76565b9050823581526116af60208401611515565b60208201526040830135828111156116c5578485fd5b6116d18782860161153e565b604083015250606083013560608201526080830135608082015260a083013560a082015260c083013560c082015260e083013560e0820152610100915081830135828201526101209150818301358282015280935050505092915050565b600060208284031215611740578081fd5b813567ffffffffffffffff80821115611757578283fd5b90830190610160828603121561176b578283fd5b61177560e0611c76565b823581526117856020840161152f565b602082015260408301358281111561179b578485fd5b6117a78782860161153e565b6040830152506060830135828111156117be578485fd5b6117ca8782860161141a565b6060830152506117dd86608085016115a9565b60808201526117ef6101208401611505565b60a08201526118016101408401611505565b60c082015295945050505050565b600060208284031215611820578081fd5b5035919050565b15159052565b61183681611d2e565b9052565b6006811061183657611836611d02565b6004811061183657611836611d02565b60008151808452815b8181101561187f57602081850181015186830182015201611863565b818111156118905782602083870101525b50601f01601f19169290920160200192915050565b805182526020810151602083015260408101516118c5604084018261183a565b5060608101516118d481611d2e565b6060830152608090810151910152565b6001600160a01b03929092168252602082015260400190565b901515815260200190565b602081016111c9828461184a565b60208082526022908201527f506570656d6f6e436172643a20537570706f727443617264206e6f7420666f756040820152611b9960f21b606082015260800190565b60208082526021908201527f506570656d6f6e436172643a20426174746c6543617264206e6f7420666f756e6040820152601960fa1b606082015260800190565b60208082526026908201527f506570656d6f6e436172643a20426174746c654361726420616c72656164792060408201526565786973747360d01b606082015260800190565b60208082526027908201527f506570656d6f6e436172643a20537570706f72744361726420616c72656164796040820152662065786973747360c81b606082015260800190565b600060208252825160208301526020830151611a45604084018261182d565b506040830151610140806060850152611a6261016085018361185a565b915060608501516080850152608085015160a085015260a085015160c085015260c085015160e085015260e0850151610100818187015280870151915050610120818187015280870151838701525050508091505092915050565b60006020808352835181840152808401516040611adc8186018361184a565b80860151915061016060608181880152611afa61018088018561185a565b88820151888203601f190160808a8101919091528151808452918801965088929091908801905b80841015611b7657875180518352898101518a84015287810151611b478985018261183a565b5085810151611b5581611d2e565b8387015283015183830152968801966001939093019260a090910190611b21565b50818b01519750611b8a60a08b01896118a5565b60a08b01519750611b9f6101408b0189611827565b60c08b01519750611bb2858b0189611827565b9a9950505050505050505050565b60006101408c8352611bd18c611d2e565b8b6020840152806040840152611be98184018c61185a565b606084019a909a525050608081019690965260a086019490945260c085019290925260e0840152610100830152610120909101529392505050565b6000610140888352611c39602084018961184a565b806040840152611c4b8184018861185a565b915050611c5b60608301866118a5565b92151561010082015290151561012090910152949350505050565b60405181810167ffffffffffffffff81118282101715611c9857611c98611d18565b604052919050565b600281046001821680611cb457607f821691505b60208210811415611cd557634e487b7160e01b600052602260045260246000fd5b50919050565b6000600019821415611cfb57634e487b7160e01b81526011600452602481fd5b5060010190565b634e487b7160e01b600052602160045260246000fd5b634e487b7160e01b600052604160045260246000fd5b60028110610a5557610a55611d02565b60028110610a5557600080fdfea26469706673582212208d4a4fe1b21d5c2c1bca6204ff9b9094222fbd92ecf0799106f0682b6adacbbe64736f6c63430008000033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {
+      "getSupportCardTypeById(uint256)": {
+        "details": "Get supportCardType of supportCard",
+        "params": {
+          "_id": "uint256"
+        }
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "notice": "This contract acts as the oracle, it contains battling information for both the Pepemon Battle and Support cards*",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 6652,
+        "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+        "label": "admins",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_struct(Role)6944_storage"
+      },
+      {
+        "astId": 6104,
+        "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+        "label": "battleCardStats",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_mapping(t_uint256,t_struct(BattleCardStats)6054_storage)"
+      },
+      {
+        "astId": 6109,
+        "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+        "label": "supportCardStats",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_mapping(t_uint256,t_struct(SupportCardStats)6073_storage)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_array(t_struct(EffectOne)6086_storage)dyn_storage": {
+        "base": "t_struct(EffectOne)6086_storage",
+        "encoding": "dynamic_array",
+        "label": "struct PepemonCardOracle.EffectOne[]",
+        "numberOfBytes": "32"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_enum(BattleCardType)6017": {
+        "encoding": "inplace",
+        "label": "enum PepemonCardOracle.BattleCardType",
+        "numberOfBytes": "1"
+      },
+      "t_enum(EffectFor)6032": {
+        "encoding": "inplace",
+        "label": "enum PepemonCardOracle.EffectFor",
+        "numberOfBytes": "1"
+      },
+      "t_enum(EffectTo)6029": {
+        "encoding": "inplace",
+        "label": "enum PepemonCardOracle.EffectTo",
+        "numberOfBytes": "1"
+      },
+      "t_enum(SupportCardType)6022": {
+        "encoding": "inplace",
+        "label": "enum PepemonCardOracle.SupportCardType",
+        "numberOfBytes": "1"
+      },
+      "t_int256": {
+        "encoding": "inplace",
+        "label": "int256",
+        "numberOfBytes": "32"
+      },
+      "t_mapping(t_address,t_bool)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => bool)",
+        "numberOfBytes": "32",
+        "value": "t_bool"
+      },
+      "t_mapping(t_uint256,t_struct(BattleCardStats)6054_storage)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => struct PepemonCardOracle.BattleCardStats)",
+        "numberOfBytes": "32",
+        "value": "t_struct(BattleCardStats)6054_storage"
+      },
+      "t_mapping(t_uint256,t_struct(SupportCardStats)6073_storage)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => struct PepemonCardOracle.SupportCardStats)",
+        "numberOfBytes": "32",
+        "value": "t_struct(SupportCardStats)6073_storage"
+      },
+      "t_string_storage": {
+        "encoding": "bytes",
+        "label": "string",
+        "numberOfBytes": "32"
+      },
+      "t_struct(BattleCardStats)6054_storage": {
+        "encoding": "inplace",
+        "label": "struct PepemonCardOracle.BattleCardStats",
+        "members": [
+          {
+            "astId": 6034,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "battleCardId",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 6037,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "battleCardType",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_enum(BattleCardType)6017"
+          },
+          {
+            "astId": 6039,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "name",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_string_storage"
+          },
+          {
+            "astId": 6041,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "hp",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 6043,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "spd",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 6045,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "inte",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 6047,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "def",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 6049,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "atk",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 6051,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "sAtk",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 6053,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "sDef",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_uint256"
+          }
+        ],
+        "numberOfBytes": "320"
+      },
+      "t_struct(EffectMany)6099_storage": {
+        "encoding": "inplace",
+        "label": "struct PepemonCardOracle.EffectMany",
+        "members": [
+          {
+            "astId": 6088,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "power",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_int256"
+          },
+          {
+            "astId": 6090,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "numTurns",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 6093,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "effectTo",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_enum(EffectTo)6029"
+          },
+          {
+            "astId": 6096,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "effectFor",
+            "offset": 1,
+            "slot": "2",
+            "type": "t_enum(EffectFor)6032"
+          },
+          {
+            "astId": 6098,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "reqCode",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256"
+          }
+        ],
+        "numberOfBytes": "128"
+      },
+      "t_struct(EffectOne)6086_storage": {
+        "encoding": "inplace",
+        "label": "struct PepemonCardOracle.EffectOne",
+        "members": [
+          {
+            "astId": 6075,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "basePower",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_int256"
+          },
+          {
+            "astId": 6077,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "triggeredPower",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_int256"
+          },
+          {
+            "astId": 6080,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "effectTo",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_enum(EffectTo)6029"
+          },
+          {
+            "astId": 6083,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "effectFor",
+            "offset": 1,
+            "slot": "2",
+            "type": "t_enum(EffectFor)6032"
+          },
+          {
+            "astId": 6085,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "reqCode",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256"
+          }
+        ],
+        "numberOfBytes": "128"
+      },
+      "t_struct(Role)6944_storage": {
+        "encoding": "inplace",
+        "label": "struct Roles.Role",
+        "members": [
+          {
+            "astId": 6943,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "bearer",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_mapping(t_address,t_bool)"
+          }
+        ],
+        "numberOfBytes": "32"
+      },
+      "t_struct(SupportCardStats)6073_storage": {
+        "encoding": "inplace",
+        "label": "struct PepemonCardOracle.SupportCardStats",
+        "members": [
+          {
+            "astId": 6056,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "supportCardId",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 6059,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "supportCardType",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_enum(SupportCardType)6022"
+          },
+          {
+            "astId": 6061,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "name",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_string_storage"
+          },
+          {
+            "astId": 6065,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "effectOnes",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_array(t_struct(EffectOne)6086_storage)dyn_storage"
+          },
+          {
+            "astId": 6068,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "effectMany",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_struct(EffectMany)6099_storage"
+          },
+          {
+            "astId": 6070,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "unstackable",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_bool"
+          },
+          {
+            "astId": 6072,
+            "contract": "contracts/PepemonCardOracle.sol:PepemonCardOracle",
+            "label": "unresettable",
+            "offset": 1,
+            "slot": "8",
+            "type": "t_bool"
+          }
+        ],
+        "numberOfBytes": "288"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}
