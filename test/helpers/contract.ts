@@ -3,9 +3,11 @@ import hre from 'hardhat'
 import { deployContract, MockProvider } from 'ethereum-waffle';
 import DeckArtifact from '../../artifacts/contracts/PepemonCardDeck.sol/PepemonCardDeck.json';
 import BattleArtifact from '../../artifacts/contracts/PepemonBattle.sol/PepemonBattle.json';
+import PepemonMatchmakerArtifact from '../../artifacts/contracts-exposed/PepemonMatchmaker.sol/XPepemonMatchmaker.json';
+import PepemonRewardPoolArtifact from '../../artifacts/contracts-exposed/PepemonRewardPool.sol/XPepemonRewardPool.json';
 
 import { Signer } from 'ethers';
-import { PepemonCardDeck, PepemonBattle } from '../../typechain';
+import { PepemonCardDeck, PepemonBattle, PepemonMatchmaker, PepemonRewardPool } from '../../typechain';
 
 let provider: providers.JsonRpcProvider;
 
@@ -33,6 +35,29 @@ export async function deployDeckContract(signer: Signer) {
 
 export async function deployBattleContract(signer: Signer) {
   return (await deployContract(signer, BattleArtifact)) as PepemonBattle;
+}
+
+export async function deployMatchmakerContract(
+  signer: Signer,
+  defaultRanking: Number,
+  battleContractAddress: string,
+  cardContractAddress: string,
+  rewardPoolAddress: string
+) {
+  return (await deployContract(
+    signer,
+    PepemonMatchmakerArtifact,
+    [
+      defaultRanking, 
+      battleContractAddress, 
+      cardContractAddress, 
+      rewardPoolAddress
+    ]
+  )) as PepemonMatchmaker;
+}
+
+export async function deployRewardPoolContract(signer: Signer) {
+  return (await deployContract(signer, PepemonRewardPoolArtifact)) as PepemonRewardPool;
 }
 
 export async function mineBlock() {

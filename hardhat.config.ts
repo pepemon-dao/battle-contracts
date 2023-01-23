@@ -58,9 +58,17 @@ const config: HardhatUserConfig = {
       allowUnlimitedContractSize: true,
       initialBaseFeePerGas: 100,
       blockGasLimit: 0x1fffffffffffff,
-      gas: 100000000,
+      gas: "auto",
       gasPrice: 8000000000,
     },
+    // for deployment: make deploy-mumbai
+    // make sure to check if scripts under ./deploy are correct!!
+    // checking contract: npx hardhat verify CONTRACT_ADDRESS --network mumbai
+    mumbai: {
+      url: 'https://rpc.ankr.com/polygon_mumbai',
+      // silence hardhat error "private key too short, expected 32 bytes" if privateKey is not set
+      accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)]
+    }
   },
   namedAccounts: {
     deployer: {

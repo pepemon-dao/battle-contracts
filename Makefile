@@ -1,4 +1,4 @@
-.PHONY : typechain compile test compile-clean console run prettier integration
+.PHONY : typechain compile test compile-clean console run prettier integration deploy-mumbai
 
 typechain:
 	./node_modules/.bin/typechain --target ethers-v5 --outDir typechain './artifacts/*.json'
@@ -12,8 +12,14 @@ compile-clean:
 	rm -r ./typechain/*
 	make compile
 
+deploy-mumbai:
+	if [ -d ./contracts-exposed ]; then rm -r ./contracts-exposed; fi
+	npx hardhat deploy --network mumbai
+
 test:
-	@DISABLE_FORKING=1 npx hardhat test
+	# re-generate hardhat-exposed ontracts with compile --force
+	npx hardhat --config ./hardhat.config.tests.ts compile --force
+	@DISABLE_FORKING=1 npx hardhat --config ./hardhat.config.tests.ts test --no-compile
 
 run-node:
 	@npx hardhat node
