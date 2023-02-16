@@ -145,7 +145,7 @@ contract PepemonBattle is AdminRole {
         address p2Addr,
         uint256 p2DeckId
     ) public onlyAdmin returns (Battle memory, uint256 battleId)  {
-        require(!_allowBattleAgainstOneself && p1Addr != p2Addr, "PepemonBattle: Cannot battle yourself");
+        require(_allowBattleAgainstOneself || p1Addr != p2Addr, "PepemonBattle: Cannot battle yourself");
 
         (uint256 p1BattleCardId, ) = _deckContract.decks(p1DeckId);
         (uint256 p2BattleCardId, ) = _deckContract.decks(p2DeckId);
