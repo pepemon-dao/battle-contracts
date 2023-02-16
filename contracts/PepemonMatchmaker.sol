@@ -21,6 +21,7 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, Ownable {
     address private _battleAddress;
     address private _deckAddress;
     address private _rewardPoolAddress;
+    bool private _allowBattleAgainstOneself;
 
     uint256 private immutable _defaultRanking;
     uint256 private _matchRange = 300;
@@ -38,6 +39,11 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, Ownable {
         _battleAddress = battleAddress;
         _deckAddress = deckAddress;
         _rewardPoolAddress = rewardPoolAddress;
+        _allowBattleAgainstOneself = false;
+    }
+
+    function setAllowBattleAgainstOneself(bool allow) public onlyOwner {
+        _allowBattleAgainstOneself = allow;
     }
 
     function setDeckContractAddress(address deckContractAddress) public onlyOwner {
@@ -189,9 +195,8 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, Ownable {
         for (uint256 i = 0; i < waitingDecks.length; ++i) {
             uint256 currentIterDeck = waitingDecks[i].deckId;
 
-            // Skip own deck, as well as other decks of the same owner
-            // TODO: uncomment this before deploying to mainnet, this logic is important but makes testing difficult
-            if (i == deckId /*|| msg.sender == deckOwner[currentIterDeck]*/) {
+            // Skip own deck, as well as other decks of the same owner IF _allowBattleAgainstOneself is false
+            if (i == deckId || (!_allowBattleAgainstOneself && msg.sender == deckOwner[currentIterDeck])) {
                 continue;
             }
 

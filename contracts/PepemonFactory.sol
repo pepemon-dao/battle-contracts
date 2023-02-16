@@ -11,5 +11,10 @@ interface PepemonFactory {
         bytes calldata _data
     ) external;
 
+    function setApprovalForAll(
+        address _operator,
+        bool _approved
+    ) external;
+
     function balanceOf(address _owner, uint256 _id) external view returns (uint256);
 }

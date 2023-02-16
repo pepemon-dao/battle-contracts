@@ -98,6 +98,7 @@ contract PepemonBattle is AdminRole {
 
     uint256 private _nextBattleId;
 
+    bool private _allowBattleAgainstOneself;
 
     PepemonCardOracle private _cardContract;
     PepemonCardDeck private _deckContract;
@@ -112,6 +113,7 @@ contract PepemonBattle is AdminRole {
         _deckContract = PepemonCardDeck(deckOracleAddress);
         _randNrGenContract = ChainLinkRngOracle(randOracleAddress);
         _nextBattleId = 1;
+        _allowBattleAgainstOneself = false;
     }
 
     function setCardContractAddress(address cardOracleAddress) public onlyAdmin {
@@ -124,6 +126,10 @@ contract PepemonBattle is AdminRole {
 
     function setRandNrGenContractAddress(address randOracleAddress) public onlyAdmin {
         _randNrGenContract = ChainLinkRngOracle(randOracleAddress);
+    }
+
+    function setAllowBattleAgainstOneself(bool allow) public onlyAdmin {
+        _allowBattleAgainstOneself = allow;
     }
 
     /**
@@ -139,7 +145,7 @@ contract PepemonBattle is AdminRole {
         address p2Addr,
         uint256 p2DeckId
     ) public onlyAdmin returns (Battle memory, uint256 battleId)  {
-        require(p1Addr != p2Addr, "PepemonBattle: Cannot battle yourself");
+        require(!_allowBattleAgainstOneself && p1Addr != p2Addr, "PepemonBattle: Cannot battle yourself");
 
         (uint256 p1BattleCardId, ) = _deckContract.decks(p1DeckId);
         (uint256 p2BattleCardId, ) = _deckContract.decks(p2DeckId);
