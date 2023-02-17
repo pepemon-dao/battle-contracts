@@ -8,7 +8,7 @@ import './lib/AdminRole.sol';
 /**
 This contract acts as the oracle, it contains battling information for both the Pepemon Battle and Support cards
 **/
-interface PepemonCardOracle {
+contract PepemonCardOracle is AdminRole {
 
     enum SupportCardType {
         OFFENSE,
@@ -99,40 +99,125 @@ interface PepemonCardOracle {
         BattleCardTypes resistance;
     }
 
-    //mapping(uint256 => BattleCardStats) public battleCardStats;
-    function battleCardStats(uint256 id) external view returns (BattleCardStats memory);
+    
 
-    //mapping(uint256 => SupportCardStats) public supportCardStats;
-    function supportCardStats(uint256 id) external view returns (SupportCardStats memory);
-
-    //mapping (BattleCardTypes => string) public elementDecode;
-    function elementDecode(BattleCardTypes battleCardTypes) external view returns (string memory);
-
-    //mapping (BattleCardTypes => elementWR) public weakResist;
-    function weakResist(BattleCardTypes battleCardTypes) external view returns (elementWR memory);
+    mapping(uint256 => BattleCardStats) public battleCardStats;
+    mapping(uint256 => SupportCardStats) public supportCardStats;
+    mapping (BattleCardTypes => string) public elementDecode;
+    mapping (BattleCardTypes => elementWR) public weakResist;
 
     event BattleCardCreated(address sender, uint256 cardId);
     event BattleCardUpdated(address sender, uint256 cardId);
     event SupportCardCreated(address sender, uint256 cardId);
     event SupportCardUpdated(address sender, uint256 cardId);
 
-    function addBattleCard(BattleCardStats memory cardData) external;
+    constructor(){
+        elementDecode[BattleCardTypes.FIRE]="Fire";
+        elementDecode[BattleCardTypes.GRASS]="Grass";
+        elementDecode[BattleCardTypes.WATER]="Water";
+        elementDecode[BattleCardTypes.LIGHTNING]="Lighting";
+        elementDecode[BattleCardTypes.WIND]="Wind";
+        elementDecode[BattleCardTypes.POISON]="Poison";
+        elementDecode[BattleCardTypes.GHOST]="Ghost";
+        elementDecode[BattleCardTypes.FAIRY]="Fairy";
+        elementDecode[BattleCardTypes.EARTH]="Earth";
+        elementDecode[BattleCardTypes.UNKNOWN]="Unknown";
+        weakResist[BattleCardTypes.FIRE] = elementWR(BattleCardTypes.WATER,BattleCardTypes.GRASS);
+        weakResist[BattleCardTypes.GRASS] = elementWR(BattleCardTypes.FIRE,BattleCardTypes.WATER);
+        weakResist[BattleCardTypes.WATER] = elementWR(BattleCardTypes.LIGHTNING,BattleCardTypes.FIRE);
+        weakResist[BattleCardTypes.LIGHTNING] = elementWR(BattleCardTypes.EARTH,BattleCardTypes.WIND);
+        weakResist[BattleCardTypes.WIND] = elementWR(BattleCardTypes.POISON,BattleCardTypes.EARTH);
+        weakResist[BattleCardTypes.POISON] = elementWR(BattleCardTypes.FAIRY,BattleCardTypes.GRASS);
+        weakResist[BattleCardTypes.GHOST] = elementWR(BattleCardTypes.FAIRY,BattleCardTypes.POISON);
+        weakResist[BattleCardTypes.FAIRY] = elementWR(BattleCardTypes.GHOST,BattleCardTypes.FAIRY);
+        weakResist[BattleCardTypes.EARTH] = elementWR(BattleCardTypes.GRASS,BattleCardTypes.GHOST);
+        weakResist[BattleCardTypes.UNKNOWN] = elementWR(BattleCardTypes.NONE,BattleCardTypes.NONE);
+    }
 
-    function updateBattleCard(BattleCardStats memory cardData) external;
+    function addBattleCard(BattleCardStats memory cardData) public onlyAdmin {
+        require(battleCardStats[cardData.battleCardId].battleCardId == 0, "PepemonCard: BattleCard already exists");
 
-    function getBattleCardById(uint256 _id) external view returns (BattleCardStats memory);
+        BattleCardStats storage _card = battleCardStats[cardData.battleCardId];
+        _card.battleCardId = cardData.battleCardId;
+        _card.element = cardData.element;
+        _card.name = cardData.name;
+        _card.hp = cardData.hp;
+        _card.spd = cardData.spd;
+        _card.inte = cardData.inte;
+        _card.def = cardData.def;
+        _card.atk = cardData.atk;
+        _card.sDef = cardData.sDef;
+        _card.sAtk = cardData.sAtk;
 
-    function addSupportCard(SupportCardStats memory cardData) external;
+        emit BattleCardCreated(msg.sender, cardData.battleCardId);
+    }
 
-    function updateSupportCard(SupportCardStats memory cardData) external;
+    function updateBattleCard(BattleCardStats memory cardData) public onlyAdmin {
+        require(battleCardStats[cardData.battleCardId].battleCardId != 0, "PepemonCard: BattleCard not found");
 
-    function getSupportCardById(uint256 _id) external view returns (SupportCardStats memory);
+        BattleCardStats storage _card = battleCardStats[cardData.battleCardId];
+        _card.hp = cardData.hp;
+        _card.element = cardData.element;
+        _card.name = cardData.name;
+        _card.spd = cardData.spd;
+        _card.inte = cardData.inte;
+        _card.def = cardData.def;
+        _card.atk = cardData.atk;
+        _card.sDef = cardData.sDef;
+        _card.sAtk = cardData.sAtk;
 
-    function getWeakResist(BattleCardTypes element) external view returns (elementWR memory);
+        emit BattleCardUpdated(msg.sender, cardData.battleCardId);
+    }
+
+    function getBattleCardById(uint256 _id) public view returns (BattleCardStats memory) {
+        require(battleCardStats[_id].battleCardId != 0, "PepemonCard: BattleCard not found");
+        return battleCardStats[_id];
+    }
+
+    function addSupportCard(SupportCardStats memory cardData) public onlyAdmin {
+        require(supportCardStats[cardData.supportCardId].supportCardId == 0, "PepemonCard: SupportCard already exists");
+
+        SupportCardStats storage _card = supportCardStats[cardData.supportCardId];
+        _card.supportCardId = cardData.supportCardId;
+        _card.supportCardType = cardData.supportCardType;
+        _card.name = cardData.name;
+        _card.effectOne = cardData.effectOne;
+        _card.effectMany = cardData.effectMany;
+        _card.unstackable = cardData.unstackable;
+        _card.unresettable = cardData.unresettable;
+
+        emit SupportCardCreated(msg.sender, cardData.supportCardId);
+    }
+
+    function updateSupportCard(SupportCardStats memory cardData) public onlyAdmin {
+        require(supportCardStats[cardData.supportCardId].supportCardId != 0, "PepemonCard: SupportCard not found");
+
+        SupportCardStats storage _card = supportCardStats[cardData.supportCardId];
+        _card.supportCardId = cardData.supportCardId;
+        _card.supportCardType = cardData.supportCardType;
+        _card.name = cardData.name;
+        _card.effectOne = cardData.effectOne;
+        _card.effectMany = cardData.effectMany;
+        _card.unstackable = cardData.unstackable;
+        _card.unresettable = cardData.unresettable;
+
+        emit SupportCardUpdated(msg.sender, cardData.supportCardId);
+    }
+
+    function getSupportCardById(uint256 _id) public view returns (SupportCardStats memory) {
+        require(supportCardStats[_id].supportCardId != 0, "PepemonCard: SupportCard not found");
+        return supportCardStats[_id];
+    }
+
+    function getWeakResist(BattleCardTypes element) public view returns (elementWR memory) {
+        return weakResist[element];
+    }
 
     /**
      * @dev Get supportCardType of supportCard
      * @param _id uint256
      */
-    function getSupportCardTypeById(uint256 _id) external view returns (SupportCardType);
+    function getSupportCardTypeById(uint256 _id) public view returns (SupportCardType) {
+        return getSupportCardById(_id).supportCardType;
+    }
 }
