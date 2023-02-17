@@ -626,7 +626,7 @@ contract PepemonBattle is AdminRole {
                     }
                 }
                 // Calc effects of EffectOne array
-                PepemonCardOracle.EffectOne memory effectOne = card.effectOnes;
+                PepemonCardOracle.EffectOne memory effectOne = card.effectOne;
                 (bool isTriggered, uint256 num) = checkReqCode(atkHand, defHand, effectOne.reqCode, false);
                 if (isTriggered) {
                     if (num > 0) {
@@ -770,7 +770,7 @@ function checkReqCode(
             if (card.supportCardType != cardType) {
                 continue;
             }
-            PepemonCardOracle.EffectOne memory effectOne = card.effectOnes;
+            PepemonCardOracle.EffectOne memory effectOne = card.effectOne;
             if (effectOne.basePower == basePower || basePower == 0) {
                 multiplier++;
             }

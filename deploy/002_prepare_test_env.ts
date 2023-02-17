@@ -22,8 +22,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   let promises = []
   for (let i = 1; i < 30; i++) {
     console.log(`Transferring card ${i} from ${testCardOwnerAddr} to ${hardhatTestAddr} and ${p2HardhatTestAddr}`);
-    promises.push(await pepemonFactory.safeTransferFrom(testCardOwnerAddr, hardhatTestAddr, i, 1, []));
-    promises.push( pepemonFactory.safeTransferFrom(testCardOwnerAddr, p2HardhatTestAddr, i, 1, []));
+    promises.push(pepemonFactory.safeTransferFrom(testCardOwnerAddr, hardhatTestAddr, i, 1, []));
+    promises.push(pepemonFactory.safeTransferFrom(testCardOwnerAddr, p2HardhatTestAddr, i, 1, []));
   }
   await Promise.all(promises);
 
@@ -43,12 +43,12 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const players: any = {
     [hardhatTestAddr]: {
       "deckId": 1,
-      "battleCard": 2, // battleCard to be set for player 1
+      "battleCard": 1, // battleCard to be set for player 1
       "supportCards": [15, 28] // supportCards to be set for player 1
     },
     [p2HardhatTestAddr]: {
       "deckId": 2,
-      "battleCard": 3,
+      "battleCard": 2,
       "supportCards": [17, 28]
     }
   }

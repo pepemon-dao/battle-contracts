@@ -62,7 +62,7 @@ contract PepemonCardOracle is AdminRole {
         uint256 supportCardId;
         SupportCardType supportCardType;
         string name;
-        EffectOne effectOnes;
+        EffectOne effectOne;
         EffectMany effectMany;
         // If true, duplicate copies of the card in the same turn will have no extra effect.
         bool unstackable;
@@ -139,7 +139,7 @@ contract PepemonCardOracle is AdminRole {
 
         BattleCardStats storage _card = battleCardStats[cardData.battleCardId];
         _card.battleCardId = cardData.battleCardId;
-        _card.battleCardType = cardData.battleCardType;
+        _card.element = cardData.element;
         _card.name = cardData.name;
         _card.hp = cardData.hp;
         _card.spd = cardData.spd;
@@ -157,7 +157,7 @@ contract PepemonCardOracle is AdminRole {
 
         BattleCardStats storage _card = battleCardStats[cardData.battleCardId];
         _card.hp = cardData.hp;
-        _card.battleCardType = cardData.battleCardType;
+        _card.element = cardData.element;
         _card.name = cardData.name;
         _card.spd = cardData.spd;
         _card.inte = cardData.inte;
@@ -181,9 +181,7 @@ contract PepemonCardOracle is AdminRole {
         _card.supportCardId = cardData.supportCardId;
         _card.supportCardType = cardData.supportCardType;
         _card.name = cardData.name;
-        for (uint256 i = 0; i < cardData.effectOnes.length; i++) {
-            _card.effectOnes.push(cardData.effectOnes[i]);
-        }
+        _card.effectOne = cardData.effectOne;
         _card.effectMany = cardData.effectMany;
         _card.unstackable = cardData.unstackable;
         _card.unresettable = cardData.unresettable;
@@ -198,9 +196,7 @@ contract PepemonCardOracle is AdminRole {
         _card.supportCardId = cardData.supportCardId;
         _card.supportCardType = cardData.supportCardType;
         _card.name = cardData.name;
-        for (uint256 i = 0; i < cardData.effectOnes.length; i++) {
-            _card.effectOnes.push(cardData.effectOnes[i]);
-        }
+        _card.effectOne = cardData.effectOne;
         _card.effectMany = cardData.effectMany;
         _card.unstackable = cardData.unstackable;
         _card.unresettable = cardData.unresettable;
