@@ -489,7 +489,7 @@ contract PepemonBattle is AdminRole {
                 // Card type is OFFENSE.
                 // Calc effects of EffectOne array
 
-                PepemonCardOracle.EffectOne memory effectOne = cardStats.effectOnes;
+                PepemonCardOracle.EffectOne memory effectOne = cardStats.effectOne;
                 
                 //Checks if that support card is triggered and by how much it is triggered by
                 (bool isTriggered, uint256 multiplier) = checkReqCode(atkHand, defHand, effectOne.reqCode, true);
@@ -536,7 +536,7 @@ contract PepemonBattle is AdminRole {
 
                 // Calc effects of EffectOne array
 
-                PepemonCardOracle.EffectOne memory effectOne = cardStats.effectOnes;
+                PepemonCardOracle.EffectOne memory effectOne = cardStats.effectOne;
                 (bool isTriggered, uint256 multiplier) = checkReqCode(atkHand, defHand, effectOne.reqCode, true);
                 if (isTriggered) {
                     //If triggered: use triggered power
@@ -591,7 +591,7 @@ contract PepemonBattle is AdminRole {
                 // Card type is DEFENSE
                 // Calc effects of EffectOne array
 
-                    PepemonCardOracle.EffectOne memory effectOne = card.effectOnes;
+                    PepemonCardOracle.EffectOne memory effectOne = card.effectOne;
                     (bool isTriggered, uint256 multiplier) = checkReqCode(atkHand, defHand, effectOne.reqCode, false);
                     if (isTriggered) {
                         defHand.currentBCstats.def += effectOne.triggeredPower * int256(multiplier);
