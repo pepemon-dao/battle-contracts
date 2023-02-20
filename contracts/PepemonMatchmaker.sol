@@ -170,9 +170,9 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, Ownable {
         // Declare loser and winner
         emit BattleFinished(winner, loser, battleId);
 
-        // TODO: uncomment this before deploying to mainnet, this logic is important but makes testing difficult
         // Send a reward to the winner
-        //RewardPool(_rewardPoolAddress).sendReward(battleId, winner);
+        RewardPool(_rewardPoolAddress).sendReward(battleId, winner);
+
         // Adjust ranking accordingly. Change is adjusted to remove the extra precision from getEloRatingChange
         uint256 change = getEloRatingChange(playerRanking[winner], playerRanking[loser]) / 100;
         playerRanking[winner] += change;
