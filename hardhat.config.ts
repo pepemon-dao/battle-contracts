@@ -47,7 +47,7 @@ const config: HardhatUserConfig = {
     hardhat: {
       forking: {
         enabled: !environment.disableForking,
-        url: 'https://polygon-mainnet.g.alchemy.com/v2/' + environment.alchemyKey,
+        url: 'https://polygon-mumbai.g.alchemy.com/v2/' + environment.alchemyKey,
       },
       // accounts: {
       //   mnemonic: '',

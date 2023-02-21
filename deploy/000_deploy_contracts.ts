@@ -1,6 +1,6 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
-import { PEPEMON_DECK, PEPEMON_BATTLE, PEPEMON_CARD_ORACLE, RNG_ORACLE, PEPEMON_MATCHMAKER, PEPEMON_REWARDPOOL, DEFAULT_RANKING } from './constants';
+import { PEPEMON_DECK, PEPEMON_BATTLE, PEPEMON_CARD_ORACLE, RNG_ORACLE, PEPEMON_MATCHMAKER, PEPEMON_REWARDPOOL, DEFAULT_RANKING, ORACLE_ADDRESS } from './constants';
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts } = hre;
@@ -14,9 +14,6 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   log(`Deploying ${PEPEMON_DECK} Contract from ${deployer}....`);
   let deckContract = await deploy(PEPEMON_DECK, { from: deployer, log: true });
 
-  log(`Deploying ${PEPEMON_CARD_ORACLE} Contract from ${deployer}....`);
-  let oracleContract = await deploy(PEPEMON_CARD_ORACLE, { from: deployer, log: true });
-
   log(`Deploying ${PEPEMON_BATTLE} Contract from ${deployer}....`);
   let pepemonBattle = await deploy(
     PEPEMON_BATTLE,
@@ -24,7 +21,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       from: deployer,
       log: true,
       args: [
-        oracleContract.address,
+        ORACLE_ADDRESS,
         deckContract.address,
         rngOracle.address
       ]
@@ -35,7 +32,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   let rewardPoolContract = await deploy(PEPEMON_REWARDPOOL, { from: deployer, log: true });
 
   log(`Deploying ${PEPEMON_MATCHMAKER} Contract from ${deployer}....`);
-  await deploy(
+  let pepemonMatchmaker = await deploy(
     PEPEMON_MATCHMAKER,
     {
       from: deployer,
@@ -49,7 +46,18 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     }
   );
 
-};
+  // save this deployment to use its address in 002_prepare_test_env.ts
+  await hre.deployments.save(PEPEMON_MATCHMAKER, {
+    abi: pepemonMatchmaker.abi,
+    address: pepemonMatchmaker.address,
+  });
+  
+  await hre.deployments.save(PEPEMON_DECK, {
+    abi: deckContract.abi,
+    address: deckContract.address,
+  });
+  
+}; 
 
 export default func;
 

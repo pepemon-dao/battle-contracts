@@ -80,6 +80,10 @@ contract PepemonRewardPool is RewardPool, ERC1155Holder, AdminRole {
      * @param account Address of who will receive the reward
      */
     function sendReward(uint256 rngSeed, address account) external override onlyAdmin {
+        // TODO: emit event when this happens
+        if (rewardPool.length == 0) {
+            return;
+        }
         uint256 index = uint256(keccak256(abi.encodePacked(uint256(42), rngSeed))) % rewardPool.length;
         // get reward
         address rewardTokenAddress = rewardPool[index].tokenAddress;

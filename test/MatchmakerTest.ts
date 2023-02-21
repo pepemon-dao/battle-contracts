@@ -84,6 +84,29 @@ describe('::Matchmaker', async () => {
     return cachedDummyBattleInstance;
   }
 
+  const forceDiversifyRankings = async (KFactor=4000) => {
+    // some tests requires at least 2 different players waiting for a match, but since we cannot
+    // change the ranking manually in the contract, we need to make a battle happen to update the
+    // ranking first, this function does that by forcing alice to win against bob with an absurd KFactor
+    
+    // Note: this function might fail if battles are not working, tests relying on this will also fail
+
+    // Get an instance of the "Battle" object, which is too big to be created inline
+    let emptyBattleData = await getDummyBattleInstance();
+
+    // Mock battleContract and RewardPool calls
+    await rewardPool.mock.sendReward.returns();
+    await battle.mock.createBattle.returns(emptyBattleData, 1);
+    await battle.mock.goForBattle.returns(emptyBattleData, alice.address); // alice will win
+
+    // set an absurd K-factor so that Bob loses 2000 points in the ranking, because we cant set rankings manually.
+    await matchmaker.setKFactor(KFactor);
+    
+    await matchmaker.enter(aliceDeck);
+    await bobSignedMatchmaker.enter(bobDeck); // battle begins here. bob loses 2000 rating points (if KFactor is 4000)
+    await matchmaker.setKFactor(16);
+  }
+
   describe('#Deck', async () => {
     it('Should allow entering and waiting for a match', async () => {
       await matchmaker.enter(aliceDeck);
@@ -94,6 +117,16 @@ describe('::Matchmaker', async () => {
     it('Should allow exiting', async () => {
       await matchmaker.enter(aliceDeck);
       await matchmaker.exit(aliceDeck);
+      expect(await matchmaker.getWaitingCount()).to.eq(0);
+    });
+
+    it('Should allow multiple players to enter and exit consistently', async () => {
+      await forceDiversifyRankings(5000);
+
+      await matchmaker.enter(aliceDeck);
+      await bobSignedMatchmaker.enter(bobDeck);
+      await matchmaker.exit(aliceDeck);
+      await bobSignedMatchmaker.exit(bobDeck);
       expect(await matchmaker.getWaitingCount()).to.eq(0);
     });
   });
@@ -157,16 +190,8 @@ describe('::Matchmaker', async () => {
     });
 
     it('Should prevent rankings from resetting when going to 0', async () => {
-      // Get an instance of the "Battle" object, which is too big to be created inline
-      let emptyBattleData = await getDummyBattleInstance();
+      await forceDiversifyRankings()
 
-      // Mock battleContract and RewardPool calls
-      await battle.mock.createBattle.returns(emptyBattleData, 1);
-      await rewardPool.mock.sendReward.returns();
-
-      // set an absurd K-factor so that Bob loses 2000 points in the ranking, because we cant set rankings manually.
-      await matchmaker.setKFactor(4000);
-      await battle.mock.goForBattle.returns(emptyBattleData, alice.address); // alice will win
       await matchmaker.enter(aliceDeck);
       await bobSignedMatchmaker.enter(bobDeck); // battle begins here. bob loses 2000 rating points
 
@@ -175,18 +200,7 @@ describe('::Matchmaker', async () => {
     });
 
     it('Should prevent rankings from going below 0', async () => {
-      // Get an instance of the "Battle" object, which is too big to be created inline
-      let emptyBattleData = await getDummyBattleInstance();
-
-      // Mock battleContract and RewardPool calls
-      await battle.mock.createBattle.returns(emptyBattleData, 1);
-      await rewardPool.mock.sendReward.returns();
-
-      // set an absurd K-factor so that Bob loses 2000 points in the ranking, because we cant set rankings manually.
-      await matchmaker.setKFactor(4200);
-      await battle.mock.goForBattle.returns(emptyBattleData, alice.address); // alice will win
-      await matchmaker.enter(aliceDeck);
-      await bobSignedMatchmaker.enter(bobDeck); // battle begins here. bob loses 2000 rating points
+      await forceDiversifyRankings(4200)
 
       let bobRanking = await matchmaker.playerRanking(bob.address);
       expect(bobRanking.toNumber()).to.be.equal(1);
@@ -211,19 +225,10 @@ describe('::Matchmaker', async () => {
     });
 
     it('Should allow a battle between players with large ranking difference after waiting some time', async () => {
-      // Get an instance of the "Battle" object, which is too big to be created inline
-      let emptyBattleData = await getDummyBattleInstance();
+      // make Bob lose 500 points in the ranking, because we cant set rankings manually.
+      await forceDiversifyRankings(1000);
 
-      // Mock battleContract and RewardPool calls
-      await battle.mock.createBattle.returns(emptyBattleData, 1);
-      await rewardPool.mock.sendReward.returns();
-
-      // set an absurd K-factor so that Bob loses 500 points in the ranking, because we cant set rankings manually.
-      await matchmaker.setKFactor(1000);
-      await battle.mock.goForBattle.returns(emptyBattleData, alice.address); // alice will win
-      await matchmaker.enter(aliceDeck);
-      await bobSignedMatchmaker.enter(bobDeck); // battle begins here. bob loses 500 rating points
-      // put alice back in the waitlist.
+      // put alice in the waitlist.
       await matchmaker.enter(aliceDeck);
 
       await matchmaker.setMatchRange(300, 1); // 1 per min

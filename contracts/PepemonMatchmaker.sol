@@ -21,6 +21,7 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, Ownable {
     address private _battleAddress;
     address private _deckAddress;
     address private _rewardPoolAddress;
+    bool private _allowBattleAgainstOneself;
 
     uint256 private immutable _defaultRanking;
     uint256 private _matchRange = 300;
@@ -38,6 +39,11 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, Ownable {
         _battleAddress = battleAddress;
         _deckAddress = deckAddress;
         _rewardPoolAddress = rewardPoolAddress;
+        _allowBattleAgainstOneself = false;
+    }
+
+    function setAllowBattleAgainstOneself(bool allow) public onlyOwner {
+        _allowBattleAgainstOneself = allow;
     }
 
     function setDeckContractAddress(address deckContractAddress) public onlyOwner {
@@ -76,6 +82,7 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, Ownable {
         if (playerRanking[msg.sender] == 0) {
             playerRanking[msg.sender] = _defaultRanking;
         }
+
         // Try find matchmaking partner
         uint256 opponentDeckId = findMatchmakingOpponent(deckId);
 
@@ -130,6 +137,7 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, Ownable {
 
     /**
      * @notice Removes a deck from the wait list
+     * @dev Works by replacing the current element by the last element of the array. See https://stackoverflow.com/a/74668959
      * @param deckId The Deck of the owner
      */
     function removeWaitingDeck(uint256 deckId) internal {
@@ -137,7 +145,15 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, Ownable {
         PepemonCardDeck(_deckAddress).safeTransferFrom(address(this), deckOwner[deckId], deckId, "");
         delete deckOwner[deckId];
 
-        waitingDecks[_waitingDecksIndex[deckId]] = waitingDecks[waitingDecks.length - 1];
+        uint256 lastItemIndex = waitingDecks.length - 1;
+
+        uint256 lastDeckId = waitingDecks[lastItemIndex].deckId;
+
+        // update the index of the item to be swapped 
+        _waitingDecksIndex[lastDeckId] = _waitingDecksIndex[deckId];
+
+        // swap the last item of the list with the one to be deleted
+        waitingDecks[_waitingDecksIndex[deckId]] = waitingDecks[lastItemIndex];
         waitingDecks.pop();
         delete _waitingDecksIndex[deckId];
     }
@@ -151,10 +167,12 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, Ownable {
     function processMatch(uint256 player1deckId, uint256 player2deckId) internal {
         // Evaluate the battle winner
         (address winner, address loser, uint256 battleId) = doBattle(player1deckId, player2deckId);
-        // Send a reward to the winner
-        RewardPool(_rewardPoolAddress).sendReward(battleId, winner);
         // Declare loser and winner
         emit BattleFinished(winner, loser, battleId);
+
+        // Send a reward to the winner
+        RewardPool(_rewardPoolAddress).sendReward(battleId, winner);
+
         // Adjust ranking accordingly. Change is adjusted to remove the extra precision from getEloRatingChange
         uint256 change = getEloRatingChange(playerRanking[winner], playerRanking[loser]) / 100;
         playerRanking[winner] += change;
@@ -176,10 +194,12 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, Ownable {
         // Find a waiting deck with a ranking that is within matchRange
         for (uint256 i = 0; i < waitingDecks.length; ++i) {
             uint256 currentIterDeck = waitingDecks[i].deckId;
-            // Skip own deck, as well as other decks of the same owner
-            if (i == deckId || msg.sender == deckOwner[currentIterDeck]) {
+
+            // Skip own deck, as well as other decks of the same owner IF _allowBattleAgainstOneself is false
+            if (i == deckId || (!_allowBattleAgainstOneself && msg.sender == deckOwner[currentIterDeck])) {
                 continue;
             }
+
             // increase precision to allow increasing playerMatchRange every second
             uint256 mins = (120 * (block.timestamp - waitingDecks[i].enterTimestamp)) / 60;
             uint256 playerMatchRange = _matchRange + (mins * _matchRangePerMinute) / 120;
