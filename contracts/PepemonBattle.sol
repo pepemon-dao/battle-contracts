@@ -285,14 +285,22 @@ contract PepemonBattle is AdminRole {
         }
 
         // Draw player1 support cards for the new turn
+        uint256 remainingCards = p1SupportCardIdsLength - player1.playedCardCount;
+        // limit number of cards to be taken to prevent taking invalid cards
+        player1.hand.currentBCstats.inte = remainingCards < player1.hand.currentBCstats.inte ? remainingCards : player1.hand.currentBCstats.inte;
         for (uint256 i = 0; i < player1.hand.currentBCstats.inte; i++) {
-            player1.hand.supportCardInHandIds[i] = player1.totalSupportCardIds[(i + player1.playedCardCount) % p1SupportCardIdsLength];
+            // "totalSupportCardIds" array has 60 elements, max intelligence is 8 (_max_inte), each 5 rounds playedCardCount is reset, 
+            // so in total, 40 (5*8) cards could end up being used, no out of bounds errors
+            player1.hand.supportCardInHandIds[i] = player1.totalSupportCardIds[i + player1.playedCardCount];
         }
         player1.playedCardCount += player1.hand.currentBCstats.inte;
 
         // Draw player2 support cards for the new turn
+        remainingCards = p2SupportCardIdsLength - player2.playedCardCount;
+        // limit number of cards to be taken to prevent taking invalid cards
+        player1.hand.currentBCstats.inte = remainingCards < player2.hand.currentBCstats.inte ? remainingCards : player2.hand.currentBCstats.inte;
         for (uint256 i = 0; i < player2.hand.currentBCstats.inte; i++) {
-            player2.hand.supportCardInHandIds[i] = player2.totalSupportCardIds[(i + player2.playedCardCount) % p2SupportCardIdsLength];
+            player2.hand.supportCardInHandIds[i] = player2.totalSupportCardIds[i + player2.playedCardCount];
         }
         player2.playedCardCount += player2.hand.currentBCstats.inte;
 
@@ -328,7 +336,7 @@ contract PepemonBattle is AdminRole {
                     // Change my card's stats using that support card
                     // Currently effectTo of EffectMany can be ATTACK, DEFENSE, SPEED and INTELLIGENCE
                     //Get the statistic changed and update it 
-                    //Intelligence can't go into the negatives
+                    //Intelligence can't go into the negatives nor above _max_inte
                     if (effect.effectTo == PepemonCardOracle.EffectTo.ATTACK) {
                         hand.currentBCstats.atk += effect.power;
                     } else if (effect.effectTo == PepemonCardOracle.EffectTo.DEFENSE) {
@@ -338,12 +346,13 @@ contract PepemonBattle is AdminRole {
                     } else if (effect.effectTo == PepemonCardOracle.EffectTo.INTELLIGENCE) {
                         int temp;
                         temp = int256(hand.currentBCstats.inte) + effect.power;
+                        temp = temp > int(_max_inte) ? int(_max_inte) : temp;
                         hand.currentBCstats.inte = (temp > 0 ? uint(temp) : 0);
                     }
                 } else {
                     //The card affects the opp's pepemon
                     //Update card stats of the opp's pepemon
-                    //Make sure INT stat can't go below zero
+                    //Make sure INT stat can't go below zero nor above _max_inte
                     if (effect.effectTo == PepemonCardOracle.EffectTo.ATTACK) {
                         oppHand.currentBCstats.atk += effect.power;
                     } else if (effect.effectTo == PepemonCardOracle.EffectTo.DEFENSE) {
@@ -353,6 +362,7 @@ contract PepemonBattle is AdminRole {
                     } else if (effect.effectTo == PepemonCardOracle.EffectTo.INTELLIGENCE) {
                         int temp;
                         temp = int256(oppHand.currentBCstats.inte) + effect.power;
+                        temp = temp > int(_max_inte) ? int(_max_inte) : temp;
                         oppHand.currentBCstats.inte = (temp > 0 ? uint(temp) : 0);
                     }
                 }
@@ -564,7 +574,7 @@ contract PepemonBattle is AdminRole {
                 // If card lasts for >1 turns
                 if (cardStats.effectMany.power != 0) {
                     // Add card  to table if <5 on table currently
-                    if (atkHand.tableSupportCardStats < 5) {
+                    if (atkHand.tableSupportCardStats < _max_cards_on_table) {
                         atkHand.tableSupportCards[atkHand.tableSupportCardStats++] = TableSupportCardStats({
                             supportCardId: id,
                             effectMany: cardStats.effectMany
@@ -652,7 +662,7 @@ contract PepemonBattle is AdminRole {
                 // If card effect lasts >1 turn
                 if (card.effectMany.power != 0) {
                     // Add card to table if there are <5 cards on table right now
-                    if (defHand.tableSupportCardStats < 5) {
+                    if (defHand.tableSupportCardStats < _max_cards_on_table) {
                         defHand.tableSupportCards[defHand.tableSupportCardStats++] = TableSupportCardStats({
                             supportCardId: id,
                             effectMany: card.effectMany
