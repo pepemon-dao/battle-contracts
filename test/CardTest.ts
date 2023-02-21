@@ -18,7 +18,7 @@ describe('Card', async () => {
     beforeEach(async () => {
       await cardContract.addBattleCard({
         battleCardId: 1,
-        battleCardType: 0,
+        element: 0,
         name: 'Pepesaur',
         hp: 450,
         spd: 10,
@@ -34,7 +34,7 @@ describe('Card', async () => {
       it('should be able to add battleCard', async () => {
         await cardContract.addBattleCard({
           battleCardId: 2,
-          battleCardType: 0,
+          element: 0,
           name: 'Pepemander',
           hp: 300,
           spd: 20,
@@ -54,7 +54,7 @@ describe('Card', async () => {
           await expect(
             cardContract.addBattleCard({
               battleCardId: 1,
-              battleCardType: 0,
+              element: 0,
               name: 'Pepemander',
               hp: 300,
               spd: 20,
@@ -73,7 +73,7 @@ describe('Card', async () => {
       it('should be able to update battleCard', async () => {
         await cardContract.updateBattleCard({
           battleCardId: 1,
-          battleCardType: 0,
+          element: 0,
           name: 'Pepesaurrrrrr',
           hp: 500,
           spd: 10,
@@ -94,7 +94,7 @@ describe('Card', async () => {
           await expect(
             cardContract.updateBattleCard({
               battleCardId: 2,
-              battleCardType: 0,
+              element: 0,
               name: 'Pepesaur',
               hp: 500,
               spd: 10,
@@ -132,15 +132,13 @@ describe('Card', async () => {
         supportCardId: 1,
         supportCardType: 0,
         name: 'Fast Attack',
-        effectOnes: [
-          {
+        effectOne: {
             basePower: 2,
             triggeredPower: 2,
             effectTo: 0,
             effectFor: 0,
             reqCode: 0,
-          },
-        ],
+        },
         effectMany: {
           power: 0,
           numTurns: 0,
@@ -159,15 +157,13 @@ describe('Card', async () => {
           supportCardId: 2,
           supportCardType: 0,
           name: 'Mid Attack',
-          effectOnes: [
-            {
+          effectOne: {
               basePower: 3,
               triggeredPower: 3,
               effectTo: 0,
               effectFor: 0,
               reqCode: 0,
-            },
-          ],
+          },
           effectMany: {
             power: 0,
             numTurns: 0,
@@ -190,15 +186,13 @@ describe('Card', async () => {
               supportCardId: 1,
               supportCardType: 0,
               name: 'Fast Attack',
-              effectOnes: [
-                {
+              effectOne: {
                   basePower: 2,
                   triggeredPower: 2,
                   effectTo: 0,
                   effectFor: 0,
                   reqCode: 0,
-                },
-              ],
+              },
               effectMany: {
                 power: 0,
                 numTurns: 0,
@@ -220,15 +214,13 @@ describe('Card', async () => {
           supportCardId: 1,
           supportCardType: 0,
           name: 'Fast Attackkkkk',
-          effectOnes: [
-            {
+          effectOne: {
               basePower: 20,
               triggeredPower: 20,
               effectTo: 0,
               effectFor: 0,
               reqCode: 0,
-            },
-          ],
+          },
           effectMany: {
             power: 0,
             numTurns: 0,
@@ -250,15 +242,13 @@ describe('Card', async () => {
               supportCardId: 2,
               supportCardType: 0,
               name: 'Fast Attackkkkk',
-              effectOnes: [
-                {
+              effectOne: {
                   basePower: 20,
                   triggeredPower: 20,
                   effectTo: 0,
                   effectFor: 0,
                   reqCode: 0,
-                },
-              ],
+              },
               effectMany: {
                 power: 0,
                 numTurns: 0,
