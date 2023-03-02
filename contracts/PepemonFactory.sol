@@ -16,5 +16,17 @@ interface PepemonFactory {
         bool _approved
     ) external;
 
-    function balanceOf(address _owner, uint256 _id) external view returns (uint256);
+    function balanceOf(
+        address _owner, 
+        uint256 _id
+    ) external view returns (uint256);
+
+    function airdrop(
+        uint256 _id,
+        address[] memory _addresses
+    ) external;
+
+    function addMinter(
+        address account
+    ) external;
 }
