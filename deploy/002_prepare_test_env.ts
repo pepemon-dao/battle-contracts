@@ -55,7 +55,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     [p2HardhatTestAddr]: {
       "deckId": 2,
       "battleCard": 4,
-      "supportCards": [11]
+      "supportCards": [17, 28]
     }
   }
   for (let player of Object.keys(players)) {
@@ -80,14 +80,11 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     }
   }
   
-  console.log(`Setting minting random cards up to id 40`);
-  await hre.deployments.execute(PEPEMON_DECK, { from: deployer, log: true }, 'setMintingRandomCards', 40);
+  console.log(`Setting minting cards from id 1 up to 40`);
+  await hre.deployments.execute(PEPEMON_DECK, { from: deployer, log: true }, 'setMintingCards', 1, 40);
 
   console.log("Player 2 joining match");
   await hre.deployments.execute(PEPEMON_MATCHMAKER, {from: p2HardhatTestAddr}, "enter", players[p2HardhatTestAddr].deckId);
-
-  //console.log("Player 1 joining match");
-  //await hre.deployments.execute(PEPEMON_MATCHMAKER, {from: hardhatTestAddr}, "enter", players[hardhatTestAddr].deckId);
 };
 
 export default func;

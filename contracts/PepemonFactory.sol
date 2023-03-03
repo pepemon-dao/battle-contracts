@@ -26,6 +26,12 @@ interface PepemonFactory {
         address[] memory _addresses
     ) external;
 
+    function batchMint(
+        uint start, 
+        uint end, 
+        address to) 
+    external;
+
     function addMinter(
         address account
     ) external;

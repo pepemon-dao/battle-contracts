@@ -37,7 +37,8 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
     uint256 public MIN_SUPPORT_CARDS;
 
     // set this to 0 to disable minting test cards.
-    uint256 maxMintTestCard;
+    uint256 maxMintTestCardId;
+    uint256 minMintTestCardId;
 
     uint256 nextDeckId;
     address public battleCardAddress;
@@ -50,6 +51,8 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
         nextDeckId = 1;
         MAX_SUPPORT_CARDS = 60;
         MIN_SUPPORT_CARDS = 40;
+        
+        minMintTestCardId = 1;
     }
 
     /**
@@ -91,20 +94,17 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
     }
 
     // ALLOW TEST MINTING
-    function setMintingRandomCards(uint256 maxCardId) public onlyOwner {
-        maxMintTestCard = maxCardId;
+    function setMintingCards(uint256 minCardId, uint256 maxCardId) public onlyOwner {
+        maxMintTestCardId = maxCardId;
+        minMintTestCardId = minCardId;
     }
     /**
-     * @dev right now there are 40 different cards that can be minted, but the maximum id is configurable with maxMintTestCard. 
-     * setting maxMintTestCard to 0 disables this random card minting.
+     * @dev right now there are 40 different cards that can be minted, but the maximum is configurable with maxMintTestCard. 
+     * setting maxMintTestCard to 0 disables this card minting.
      */
-    function mintRandomCard() public {
-        require(maxMintTestCard > 0, "Minting test cards is disabled");
-        address[] memory addresses = new address[](1);
-        addresses[0] = msg.sender;
-        // true randomness is not necessary since this is for tests only
-        uint256 randomCardId = (uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender))) % maxMintTestCard) + 1;
-        PepemonFactory(supportCardAddress).airdrop(randomCardId, addresses);
+    function mintCards() public {
+        require(maxMintTestCardId > 0, "Minting test cards is disabled");
+        PepemonFactory(supportCardAddress).batchMint(minMintTestCardId, maxMintTestCardId, msg.sender);
     }
 
     function createDeck() public {
