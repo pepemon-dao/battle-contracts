@@ -55,7 +55,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     [p2HardhatTestAddr]: {
       "deckId": 2,
       "battleCard": 4,
-      "supportCards": [17, 28]
+      "supportCards": [14]
     }
   }
   for (let player of Object.keys(players)) {
