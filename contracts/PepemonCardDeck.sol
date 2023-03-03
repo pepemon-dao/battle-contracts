@@ -36,6 +36,10 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
     uint256 public MAX_SUPPORT_CARDS;
     uint256 public MIN_SUPPORT_CARDS;
 
+    // set this to 0 to disable minting test cards.
+    uint256 maxMintTestCardId;
+    uint256 minMintTestCardId;
+
     uint256 nextDeckId;
     address public battleCardAddress;
     address public supportCardAddress;
@@ -47,6 +51,8 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
         nextDeckId = 1;
         MAX_SUPPORT_CARDS = 60;
         MIN_SUPPORT_CARDS = 40;
+        
+        minMintTestCardId = 1;
     }
 
     /**
@@ -68,6 +74,8 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
         _;
     }
 
+
+
     // PUBLIC METHODS
     function setBattleCardAddress(address _battleCardAddress) public onlyOwner {
         battleCardAddress = _battleCardAddress;
@@ -83,6 +91,20 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
 
     function setMinSupportCards(uint256 _minSupportCards) public onlyOwner {
         MIN_SUPPORT_CARDS = _minSupportCards;
+    }
+
+    // ALLOW TEST MINTING
+    function setMintingCards(uint256 minCardId, uint256 maxCardId) public onlyOwner {
+        maxMintTestCardId = maxCardId;
+        minMintTestCardId = minCardId;
+    }
+    /**
+     * @dev right now there are 40 different cards that can be minted, but the maximum is configurable with maxMintTestCard. 
+     * setting maxMintTestCard to 0 disables this card minting.
+     */
+    function mintCards() public {
+        require(maxMintTestCardId > 0, "Minting test cards is disabled");
+        PepemonFactory(supportCardAddress).batchMint(minMintTestCardId, maxMintTestCardId, msg.sender);
     }
 
     function createDeck() public {
