@@ -298,7 +298,7 @@ contract PepemonBattle is AdminRole {
         // Draw player2 support cards for the new turn
         remainingCards = p2SupportCardIdsLength - player2.playedCardCount;
         // limit number of cards to be taken to prevent taking invalid cards
-        player1.hand.currentBCstats.inte = remainingCards < player2.hand.currentBCstats.inte ? remainingCards : player2.hand.currentBCstats.inte;
+        player2.hand.currentBCstats.inte = remainingCards < player2.hand.currentBCstats.inte ? remainingCards : player2.hand.currentBCstats.inte;
         for (uint256 i = 0; i < player2.hand.currentBCstats.inte; i++) {
             player2.hand.supportCardInHandIds[i] = player2.totalSupportCardIds[i + player2.playedCardCount];
         }
