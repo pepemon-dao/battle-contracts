@@ -1,7 +1,6 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
-import { PEPEMON_MATCHMAKER, SUPPORT_CARD_ADDRESS, PEPEMON_DECK, PEPEMON_BATTLE, 
-  PEPEMON_CARD_ORACLE, RNG_ORACLE, USE_TESTNET_ADDRESSES, BATTLE_CARD_ADDRESS } from './constants';
+import { PEPEMON_MATCHMAKER, SUPPORT_CARD_ADDRESS, PEPEMON_DECK, PEPEMON_BATTLE, USE_TESTNET_ADDRESSES } from './constants';
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { getNamedAccounts, deployments } = hre;
@@ -21,18 +20,17 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   console.log("Loading PepemonFactory ...")
   const pepemonFactory = await hre.ethers.getContractAt("PepemonFactory", SUPPORT_CARD_ADDRESS, signer);
 
-  let promises = []
-  for (let i = 1; i < 15; i++) {
-    console.log(`Transferring card ${i} from ${testCardOwnerAddr} to ${hardhatTestAddr} and ${p2HardhatTestAddr}`);
-    promises.push(pepemonFactory.safeTransferFrom(testCardOwnerAddr, hardhatTestAddr, i, 2, []));
-    promises.push(pepemonFactory.safeTransferFrom(testCardOwnerAddr, p2HardhatTestAddr, i, 2, []));
-  }
-  await Promise.all(promises);
+  const firstCardId = 1;
+  const lastCardId = 40;
 
+  console.log(`Minting cards ${firstCardId}-${lastCardId} to ${hardhatTestAddr} and ${p2HardhatTestAddr}`);
+  await pepemonFactory.batchMint(firstCardId, lastCardId, hardhatTestAddr);
+  await pepemonFactory.batchMint(firstCardId, lastCardId, p2HardhatTestAddr);
+  
   let deckContract = await hre.deployments.get(PEPEMON_DECK);
 
   // allows minting cards
-  pepemonFactory.addMinter(deckContract.address);
+  await pepemonFactory.addMinter(deckContract.address);
 
   // Stop impersonating
   await hre.network.provider.request({
@@ -50,12 +48,12 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     [hardhatTestAddr]: {
       "deckId": 1,
       "battleCard": 3, // battleCard to be set for player 1
-      "supportCards": [12] // supportCards to be set for player 1
+      "supportCards": [12,14,16,18,20,22,24,26,28,30] // supportCards to be set for player 1
     },
     [p2HardhatTestAddr]: {
       "deckId": 2,
       "battleCard": 4,
-      "supportCards": [14]
+      "supportCards": [11,12,13,14,15,16,17,18,19,20]
     }
   }
   for (let player of Object.keys(players)) {
@@ -90,4 +88,4 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 export default func;
 
 func.tags = ['test-env'];
-func.dependencies = [PEPEMON_DECK, PEPEMON_BATTLE, PEPEMON_CARD_ORACLE, RNG_ORACLE, 'SETUP_CARDS']
+func.dependencies = [PEPEMON_DECK, PEPEMON_BATTLE, 'SETUP_CARDS']
