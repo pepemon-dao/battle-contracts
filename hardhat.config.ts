@@ -68,6 +68,10 @@ const config: HardhatUserConfig = {
       url: 'https://rpc.ankr.com/polygon_mumbai',
       // silence hardhat error "private key too short, expected 32 bytes" if privateKey is not set
       accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)]
+    },
+    fantom_testnet: {
+      url: 'https://rpc.ankr.com/fantom_testnet',
+      accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)]
     }
   },
   namedAccounts: {
