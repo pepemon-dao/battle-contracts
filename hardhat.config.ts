@@ -47,7 +47,7 @@ const config: HardhatUserConfig = {
     hardhat: {
       forking: {
         enabled: !environment.disableForking,
-        url: 'https://polygon-mumbai.g.alchemy.com/v2/' + environment.alchemyKey,
+        url: 'https://fantom-testnet.rpc.thirdweb.com'
       },
       // accounts: {
       //   mnemonic: '',
@@ -71,6 +71,10 @@ const config: HardhatUserConfig = {
     },
     fantom_testnet: {
       url: 'https://rpc.ankr.com/fantom_testnet',
+      accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)]
+    },
+    fantom_mainnet: {
+      url: 'https://rpc.ankr.com/fantom',
       accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)]
     }
   },
