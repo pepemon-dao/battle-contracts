@@ -75,6 +75,14 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
     function setKFactor(uint256 kFactor) public onlyAdmin {
         _kFactor = kFactor;
     }
+    
+    /**
+     * @dev Returns the number of players currently on the leaderboard.
+     * @return The number of players currently on the leaderboard.
+     */
+    function leaderboardPlayersCount() public view returns(uint256) {
+        return leaderboardPlayers.length;
+    }
 
     /**
      * @dev Returns the rankings and addresses of players on the leaderboard, within a given range of indices.
