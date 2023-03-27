@@ -16,6 +16,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     params: [testCardOwnerAddr]
   });
   const signer = await hre.ethers.getSigner(testCardOwnerAddr);
+
+  await hre.deployments.execute(PEPEMON_DECK, { from: deployer, log: true }, 'setMinSupportCards', 1);
   
   console.log("Loading PepemonFactory ...")
   const pepemonFactory = await hre.ethers.getContractAt("PepemonFactory", SUPPORT_CARD_ADDRESS, signer);
