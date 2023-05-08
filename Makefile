@@ -20,6 +20,10 @@ deploy-fantom-testnet:
 	if [ -d ./contracts-exposed ]; then rm -r ./contracts-exposed; fi
 	npx hardhat deploy --network fantom_testnet
 
+deploy-pepechain-testnet:
+	if [ -d ./contracts-exposed ]; then rm -r ./contracts-exposed; fi
+	npx hardhat deploy --network pepechain_testnet
+
 test:
 	# re-generate hardhat-exposed ontracts with compile --force
 	npx hardhat --config ./hardhat.config.tests.ts compile --force
