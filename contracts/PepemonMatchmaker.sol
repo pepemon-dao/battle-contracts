@@ -3,14 +3,14 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "./lib/AdminRole.sol";
 import "./PepemonCardDeck.sol";
 import "./lib/RewardPool.sol";
 import "./lib/Elo.sol";
 import "./PepemonCardOracle.sol";
 import "./PepemonBattle.sol";
 
-contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, Ownable {
+contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
     event BattleFinished(address indexed winner, address indexed loser, uint256 battleId);
 
     struct waitingDeckData {
@@ -33,6 +33,7 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, Ownable {
     waitingDeckData[] public waitingDecks;
 
     mapping(address => uint256) public playerRanking;
+    address[] public leaderboardPlayers;
 
     constructor (uint256 defaultRanking, address battleAddress, address deckAddress, address rewardPoolAddress) {
         _defaultRanking = defaultRanking; // suggested: 2000
@@ -42,33 +43,74 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, Ownable {
         _allowBattleAgainstOneself = false;
     }
 
-    function setAllowBattleAgainstOneself(bool allow) public onlyOwner {
+    function setAllowBattleAgainstOneself(bool allow) public onlyAdmin {
         _allowBattleAgainstOneself = allow;
     }
 
-    function setDeckContractAddress(address deckContractAddress) public onlyOwner {
+    function setDeckContractAddress(address deckContractAddress) public onlyAdmin {
         _deckAddress = deckContractAddress;
     }
 
-    function setBattleContractAddress(address battleContractAddress) public onlyOwner {
+    function setBattleContractAddress(address battleContractAddress) public onlyAdmin {
         _battleAddress = battleContractAddress;
     }
 
-    function setRewardPoolAddress(address rewardPoolAddress) public onlyOwner {
+    function setRewardPoolAddress(address rewardPoolAddress) public onlyAdmin {
         _rewardPoolAddress = rewardPoolAddress;
     }
 
-    function setMatchRange(uint256 matchRange, uint256 matchRangePerMinute) public onlyOwner {
+    function setMatchRange(uint256 matchRange, uint256 matchRangePerMinute) public onlyAdmin {
         _matchRange = matchRange;
         _matchRangePerMinute = matchRangePerMinute;
+    }
+
+    function forceExit(uint256 deckId) public onlyAdmin {
+        removeWaitingDeck(deckId);
     }
 
     /**
      * @dev Dictates the rate of change, has a direct influence on how much a player wins/loses in the ranking
      * @param kFactor Value used to calculate the rate of change in getEloRatingChange
      */
-    function setKFactor(uint256 kFactor) public onlyOwner {
+    function setKFactor(uint256 kFactor) public onlyAdmin {
         _kFactor = kFactor;
+    }
+    
+    /**
+     * @dev Returns the number of players currently on the leaderboard.
+     * @return The number of players currently on the leaderboard.
+     */
+    function leaderboardPlayersCount() public view returns(uint256) {
+        return leaderboardPlayers.length;
+    }
+
+    /**
+     * @dev Returns the rankings and addresses of players on the leaderboard, within a given range of indices.
+     * @param count The number of rankings to return.
+     * @param offset The index of the first ranking to return.
+     * @return addresses An array of player addresses corresponding to the returned rankings.
+     * @return rankings An array of ranking values for the returned players.
+     * @dev Requires that `count` is less than or equal to the number of players on the leaderboard minus `offset`, and that `offset` is less than the number of players on the leaderboard.
+     */
+    function getPlayersRankings(
+        uint256 count, 
+        uint256 offset
+    ) public view returns (address[] memory addresses, uint256[] memory rankings) {
+        require(offset < leaderboardPlayers.length, "Invalid offset");
+        
+        if(count - offset > leaderboardPlayers.length) {
+            count = leaderboardPlayers.length;
+        }
+
+        addresses = new address[](count);
+        rankings = new uint256[](count);
+
+        for (uint256 i = offset; i < offset + count; ++i) {
+            address playerAddress = leaderboardPlayers[i];
+            addresses[i - offset] = playerAddress;
+            rankings[i - offset] = playerRanking[playerAddress];
+        }
+        return (addresses, rankings);
     }
 
     /**
@@ -78,9 +120,15 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, Ownable {
      */
     function enter(uint256 deckId) public {
         require(msg.sender == PepemonCardDeck(_deckAddress).ownerOf(deckId), "PepemonMatchmaker: Not your deck");
+        require(PepemonCardDeck(_deckAddress).getBattleCardInDeck(deckId) != 0, "PepemonMatchmaker: Invalid battlecard");
+        
+        (,uint256 supportCardCount) = PepemonCardDeck(_deckAddress).decks(deckId);
+        require(supportCardCount >= PepemonCardDeck(_deckAddress).MIN_SUPPORT_CARDS(), "PepemonMatchmaker: Not enough support cards");
+
         // If playerRanking is empty, set default ranking
         if (playerRanking[msg.sender] == 0) {
             playerRanking[msg.sender] = _defaultRanking;
+            leaderboardPlayers.push(msg.sender);
         }
 
         // Try find matchmaking partner

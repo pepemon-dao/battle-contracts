@@ -51,9 +51,14 @@ describe('::Matchmaker', async () => {
     // safeTransferFrom with 3 arguments fails to be mocked for some reason, maybe overloads cant be mocked
     await cardDeck.mock.safeTransferFrom.withArgs(matchmaker.address, alice.address, aliceDeck, '0x').returns();
     await cardDeck.mock.safeTransferFrom.withArgs(matchmaker.address, bob.address, bobDeck, '0x').returns();
+    
+    // no args specified => any params apply the specified return
+    await cardDeck.mock.MIN_SUPPORT_CARDS.returns(0);
+    await cardDeck.mock.decks.returns(1, 1);
+    await cardDeck.mock.getBattleCardInDeck.returns(1);
   };
 
-  const incrementBlockTimestamp = async (addedSecs: Number) => {
+  const incrementBlockTimestamp = async (addedSecs: number) => {
       // https://ethereum.stackexchange.com/questions/86633/time-dependent-tests-with-hardhat https://tinyurl.com/2yuf32vd
       await ethers.provider.send("evm_increaseTime", [addedSecs]); // 50min
       // @ts-ignore
@@ -114,6 +119,24 @@ describe('::Matchmaker', async () => {
       expect(await matchmaker.getWaitingCount()).to.eq(1);
     });
 
+    it('Should disallow entering without the minimum amount of support cards', async () => {
+      await cardDeck.mock.decks.returns(0,0);
+      await cardDeck.mock.MIN_SUPPORT_CARDS.withArgs().returns(100);
+
+      await expect(matchmaker.enter(aliceDeck)).to.be.revertedWith(
+        'PepemonMatchmaker: Not enough support cards'
+      );
+    });
+
+    it('Should disallow entering without a battle card', async () => {
+      await cardDeck.mock.decks.returns(0,0);
+      await cardDeck.mock.getBattleCardInDeck.returns(0);
+
+      await expect(matchmaker.enter(aliceDeck)).to.be.revertedWith(
+        'PepemonMatchmaker: Invalid battlecard'
+      );
+    });
+
     it('Should allow exiting', async () => {
       await matchmaker.enter(aliceDeck);
       await matchmaker.exit(aliceDeck);
@@ -145,15 +168,21 @@ describe('::Matchmaker', async () => {
     });
     it('Should prevent anyone but the admins from setting the kFactor', async () => {
       await matchmaker.enter(aliceDeck);
-      await expect(bobSignedMatchmaker.setKFactor(34)).to.be.revertedWith(
-        'Ownable: caller is not the owner'
-      );
+      await expect(bobSignedMatchmaker.setKFactor(34)).to.be.reverted;
     });
     it('Should prevent anyone but the admins from changing the MatchRange', async () => {
       await matchmaker.enter(aliceDeck);
-      await expect(bobSignedMatchmaker.setMatchRange(34, 68)).to.be.revertedWith(
-        'Ownable: caller is not the owner'
-      );
+      await expect(bobSignedMatchmaker.setMatchRange(34, 68)).to.be.reverted;
+    });
+    it('Should prevent anyone but the admins from forcibly removing a deck from the waitlist', async () => {
+      await matchmaker.enter(aliceDeck);
+      await expect(bobSignedMatchmaker.forceExit(1)).to.be.reverted;
+    });
+    it('Should allow admins to forcibly remove a deck from the waitlist', async () => {
+      await bobSignedMatchmaker.enter(bobDeck);
+      expect(await matchmaker.getWaitingCount()).to.eq(1);
+      await expect(matchmaker.forceExit(bobDeck)).to.not.be.reverted;
+      expect(await matchmaker.getWaitingCount()).to.eq(0);
     });
   });
 
@@ -187,6 +216,31 @@ describe('::Matchmaker', async () => {
 
       expect(aliceRanking.toNumber()).to.be.equal(defaultRanking);
       expect(bobRanking.toNumber()).to.be.equal(defaultRanking);
+    });
+
+    it('Should return the player rankings correctly', async () => {
+      await matchmaker.enter(aliceDeck);
+      await matchmaker.exit(aliceDeck); // if bob joins without alice leaving first, a battle would start
+      await bobSignedMatchmaker.enter(bobDeck);
+      await bobSignedMatchmaker.exit(bobDeck);
+
+      let rankings = await matchmaker.getPlayersRankings(1, 0);
+      // expect: [[alice_address], [alice_ranking]]
+      expect(rankings.length).to.be.eq(2);
+      expect(rankings[0].length).to.be.eq(1);
+      expect(rankings[0][0]).to.be.eq(alice.address);
+      
+      rankings = await matchmaker.getPlayersRankings(5, 0);
+      // expect: [[alice_address, bob_address], [alice_ranking, bob_ranking]]
+      expect(rankings.length).to.be.eq(2);
+      expect(rankings[0].length).to.be.eq(2);
+      expect(rankings[0][1]).to.be.eq(bob.address);
+      
+      rankings = await matchmaker.getPlayersRankings(1, 1);
+      // expect: [[bob_address], [bob_ranking]]
+      expect(rankings.length).to.be.eq(2);
+      expect(rankings[0].length).to.be.eq(1);
+      expect(rankings[0][0]).to.be.eq(bob.address);
     });
 
     it('Should prevent rankings from resetting when going to 0', async () => {

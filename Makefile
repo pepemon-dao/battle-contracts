@@ -1,4 +1,4 @@
-.PHONY : typechain compile test compile-clean console run prettier integration deploy-mumbai
+.PHONY : typechain compile test compile-clean console run prettier integration deploy-mumbai deploy-fantom-testnet
 
 typechain:
 	./node_modules/.bin/typechain --target ethers-v5 --outDir typechain './artifacts/*.json'
@@ -15,6 +15,10 @@ compile-clean:
 deploy-mumbai:
 	if [ -d ./contracts-exposed ]; then rm -r ./contracts-exposed; fi
 	npx hardhat deploy --network mumbai
+	
+deploy-fantom-testnet:
+	if [ -d ./contracts-exposed ]; then rm -r ./contracts-exposed; fi
+	npx hardhat deploy --network fantom_testnet
 
 test:
 	# re-generate hardhat-exposed ontracts with compile --force
