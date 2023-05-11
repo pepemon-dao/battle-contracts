@@ -14,15 +14,15 @@ compile-clean:
 
 deploy-mumbai:
 	if [ -d ./contracts-exposed ]; then rm -r ./contracts-exposed; fi
-	npx hardhat deploy --network mumbai
+	npx hardhat deploy --network mumbai --tags SETUP_CARDS
 	
 deploy-fantom-testnet:
 	if [ -d ./contracts-exposed ]; then rm -r ./contracts-exposed; fi
-	npx hardhat deploy --network fantom_testnet
+	npx hardhat deploy --network fantom_testnet --tags SETUP_CARDS
 
 deploy-pepechain-testnet:
 	if [ -d ./contracts-exposed ]; then rm -r ./contracts-exposed; fi
-	npx hardhat deploy --network pepechain_testnet
+	npx hardhat deploy --network pepechain_testnet --tags SETUP_CARDS
 
 test:
 	# re-generate hardhat-exposed ontracts with compile --force
