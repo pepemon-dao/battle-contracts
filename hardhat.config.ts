@@ -3,7 +3,7 @@ import environment from './config';
 
 import '@nomiclabs/hardhat-ethers';
 import '@nomiclabs/hardhat-waffle';
-import '@nomiclabs/hardhat-etherscan';
+import "@nomicfoundation/hardhat-verify";
 
 import 'hardhat-typechain';
 
@@ -95,6 +95,16 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: environment.etherScanKey,
+    customChains: [
+      {
+        network: "pepechain-testnet-8uk55qlld4",
+        chainId: 906090,
+        urls: {
+          apiURL: "https://explorerl2-pepechain-testnet-8uk55qlld4.t.conduit.xyz/api",
+          browserURL: "https://explorerl2-pepechain-testnet-8uk55qlld4.t.conduit.xyz"
+        }
+      }
+    ]
   },
   mocha: {
     timeout: 200000,
