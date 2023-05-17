@@ -3,7 +3,7 @@ import environment from './config';
 
 import '@nomiclabs/hardhat-ethers';
 import '@nomiclabs/hardhat-waffle';
-import '@nomiclabs/hardhat-etherscan';
+import "@nomicfoundation/hardhat-verify";
 
 import 'hardhat-typechain';
 
@@ -47,7 +47,7 @@ const config: HardhatUserConfig = {
     hardhat: {
       forking: {
         enabled: !environment.disableForking,
-        url: 'https://fantom-testnet.rpc.thirdweb.com'
+        url: 'https://l2-pepechain-testnet-8uk55qlld4.t.conduit.xyz'
       },
       // accounts: {
       //   mnemonic: '',
@@ -76,6 +76,10 @@ const config: HardhatUserConfig = {
     fantom_mainnet: {
       url: 'https://rpc.ankr.com/fantom',
       accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)]
+    },
+    pepechain_testnet: {
+      url: 'https://l2-pepechain-testnet-8uk55qlld4.t.conduit.xyz',
+      accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)]
     }
   },
   namedAccounts: {
@@ -91,6 +95,16 @@ const config: HardhatUserConfig = {
   },
   etherscan: {
     apiKey: environment.etherScanKey,
+    customChains: [
+      {
+        network: "pepechain-testnet-8uk55qlld4",
+        chainId: 906090,
+        urls: {
+          apiURL: "https://explorerl2-pepechain-testnet-8uk55qlld4.t.conduit.xyz/api",
+          browserURL: "https://explorerl2-pepechain-testnet-8uk55qlld4.t.conduit.xyz"
+        }
+      }
+    ]
   },
   mocha: {
     timeout: 200000,

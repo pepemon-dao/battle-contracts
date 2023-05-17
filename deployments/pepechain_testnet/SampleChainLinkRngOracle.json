@@ -1,0 +1,287 @@
+{
+  "address": "0x6170CEF7Ba33F242A2693609BddE99c29Ad974F1",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "AdminAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "AdminRemoved",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "addAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "_requestId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "fetchNumberByRequestId",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getNewRandomNumber",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "requestId",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getRandomNumber",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "isAdmin",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "lastRequestId",
+      "outputs": [
+        {
+          "internalType": "bytes32",
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes32",
+          "name": "requestId",
+          "type": "bytes32"
+        },
+        {
+          "internalType": "uint256",
+          "name": "randomness",
+          "type": "uint256"
+        }
+      ],
+      "name": "rawFulfillRandomness",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xa44264ae86010f2975d0e57810bf1a85e7e4426c44aa617e33edb95b055a2099",
+  "receipt": {
+    "to": null,
+    "from": "0x3c4A6d1C581A619B90CD6ffEABf02AF33d822E07",
+    "contractAddress": "0x6170CEF7Ba33F242A2693609BddE99c29Ad974F1",
+    "transactionIndex": 1,
+    "gasUsed": "558026",
+    "logsBloom": "0x00000000000000000000000000100000000000000000000000000000000000000000000000000008000000000000000000200008000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000020000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0xeeba8072ed41f462aa9c9bd821fadac44e0fb07e77037aa357abd0a8a21ba15d",
+    "transactionHash": "0xa44264ae86010f2975d0e57810bf1a85e7e4426c44aa617e33edb95b055a2099",
+    "logs": [
+      {
+        "transactionIndex": 1,
+        "blockNumber": 80918,
+        "transactionHash": "0xa44264ae86010f2975d0e57810bf1a85e7e4426c44aa617e33edb95b055a2099",
+        "address": "0x6170CEF7Ba33F242A2693609BddE99c29Ad974F1",
+        "topics": [
+          "0x44d6d25963f097ad14f29f06854a01f575648a1ef82f30e562ccd3889717e339",
+          "0x0000000000000000000000003c4a6d1c581a619b90cd6ffeabf02af33d822e07"
+        ],
+        "data": "0x",
+        "logIndex": 0,
+        "blockHash": "0xeeba8072ed41f462aa9c9bd821fadac44e0fb07e77037aa357abd0a8a21ba15d"
+      }
+    ],
+    "blockNumber": 80918,
+    "cumulativeGasUsed": "607679",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [],
+  "numDeployments": 1,
+  "solcInputHash": "1765d0170d31ec80b93477525dd7aca1",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.0+commit.c7dfd78e\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"AdminAdded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"AdminRemoved\",\"type\":\"event\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"addAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"_requestId\",\"type\":\"bytes32\"}],\"name\":\"fetchNumberByRequestId\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getNewRandomNumber\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"requestId\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getRandomNumber\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"isAdmin\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"lastRequestId\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"requestId\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"randomness\",\"type\":\"uint256\"}],\"name\":\"rawFulfillRandomness\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceAdmin\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/SampleChainLinkRngOracle.sol\":\"SampleChainLinkRngOracle\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"@chainlink/contracts/src/v0.8/VRFConsumerBase.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\nimport \\\"./interfaces/LinkTokenInterface.sol\\\";\\n\\nimport \\\"./VRFRequestIDBase.sol\\\";\\n\\n/** ****************************************************************************\\n * @notice Interface for contracts using VRF randomness\\n * *****************************************************************************\\n * @dev PURPOSE\\n *\\n * @dev Reggie the Random Oracle (not his real job) wants to provide randomness\\n * @dev to Vera the verifier in such a way that Vera can be sure he's not\\n * @dev making his output up to suit himself. Reggie provides Vera a public key\\n * @dev to which he knows the secret key. Each time Vera provides a seed to\\n * @dev Reggie, he gives back a value which is computed completely\\n * @dev deterministically from the seed and the secret key.\\n *\\n * @dev Reggie provides a proof by which Vera can verify that the output was\\n * @dev correctly computed once Reggie tells it to her, but without that proof,\\n * @dev the output is indistinguishable to her from a uniform random sample\\n * @dev from the output space.\\n *\\n * @dev The purpose of this contract is to make it easy for unrelated contracts\\n * @dev to talk to Vera the verifier about the work Reggie is doing, to provide\\n * @dev simple access to a verifiable source of randomness.\\n * *****************************************************************************\\n * @dev USAGE\\n *\\n * @dev Calling contracts must inherit from VRFConsumerBase, and can\\n * @dev initialize VRFConsumerBase's attributes in their constructor as\\n * @dev shown:\\n *\\n * @dev   contract VRFConsumer {\\n * @dev     constuctor(<other arguments>, address _vrfCoordinator, address _link)\\n * @dev       VRFConsumerBase(_vrfCoordinator, _link) public {\\n * @dev         <initialization with other arguments goes here>\\n * @dev       }\\n * @dev   }\\n *\\n * @dev The oracle will have given you an ID for the VRF keypair they have\\n * @dev committed to (let's call it keyHash), and have told you the minimum LINK\\n * @dev price for VRF service. Make sure your contract has sufficient LINK, and\\n * @dev call requestRandomness(keyHash, fee, seed), where seed is the input you\\n * @dev want to generate randomness from.\\n *\\n * @dev Once the VRFCoordinator has received and validated the oracle's response\\n * @dev to your request, it will call your contract's fulfillRandomness method.\\n *\\n * @dev The randomness argument to fulfillRandomness is the actual random value\\n * @dev generated from your seed.\\n *\\n * @dev The requestId argument is generated from the keyHash and the seed by\\n * @dev makeRequestId(keyHash, seed). If your contract could have concurrent\\n * @dev requests open, you can use the requestId to track which seed is\\n * @dev associated with which randomness. See VRFRequestIDBase.sol for more\\n * @dev details. (See \\\"SECURITY CONSIDERATIONS\\\" for principles to keep in mind,\\n * @dev if your contract could have multiple requests in flight simultaneously.)\\n *\\n * @dev Colliding `requestId`s are cryptographically impossible as long as seeds\\n * @dev differ. (Which is critical to making unpredictable randomness! See the\\n * @dev next section.)\\n *\\n * *****************************************************************************\\n * @dev SECURITY CONSIDERATIONS\\n *\\n * @dev A method with the ability to call your fulfillRandomness method directly\\n * @dev could spoof a VRF response with any random value, so it's critical that\\n * @dev it cannot be directly called by anything other than this base contract\\n * @dev (specifically, by the VRFConsumerBase.rawFulfillRandomness method).\\n *\\n * @dev For your users to trust that your contract's random behavior is free\\n * @dev from malicious interference, it's best if you can write it so that all\\n * @dev behaviors implied by a VRF response are executed *during* your\\n * @dev fulfillRandomness method. If your contract must store the response (or\\n * @dev anything derived from it) and use it later, you must ensure that any\\n * @dev user-significant behavior which depends on that stored value cannot be\\n * @dev manipulated by a subsequent VRF request.\\n *\\n * @dev Similarly, both miners and the VRF oracle itself have some influence\\n * @dev over the order in which VRF responses appear on the blockchain, so if\\n * @dev your contract could have multiple VRF requests in flight simultaneously,\\n * @dev you must ensure that the order in which the VRF responses arrive cannot\\n * @dev be used to manipulate your contract's user-significant behavior.\\n *\\n * @dev Since the ultimate input to the VRF is mixed with the block hash of the\\n * @dev block in which the request is made, user-provided seeds have no impact\\n * @dev on its economic security properties. They are only included for API\\n * @dev compatability with previous versions of this contract.\\n *\\n * @dev Since the block hash of the block which contains the requestRandomness\\n * @dev call is mixed into the input to the VRF *last*, a sufficiently powerful\\n * @dev miner could, in principle, fork the blockchain to evict the block\\n * @dev containing the request, forcing the request to be included in a\\n * @dev different block with a different hash, and therefore a different input\\n * @dev to the VRF. However, such an attack would incur a substantial economic\\n * @dev cost. This cost scales with the number of blocks the VRF oracle waits\\n * @dev until it calls responds to a request.\\n */\\nabstract contract VRFConsumerBase is VRFRequestIDBase {\\n\\n  /**\\n   * @notice fulfillRandomness handles the VRF response. Your contract must\\n   * @notice implement it. See \\\"SECURITY CONSIDERATIONS\\\" above for important\\n   * @notice principles to keep in mind when implementing your fulfillRandomness\\n   * @notice method.\\n   *\\n   * @dev VRFConsumerBase expects its subcontracts to have a method with this\\n   * @dev signature, and will call it once it has verified the proof\\n   * @dev associated with the randomness. (It is triggered via a call to\\n   * @dev rawFulfillRandomness, below.)\\n   *\\n   * @param requestId The Id initially returned by requestRandomness\\n   * @param randomness the VRF output\\n   */\\n  function fulfillRandomness(\\n    bytes32 requestId,\\n    uint256 randomness\\n  )\\n    internal\\n    virtual;\\n\\n  /**\\n   * @dev In order to keep backwards compatibility we have kept the user\\n   * seed field around. We remove the use of it because given that the blockhash\\n   * enters later, it overrides whatever randomness the used seed provides.\\n   * Given that it adds no security, and can easily lead to misunderstandings,\\n   * we have removed it from usage and can now provide a simpler API.\\n   */\\n  uint256 constant private USER_SEED_PLACEHOLDER = 0;\\n\\n  /**\\n   * @notice requestRandomness initiates a request for VRF output given _seed\\n   *\\n   * @dev The fulfillRandomness method receives the output, once it's provided\\n   * @dev by the Oracle, and verified by the vrfCoordinator.\\n   *\\n   * @dev The _keyHash must already be registered with the VRFCoordinator, and\\n   * @dev the _fee must exceed the fee specified during registration of the\\n   * @dev _keyHash.\\n   *\\n   * @dev The _seed parameter is vestigial, and is kept only for API\\n   * @dev compatibility with older versions. It can't *hurt* to mix in some of\\n   * @dev your own randomness, here, but it's not necessary because the VRF\\n   * @dev oracle will mix the hash of the block containing your request into the\\n   * @dev VRF seed it ultimately uses.\\n   *\\n   * @param _keyHash ID of public key against which randomness is generated\\n   * @param _fee The amount of LINK to send with the request\\n   *\\n   * @return requestId unique ID for this request\\n   *\\n   * @dev The returned requestId can be used to distinguish responses to\\n   * @dev concurrent requests. It is passed as the first argument to\\n   * @dev fulfillRandomness.\\n   */\\n  function requestRandomness(\\n    bytes32 _keyHash,\\n    uint256 _fee\\n  )\\n    internal\\n    returns (\\n      bytes32 requestId\\n    )\\n  {\\n    LINK.transferAndCall(vrfCoordinator, _fee, abi.encode(_keyHash, USER_SEED_PLACEHOLDER));\\n    // This is the seed passed to VRFCoordinator. The oracle will mix this with\\n    // the hash of the block containing this request to obtain the seed/input\\n    // which is finally passed to the VRF cryptographic machinery.\\n    uint256 vRFSeed  = makeVRFInputSeed(_keyHash, USER_SEED_PLACEHOLDER, address(this), nonces[_keyHash]);\\n    // nonces[_keyHash] must stay in sync with\\n    // VRFCoordinator.nonces[_keyHash][this], which was incremented by the above\\n    // successful LINK.transferAndCall (in VRFCoordinator.randomnessRequest).\\n    // This provides protection against the user repeating their input seed,\\n    // which would result in a predictable/duplicate output, if multiple such\\n    // requests appeared in the same block.\\n    nonces[_keyHash] = nonces[_keyHash] + 1;\\n    return makeRequestId(_keyHash, vRFSeed);\\n  }\\n\\n  LinkTokenInterface immutable internal LINK;\\n  address immutable private vrfCoordinator;\\n\\n  // Nonces for each VRF key from which randomness has been requested.\\n  //\\n  // Must stay in sync with VRFCoordinator[_keyHash][this]\\n  mapping(bytes32 /* keyHash */ => uint256 /* nonce */) private nonces;\\n\\n  /**\\n   * @param _vrfCoordinator address of VRFCoordinator contract\\n   * @param _link address of LINK token contract\\n   *\\n   * @dev https://docs.chain.link/docs/link-token-contracts\\n   */\\n  constructor(\\n    address _vrfCoordinator,\\n    address _link\\n  ) {\\n    vrfCoordinator = _vrfCoordinator;\\n    LINK = LinkTokenInterface(_link);\\n  }\\n\\n  // rawFulfillRandomness is called by VRFCoordinator when it receives a valid VRF\\n  // proof. rawFulfillRandomness then calls fulfillRandomness, after validating\\n  // the origin of the call\\n  function rawFulfillRandomness(\\n    bytes32 requestId,\\n    uint256 randomness\\n  )\\n    external\\n  {\\n    require(msg.sender == vrfCoordinator, \\\"Only VRFCoordinator can fulfill\\\");\\n    fulfillRandomness(requestId, randomness);\\n  }\\n}\\n\",\"keccak256\":\"0x991e49ee47043d6667887d7ed6ab5a0f8e4e5550f92b09b0d75c1fb1a473cd8d\",\"license\":\"MIT\"},\"@chainlink/contracts/src/v0.8/VRFRequestIDBase.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\ncontract VRFRequestIDBase {\\n\\n  /**\\n   * @notice returns the seed which is actually input to the VRF coordinator\\n   *\\n   * @dev To prevent repetition of VRF output due to repetition of the\\n   * @dev user-supplied seed, that seed is combined in a hash with the\\n   * @dev user-specific nonce, and the address of the consuming contract. The\\n   * @dev risk of repetition is mostly mitigated by inclusion of a blockhash in\\n   * @dev the final seed, but the nonce does protect against repetition in\\n   * @dev requests which are included in a single block.\\n   *\\n   * @param _userSeed VRF seed input provided by user\\n   * @param _requester Address of the requesting contract\\n   * @param _nonce User-specific nonce at the time of the request\\n   */\\n  function makeVRFInputSeed(\\n    bytes32 _keyHash,\\n    uint256 _userSeed,\\n    address _requester,\\n    uint256 _nonce\\n  )\\n    internal\\n    pure\\n    returns (\\n      uint256\\n    )\\n  {\\n    return uint256(keccak256(abi.encode(_keyHash, _userSeed, _requester, _nonce)));\\n  }\\n\\n  /**\\n   * @notice Returns the id for this request\\n   * @param _keyHash The serviceAgreement ID to be used for this request\\n   * @param _vRFInputSeed The seed to be passed directly to the VRF\\n   * @return The id for this request\\n   *\\n   * @dev Note that _vRFInputSeed is not the seed passed by the consuming\\n   * @dev contract, but the one generated by makeVRFInputSeed\\n   */\\n  function makeRequestId(\\n    bytes32 _keyHash,\\n    uint256 _vRFInputSeed\\n  )\\n    internal\\n    pure\\n    returns (\\n      bytes32\\n    )\\n  {\\n    return keccak256(abi.encodePacked(_keyHash, _vRFInputSeed));\\n  }\\n}\",\"keccak256\":\"0x7c8dad07e6c6c9269d97fd1191ccf9c0f0068683f1f88003e688eef9373de0d9\",\"license\":\"MIT\"},\"@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity ^0.8.0;\\n\\ninterface LinkTokenInterface {\\n\\n  function allowance(\\n    address owner,\\n    address spender\\n  )\\n    external\\n    view\\n    returns (\\n      uint256 remaining\\n    );\\n\\n  function approve(\\n    address spender,\\n    uint256 value\\n  )\\n    external\\n    returns (\\n      bool success\\n    );\\n\\n  function balanceOf(\\n    address owner\\n  )\\n    external\\n    view\\n    returns (\\n      uint256 balance\\n    );\\n\\n  function decimals()\\n    external\\n    view\\n    returns (\\n      uint8 decimalPlaces\\n    );\\n\\n  function decreaseApproval(\\n    address spender,\\n    uint256 addedValue\\n  )\\n    external\\n    returns (\\n      bool success\\n    );\\n\\n  function increaseApproval(\\n    address spender,\\n    uint256 subtractedValue\\n  ) external;\\n\\n  function name()\\n    external\\n    view\\n    returns (\\n      string memory tokenName\\n    );\\n\\n  function symbol()\\n    external\\n    view\\n    returns (\\n      string memory tokenSymbol\\n    );\\n\\n  function totalSupply()\\n    external\\n    view\\n    returns (\\n      uint256 totalTokensIssued\\n    );\\n\\n  function transfer(\\n    address to,\\n    uint256 value\\n  )\\n    external\\n    returns (\\n      bool success\\n    );\\n\\n  function transferAndCall(\\n    address to,\\n    uint256 value,\\n    bytes calldata data\\n  )\\n    external\\n    returns (\\n      bool success\\n    );\\n\\n  function transferFrom(\\n    address from,\\n    address to,\\n    uint256 value\\n  )\\n    external\\n    returns (\\n      bool success\\n    );\\n\\n}\\n\",\"keccak256\":\"0x50528c237386c55ff122d047f91b32be7abe24e9dfdc609de21cd605aae83b9a\",\"license\":\"MIT\"},\"contracts/SampleChainLinkRngOracle.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity ^0.8.0;\\npragma experimental ABIEncoderV2;\\nimport \\\"./lib/ChainLinkRngOracle.sol\\\";\\n\\ncontract SampleChainLinkRngOracle is ChainLinkRngOracle {\\n}\\n\",\"keccak256\":\"0x716f7204d849927f95949df09187ceccd17dcbc4eebe26d4e39662b1922b5258\",\"license\":\"MIT\"},\"contracts/lib/AdminRole.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity ^0.8.0;\\n\\nimport \\\"./Roles.sol\\\";\\n\\ncontract AdminRole {\\n  using Roles for Roles.Role;\\n\\n  event AdminAdded(address indexed account);\\n  event AdminRemoved(address indexed account);\\n\\n  Roles.Role private admins;\\n\\n  constructor() {\\n    _addAdmin(msg.sender);\\n  }\\n\\n  modifier onlyAdmin() {\\n    require(isAdmin(msg.sender));\\n    _;\\n  }\\n\\n  function isAdmin(address account) public view returns (bool) {\\n    return admins.has(account);\\n  }\\n\\n  function addAdmin(address account) public onlyAdmin {\\n    _addAdmin(account);\\n  }\\n\\n  function renounceAdmin() public {\\n    _removeAdmin(msg.sender);\\n  }\\n\\n  function _addAdmin(address account) internal {\\n    admins.add(account);\\n    emit AdminAdded(account);\\n  }\\n\\n  function _removeAdmin(address account) internal {\\n    admins.remove(account);\\n    emit AdminRemoved(account);\\n  }\\n}\",\"keccak256\":\"0x087322ecbf7bdc39315bedc5ec603149a119a35910f82ceb131820c1b7bb9804\",\"license\":\"MIT\"},\"contracts/lib/ChainLinkRngOracle.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\npragma solidity ^0.8.0;\\n\\nimport \\\"@chainlink/contracts/src/v0.8/VRFConsumerBase.sol\\\";\\nimport \\\"./AdminRole.sol\\\";\\n\\nabstract contract ChainLinkRngOracle is VRFConsumerBase, AdminRole {\\n    bytes32 immutable keyHash;\\n    bytes32 public lastRequestId;\\n    uint256 internal fee;\\n\\n    address constant maticLink = 0xb0897686c545045aFc77CF20eC7A532E3120E0F1;\\n    address constant maticVrfCoordinator = 0x3d2341ADb2D31f1c5530cDC622016af293177AE0;\\n    bytes32 constant maticKeyHash = 0xf86195cf7690c55907b2b611ebb7343a6f649bff128701cc542f0569e2c549da;\\n\\n    address constant mumbaiLink = 0x326C977E6efc84E512bB9C30f76E30c160eD06FB;\\n    address constant mumbaiVrfCoordinator = 0x8C7382F9D8f56b33781fE506E897a4F1e2d17255;\\n    bytes32 constant mumbaiKeyHash = 0x6e75b569a01ef56d18cab6a8e71e6600d6ce853834d4a5748b720d06f878b3a4;\\n\\n    address constant fantomTestnetLink = 0xfaFedb041c0DD4fA2Dc0d87a6B0979Ee6FA7af5F;\\n    address constant fantomTestnetVrfCoordinator = 0xbd13f08b8352A3635218ab9418E340c60d6Eb418;\\n    bytes32 constant fantomTestnetKeyHash = 0x121a143066e0f2f08b620784af77cccb35c6242460b4a8ee251b4b416abaebd4;\\n\\n    address constant fantomLink = 0x6F43FF82CCA38001B6699a8AC47A2d0E66939407;\\n    address constant fantomVrfCoordinator = 0xd5D517aBE5cF79B7e95eC98dB0f0277788aFF634;\\n    bytes32 constant fantomKeyHash = 0x5881eea62f9876043df723cf89f0c2bb6f950da25e9dfe66995c24f919c8f8ab;\\n\\n\\n\\n    mapping(bytes32 => uint256) internal results;\\n\\n    constructor() VRFConsumerBase(fantomTestnetVrfCoordinator, fantomTestnetLink) {\\n        keyHash = fantomTestnetKeyHash;\\n        fee = 1 ether / 1000;\\n    }\\n\\n    //Get a new random number (paying link for it)\\n    //Only callable by admin\\n    function getNewRandomNumber() public onlyAdmin returns (bytes32 requestId) {\\n        require(LINK.balanceOf(address(this)) >= fee, \\\"Not enough LINK - fill contract with faucet\\\");\\n        lastRequestId = requestRandomness(keyHash, fee);\\n        return lastRequestId;\\n    }\\n\\n    /**\\n     * Callback function used by VRF Coordinator\\n     */\\n    function fulfillRandomness(bytes32 requestId, uint256 randomness) internal override {\\n        results[requestId] = randomness;\\n    }\\n\\n    function fetchNumberByRequestId(bytes32 _requestId) public view returns (uint256) {\\n        return results[_requestId];\\n    }\\n\\n    //Get most recent random number and use that as randomness source    \\n    function getRandomNumber() public view returns (uint256){\\n        return fetchNumberByRequestId(lastRequestId);        \\n    }\\n}\\n\",\"keccak256\":\"0x7e49731f7e4ad3b8b6e60c8dd8245611985a7c1d16421a13f3f0fbc8df8600cb\",\"license\":\"MIT\"},\"contracts/lib/Roles.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n\\n\\npragma solidity ^0.8.0;\\n\\n/**\\n * @title Roles\\n * @dev Library for managing addresses assigned to a Role.\\n */\\nlibrary Roles {\\n  struct Role {\\n    mapping (address => bool) bearer;\\n  }\\n\\n  /**\\n   * @dev give an account access to this role\\n   */\\n  function add(Role storage role, address account) internal {\\n    require(account != address(0));\\n    require(!has(role, account));\\n\\n    role.bearer[account] = true;\\n  }\\n\\n  /**\\n   * @dev remove an account's access to this role\\n   */\\n  function remove(Role storage role, address account) internal {\\n    require(account != address(0));\\n    require(has(role, account));\\n\\n    role.bearer[account] = false;\\n  }\\n\\n  /**\\n   * @dev check if an account has this role\\n   * @return bool\\n   */\\n  function has(Role storage role, address account)\\n    internal\\n    view\\n    returns (bool)\\n  {\\n    require(account != address(0));\\n    return role.bearer[account];\\n  }\\n}\",\"keccak256\":\"0xd66f1c8050d61971204bf1249496bd98b69fd79b2011a630767f817d7201b56c\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x60e060405234801561001057600080fd5b507fbd13f08b8352a3635218ab9418e340c60d6eb41800000000000000000000000060a0527ffafedb041c0dd4fa2dc0d87a6b0979ee6fa7af5f00000000000000000000000060805261006233610096565b7f121a143066e0f2f08b620784af77cccb35c6242460b4a8ee251b4b416abaebd460c05266038d7ea4c68000600355610166565b6100ae8160016100e560201b6102ea1790919060201c565b6040516001600160a01b038216907f44d6d25963f097ad14f29f06854a01f575648a1ef82f30e562ccd3889717e33990600090a250565b6001600160a01b0381166100f857600080fd5b6101028282610131565b1561010c57600080fd5b6001600160a01b0316600090815260209190915260409020805460ff19166001179055565b60006001600160a01b03821661014657600080fd5b506001600160a01b03166000908152602091909152604090205460ff1690565b60805160601c60a05160601c60c05161083b6101a96000396000610222015260008181610287015261039e015260008181610171015261036f015261083b6000f3fe608060405234801561001057600080fd5b50600436106100885760003560e01c80638bad0c0a1161005b5780638bad0c0a146100f357806394985ddd146100fb578063dbdff2c11461010e578063fc2a88c31461011657610088565b806324d7806c1461008d578063391d1c09146100b65780634b1c8d65146100d657806370480275146100de575b600080fd5b6100a061009b3660046105fc565b61011e565b6040516100ad9190610727565b60405180910390f35b6100c96100c436600461064a565b610131565b6040516100ad9190610732565b6100c9610143565b6100f16100ec3660046105fc565b610253565b005b6100f1610271565b6100f1610109366004610662565b61027c565b6100c96102d2565b6100c96102e4565b600061012b600183610336565b92915050565b60009081526004602052604090205490565b600061014e3361011e565b61015757600080fd5b6003546040516370a0823160e01b81526001600160a01b037f000000000000000000000000000000000000000000000000000000000000000016906370a08231906101a69030906004016106a9565b60206040518083038186803b1580156101be57600080fd5b505afa1580156101d2573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906101f69190610683565b101561021d5760405162461bcd60e51b81526004016102149061075f565b60405180910390fd5b6102497f000000000000000000000000000000000000000000000000000000000000000060035461036b565b6002819055905090565b61025c3361011e565b61026557600080fd5b61026e816104b1565b50565b61027a336104f3565b565b336001600160a01b037f000000000000000000000000000000000000000000000000000000000000000016146102c45760405162461bcd60e51b8152600401610214906107aa565b6102ce8282610535565b5050565b60006102df600254610131565b905090565b60025481565b6001600160a01b0381166102fd57600080fd5b6103078282610336565b1561031157600080fd5b6001600160a01b0316600090815260209190915260409020805460ff19166001179055565b60006001600160a01b03821661034b57600080fd5b506001600160a01b03166000908152602091909152604090205460ff1690565b60007f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316634000aea07f0000000000000000000000000000000000000000000000000000000000000000848660006040516020016103d292919061069b565b6040516020818303038152906040526040518463ffffffff1660e01b81526004016103ff939291906106bd565b602060405180830381600087803b15801561041957600080fd5b505af115801561042d573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610451919061062a565b5060006104738460003060008089815260200190815260200160002054610547565b6000858152602081905260409020549091506104909060016107e1565b6000858152602081905260409020556104a98482610581565b949350505050565b6104bc6001826102ea565b6040516001600160a01b038216907f44d6d25963f097ad14f29f06854a01f575648a1ef82f30e562ccd3889717e33990600090a250565b6104fe6001826105b4565b6040516001600160a01b038216907fa3b62bc36326052d97ea62d63c3d60308ed4c3ea8ac079dd8499f1e9c4f80c0f90600090a250565b60009182526004602052604090912055565b600084848484604051602001610560949392919061073b565b60408051601f19818403018152919052805160209091012095945050505050565b6000828260405160200161059692919061069b565b60405160208183030381529060405280519060200120905092915050565b6001600160a01b0381166105c757600080fd5b6105d18282610336565b6105da57600080fd5b6001600160a01b0316600090815260209190915260409020805460ff19169055565b60006020828403121561060d578081fd5b81356001600160a01b0381168114610623578182fd5b9392505050565b60006020828403121561063b578081fd5b81518015158114610623578182fd5b60006020828403121561065b578081fd5b5035919050565b60008060408385031215610674578081fd5b50508035926020909101359150565b600060208284031215610694578081fd5b5051919050565b918252602082015260400190565b6001600160a01b0391909116815260200190565b600060018060a01b038516825260208481840152606060408401528351806060850152825b818110156106fe578581018301518582016080015282016106e2565b8181111561070f5783608083870101525b50601f01601f19169290920160800195945050505050565b901515815260200190565b90815260200190565b93845260208401929092526001600160a01b03166040830152606082015260800190565b6020808252602b908201527f4e6f7420656e6f756768204c494e4b202d2066696c6c20636f6e74726163742060408201526a1dda5d1a0819985d58d95d60aa1b606082015260800190565b6020808252601f908201527f4f6e6c7920565246436f6f7264696e61746f722063616e2066756c66696c6c00604082015260600190565b6000821982111561080057634e487b7160e01b81526011600452602481fd5b50019056fea264697066735822122012d9fce014498e8b3be6ad2a0239678d77e7b135a71c4a9690770000f184d09664736f6c63430008000033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100885760003560e01c80638bad0c0a1161005b5780638bad0c0a146100f357806394985ddd146100fb578063dbdff2c11461010e578063fc2a88c31461011657610088565b806324d7806c1461008d578063391d1c09146100b65780634b1c8d65146100d657806370480275146100de575b600080fd5b6100a061009b3660046105fc565b61011e565b6040516100ad9190610727565b60405180910390f35b6100c96100c436600461064a565b610131565b6040516100ad9190610732565b6100c9610143565b6100f16100ec3660046105fc565b610253565b005b6100f1610271565b6100f1610109366004610662565b61027c565b6100c96102d2565b6100c96102e4565b600061012b600183610336565b92915050565b60009081526004602052604090205490565b600061014e3361011e565b61015757600080fd5b6003546040516370a0823160e01b81526001600160a01b037f000000000000000000000000000000000000000000000000000000000000000016906370a08231906101a69030906004016106a9565b60206040518083038186803b1580156101be57600080fd5b505afa1580156101d2573d6000803e3d6000fd5b505050506040513d601f19601f820116820180604052508101906101f69190610683565b101561021d5760405162461bcd60e51b81526004016102149061075f565b60405180910390fd5b6102497f000000000000000000000000000000000000000000000000000000000000000060035461036b565b6002819055905090565b61025c3361011e565b61026557600080fd5b61026e816104b1565b50565b61027a336104f3565b565b336001600160a01b037f000000000000000000000000000000000000000000000000000000000000000016146102c45760405162461bcd60e51b8152600401610214906107aa565b6102ce8282610535565b5050565b60006102df600254610131565b905090565b60025481565b6001600160a01b0381166102fd57600080fd5b6103078282610336565b1561031157600080fd5b6001600160a01b0316600090815260209190915260409020805460ff19166001179055565b60006001600160a01b03821661034b57600080fd5b506001600160a01b03166000908152602091909152604090205460ff1690565b60007f00000000000000000000000000000000000000000000000000000000000000006001600160a01b0316634000aea07f0000000000000000000000000000000000000000000000000000000000000000848660006040516020016103d292919061069b565b6040516020818303038152906040526040518463ffffffff1660e01b81526004016103ff939291906106bd565b602060405180830381600087803b15801561041957600080fd5b505af115801561042d573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610451919061062a565b5060006104738460003060008089815260200190815260200160002054610547565b6000858152602081905260409020549091506104909060016107e1565b6000858152602081905260409020556104a98482610581565b949350505050565b6104bc6001826102ea565b6040516001600160a01b038216907f44d6d25963f097ad14f29f06854a01f575648a1ef82f30e562ccd3889717e33990600090a250565b6104fe6001826105b4565b6040516001600160a01b038216907fa3b62bc36326052d97ea62d63c3d60308ed4c3ea8ac079dd8499f1e9c4f80c0f90600090a250565b60009182526004602052604090912055565b600084848484604051602001610560949392919061073b565b60408051601f19818403018152919052805160209091012095945050505050565b6000828260405160200161059692919061069b565b60405160208183030381529060405280519060200120905092915050565b6001600160a01b0381166105c757600080fd5b6105d18282610336565b6105da57600080fd5b6001600160a01b0316600090815260209190915260409020805460ff19169055565b60006020828403121561060d578081fd5b81356001600160a01b0381168114610623578182fd5b9392505050565b60006020828403121561063b578081fd5b81518015158114610623578182fd5b60006020828403121561065b578081fd5b5035919050565b60008060408385031215610674578081fd5b50508035926020909101359150565b600060208284031215610694578081fd5b5051919050565b918252602082015260400190565b6001600160a01b0391909116815260200190565b600060018060a01b038516825260208481840152606060408401528351806060850152825b818110156106fe578581018301518582016080015282016106e2565b8181111561070f5783608083870101525b50601f01601f19169290920160800195945050505050565b901515815260200190565b90815260200190565b93845260208401929092526001600160a01b03166040830152606082015260800190565b6020808252602b908201527f4e6f7420656e6f756768204c494e4b202d2066696c6c20636f6e74726163742060408201526a1dda5d1a0819985d58d95d60aa1b606082015260800190565b6020808252601f908201527f4f6e6c7920565246436f6f7264696e61746f722063616e2066756c66696c6c00604082015260600190565b6000821982111561080057634e487b7160e01b81526011600452602481fd5b50019056fea264697066735822122012d9fce014498e8b3be6ad2a0239678d77e7b135a71c4a9690770000f184d09664736f6c63430008000033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {},
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 79,
+        "contract": "contracts/SampleChainLinkRngOracle.sol:SampleChainLinkRngOracle",
+        "label": "nonces",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_mapping(t_bytes32,t_uint256)"
+      },
+      {
+        "astId": 8665,
+        "contract": "contracts/SampleChainLinkRngOracle.sol:SampleChainLinkRngOracle",
+        "label": "admins",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_struct(Role)9171_storage"
+      },
+      {
+        "astId": 8838,
+        "contract": "contracts/SampleChainLinkRngOracle.sol:SampleChainLinkRngOracle",
+        "label": "lastRequestId",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_bytes32"
+      },
+      {
+        "astId": 8840,
+        "contract": "contracts/SampleChainLinkRngOracle.sol:SampleChainLinkRngOracle",
+        "label": "fee",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 8880,
+        "contract": "contracts/SampleChainLinkRngOracle.sol:SampleChainLinkRngOracle",
+        "label": "results",
+        "offset": 0,
+        "slot": "4",
+        "type": "t_mapping(t_bytes32,t_uint256)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_bytes32": {
+        "encoding": "inplace",
+        "label": "bytes32",
+        "numberOfBytes": "32"
+      },
+      "t_mapping(t_address,t_bool)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => bool)",
+        "numberOfBytes": "32",
+        "value": "t_bool"
+      },
+      "t_mapping(t_bytes32,t_uint256)": {
+        "encoding": "mapping",
+        "key": "t_bytes32",
+        "label": "mapping(bytes32 => uint256)",
+        "numberOfBytes": "32",
+        "value": "t_uint256"
+      },
+      "t_struct(Role)9171_storage": {
+        "encoding": "inplace",
+        "label": "struct Roles.Role",
+        "members": [
+          {
+            "astId": 9170,
+            "contract": "contracts/SampleChainLinkRngOracle.sol:SampleChainLinkRngOracle",
+            "label": "bearer",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_mapping(t_address,t_bool)"
+          }
+        ],
+        "numberOfBytes": "32"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}
