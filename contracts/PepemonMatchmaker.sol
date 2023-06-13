@@ -22,6 +22,7 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
     address private _deckAddress;
     address private _rewardPoolAddress;
     bool private _allowBattleAgainstOneself;
+    bool private _pveMode;
 
     uint256 private immutable _defaultRanking;
     uint256 private _matchRange = 300;
@@ -41,6 +42,20 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
         _deckAddress = deckAddress;
         _rewardPoolAddress = rewardPoolAddress;
         _allowBattleAgainstOneself = false;
+    }
+
+    function setPveMode(bool enable) public onlyAdmin {
+        _pveMode = enable;
+    }
+
+    function addPveDeck(uint256 deckId) public onlyAdmin {
+        require(_pveMode == true);
+        addWaitingDeck(deckId);
+    }
+
+    function removePveDeck(uint256 deckId) public onlyAdmin {
+        require(_pveMode == true);
+        removeWaitingDeck(deckId);
     }
 
     function setAllowBattleAgainstOneself(bool allow) public onlyAdmin {
@@ -114,14 +129,51 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
     }
 
     /**
+     * @notice Tries to initiate a battle using a specified deck. Opponents are not other players but a set of decks added by admins.
+     * @dev This function cannot be used if _pveMode is set to false. In that case, players should join using "enter" instead, which 
+     * allows them to fight each other.
+     * @param deckId The Deck of who called this function
+     */
+    function enterPve(uint256 deckId) public {
+        require(msg.sender == PepemonCardDeck(_deckAddress).ownerOf(deckId), "PepemonMatchmaker: Not your deck");
+        require(PepemonCardDeck(_deckAddress).getBattleCardInDeck(deckId) != 0, "PepemonMatchmaker: Invalid battlecard");
+        require(_pveMode == true, "PepemonMatchmaker: PvE mode disabled");
+
+        // Make sure the player has the minimum amount of support cards required
+        (,uint256 supportCardCount) = PepemonCardDeck(_deckAddress).decks(deckId);
+        require(supportCardCount >= PepemonCardDeck(_deckAddress).MIN_SUPPORT_CARDS(), "PepemonMatchmaker: Not enough support cards");
+
+        // If playerRanking is empty, set default ranking
+        if (playerRanking[msg.sender] == 0) {
+            playerRanking[msg.sender] = _defaultRanking;
+            leaderboardPlayers.push(msg.sender);
+        }
+
+        // Get a matchmaking opponent
+        uint256 opponentDeckId = getPveMatchmakingOpponent(deckId);
+
+        // If one is found then start the battle, otherwise revert the transaction because someone forgot to add the opponents
+        if (opponentDeckId > 0) {
+            // start battle
+            processMatch(deckId, opponentDeckId);
+        } else {
+            // should only happen if an admin forgot to add decks to this contract
+            revert("PepemonMatchmaker: No PvE opponents available");
+        }
+    }
+
+    /**
      * @notice Tries to initiate a battle using a specified deck. If no opponents are found, the deck
      * is placed in a wait list.
+     * @dev This function cannot be used if _pveMode is set to true, players should join using "enterPve" instead.
      * @param deckId The Deck of who called this function
      */
     function enter(uint256 deckId) public {
         require(msg.sender == PepemonCardDeck(_deckAddress).ownerOf(deckId), "PepemonMatchmaker: Not your deck");
         require(PepemonCardDeck(_deckAddress).getBattleCardInDeck(deckId) != 0, "PepemonMatchmaker: Invalid battlecard");
-        
+        require(_pveMode == false, "PepemonMatchmaker: PvE mode enabled");
+
+        // Make sure the player has the minimum amount of support cards required
         (,uint256 supportCardCount) = PepemonCardDeck(_deckAddress).decks(deckId);
         require(supportCardCount >= PepemonCardDeck(_deckAddress).MIN_SUPPORT_CARDS(), "PepemonMatchmaker: Not enough support cards");
 
@@ -230,6 +282,20 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
         } else {
             playerRanking[loser] = 1;
         }
+    }
+
+    /**
+     * @dev Takes one random deckId from the waiting list, which in pve mode contains decks set by admins instead of other player's decks
+     * @param deckId Deck of the current player trying to start a match, only used for added entropy
+     * @return opponentDeckId Deck of the opponent, if any. 0 when none are available
+     */
+    function getPveMatchmakingOpponent(uint256 deckId) internal view returns (uint256) {
+        if (waitingDecks.length == 0) {
+            return 0;
+        }
+        // Take one of the random pve decks
+        uint256 index = uint256(keccak256(abi.encodePacked(uint256(63), deckId, block.timestamp, block.prevrandao))) % waitingDecks.length;
+        return waitingDecks[index].deckId;
     }
 
     /**
