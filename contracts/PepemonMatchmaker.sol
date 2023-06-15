@@ -97,7 +97,15 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
     function setKFactor(uint256 kFactor) public onlyAdmin {
         _kFactor = kFactor;
     }
-    
+
+    /**
+     * @notice Tells whether or not this contract is operating in PvE mode. When in PvE mode, players cannot fight against
+     * each other (because PvE is the opposite of PvP).
+     */
+    function isPveMode() public view returns(bool) {
+        return _pveMode;
+    }
+
     /**
      * @dev Returns the number of players currently on the leaderboard.
      * @return The number of players currently on the leaderboard.
