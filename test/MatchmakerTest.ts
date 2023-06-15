@@ -381,7 +381,10 @@ describe('::Matchmaker', () => {
       await matchmaker.setPveMode(true);
       await matchmaker.addPveDeck(aliceDeck);
 
-      await bobSignedMatchmaker.enterPve(bobDeck); // battle begins here
+      // battle 3x in a row
+      await bobSignedMatchmaker.enterPve(bobDeck); 
+      await bobSignedMatchmaker.enterPve(bobDeck);
+      await bobSignedMatchmaker.enterPve(bobDeck);
 
       let aliceRanking = await bobSignedMatchmaker.playerRanking(alice.address);
       let bobRanking = await bobSignedMatchmaker.playerRanking(bob.address);
