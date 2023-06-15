@@ -50,6 +50,13 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
 
     function addPveDeck(uint256 deckId) public onlyAdmin {
         require(_pveMode == true);
+
+        // must be set, unless PvE requires no ranking (to be confirmed)
+        if (playerRanking[msg.sender] == 0) {
+            playerRanking[msg.sender] = _defaultRanking;
+            leaderboardPlayers.push(msg.sender);
+        }
+
         addWaitingDeck(deckId);
     }
 
@@ -294,7 +301,7 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
             return 0;
         }
         // Take one of the random pve decks
-        uint256 index = uint256(keccak256(abi.encodePacked(uint256(63), deckId, block.timestamp, block.prevrandao))) % waitingDecks.length;
+        uint256 index = uint256(keccak256(abi.encodePacked(uint256(63), deckId, block.timestamp))) % waitingDecks.length;
         return waitingDecks[index].deckId;
     }
 

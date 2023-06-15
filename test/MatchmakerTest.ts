@@ -20,7 +20,7 @@ const aliceDeck = 1;
 const bobDeck = 2;
 const defaultRanking = 2000;
 
-describe('::Matchmaker', async () => {
+describe('::Matchmaker', () => {
   let matchmaker: PepemonMatchmaker;
   let bobSignedMatchmaker: PepemonMatchmaker;
   let cardDeck: PepemonCardDeck | MockContract;
@@ -60,7 +60,7 @@ describe('::Matchmaker', async () => {
 
   const incrementBlockTimestamp = async (addedSecs: number) => {
       // https://ethereum.stackexchange.com/questions/86633/time-dependent-tests-with-hardhat https://tinyurl.com/2yuf32vd
-      await ethers.provider.send("evm_increaseTime", [addedSecs]); // 50min
+      await ethers.provider.send("evm_increaseTime", [addedSecs]);
       // @ts-ignore
       await ethers.provider.send("evm_mine");
   };
@@ -112,7 +112,7 @@ describe('::Matchmaker', async () => {
     await matchmaker.setKFactor(16);
   }
 
-  describe('#Deck', async () => {
+  describe('#Deck', () => {
     it('Should allow entering and waiting for a match', async () => {
       await matchmaker.enter(aliceDeck);
       expect(await matchmaker.deckOwner(aliceDeck)).to.eq(alice.address);
@@ -154,7 +154,7 @@ describe('::Matchmaker', async () => {
     });
   });
 
-  describe('#Permissions', async () => {
+  describe('#Permissions', () => {
     it('Should prevent anyone but the owner from entering', async () => {
       await expect(bobSignedMatchmaker.enter(aliceDeck)).to.be.revertedWith(
         'PepemonMatchmaker: Not your deck'
@@ -184,9 +184,50 @@ describe('::Matchmaker', async () => {
       await expect(matchmaker.forceExit(bobDeck)).to.not.be.reverted;
       expect(await matchmaker.getWaitingCount()).to.eq(0);
     });
+    it('Should prevent anyone from adding PvE decks when PvE mode is disabled', async () => {
+      await expect(matchmaker.addPveDeck(aliceDeck)).to.be.reverted;
+      await expect(bobSignedMatchmaker.addPveDeck(bobDeck)).to.be.reverted;
+    });
+    it('Should prevent anyone from removing PvE decks when PvE mode is disabled', async () => {
+      await expect(matchmaker.removePveDeck(aliceDeck)).to.be.reverted;
+      await expect(bobSignedMatchmaker.removePveDeck(bobDeck)).to.be.reverted;
+    });
+    it('Should prevent anyone but the admins from setting PvE mode', async () => {
+      await expect(matchmaker.setPveMode(true)).not.to.be.reverted;
+      await expect(bobSignedMatchmaker.setPveMode(false)).to.be.reverted;
+    });
+    it('Should prevent anyone but the admins from adding a PvE deck', async () => {
+      await matchmaker.setPveMode(true);
+      await expect(matchmaker.addPveDeck(aliceDeck)).not.to.be.reverted;
+      await expect(bobSignedMatchmaker.addPveDeck(bobDeck)).to.be.reverted;
+    });
+    it('Should prevent anyone but the admins from removing a PvE deck', async () => {
+      await matchmaker.setPveMode(true);
+      await matchmaker.addPveDeck(aliceDeck);
+      expect(await matchmaker.getWaitingCount()).to.eq(1);
+      await expect(bobSignedMatchmaker.removePveDeck(aliceDeck)).to.be.reverted;
+    });
+    it('Should prevent players from entering a PvE match with PvP mode enabled', async () => {
+      await matchmaker.setPveMode(false);
+      await expect(bobSignedMatchmaker.enterPve(bobDeck)).to.be.revertedWith(
+        "PepemonMatchmaker: PvE mode disabled"
+      );
+    });
+    it('Should prevent players from entering a PvP match with PvE mode enabled', async () => {
+      await matchmaker.setPveMode(true);
+      await expect(bobSignedMatchmaker.enter(bobDeck)).to.be.revertedWith(
+        "PepemonMatchmaker: PvE mode enabled"
+      );
+    });
+    it('Should prevent players from entering a PvE match when there are no opponents set by admins', async () => {
+      await matchmaker.setPveMode(true);
+      await expect(bobSignedMatchmaker.enterPve(bobDeck)).to.be.revertedWith(
+        "PepemonMatchmaker: No PvE opponents available"
+      );
+    });
   });
 
-  describe('#Ranking', async () => {
+  describe('#Ranking', () => {
     it('Should calculate Elo rating change correctly', async () => {
       // refer to this for the precise values (must set Custom K-factor): https://www.omnicalculator.com/sports/elo
       await matchmaker.setKFactor(16);
@@ -261,7 +302,7 @@ describe('::Matchmaker', async () => {
     });
   });
 
-  describe('#Battle', async () => {
+  describe('#Battle', () => {
     it('Should allow a battle between 2 players to update their ranking', async () => {
       // Get an instance of the "Battle" object, which is too big to be created inline
       let emptyBattleData = await getDummyBattleInstance();
@@ -326,6 +367,25 @@ describe('::Matchmaker', async () => {
 
       let opponent = await bobSignedMatchmaker.xfindMatchmakingOpponent(bobDeck); // hardhat-exposed
       expect(opponent.toNumber()).to.be.equal(0);
+    });
+
+    it('Should allow two players to fight in PvE', async () => {
+      // Get an instance of the "Battle" object, which is too big to be created inline
+      let emptyBattleData = await getDummyBattleInstance();
+      // Mock battleContract and RewardPool calls
+      await battle.mock.createBattle.returns(emptyBattleData, 1);
+      await battle.mock.goForBattle.returns(emptyBattleData, alice.address); // alice wins
+      await rewardPool.mock.sendReward.returns();
+
+      // enable PvE mode
+      await matchmaker.setPveMode(true);
+      await matchmaker.addPveDeck(aliceDeck);
+
+      await bobSignedMatchmaker.enterPve(bobDeck); // battle begins here
+
+      let aliceRanking = await bobSignedMatchmaker.playerRanking(alice.address);
+      let bobRanking = await bobSignedMatchmaker.playerRanking(bob.address);
+      expect(aliceRanking.toNumber()).to.be.greaterThan(bobRanking.toNumber());
     });
   });
 });
