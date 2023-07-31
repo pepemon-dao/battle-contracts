@@ -95,13 +95,16 @@ const config: HardhatUserConfig = {
     proxyOwner: 1,
   },
   etherscan: {
-    apiKey: environment.etherScanKey,
+    apiKey: {
+      ethereum: environment.etherScanKey,
+      pepechain_testnet: "NONE"
+    },
     customChains: [
       {
-        network: "pepechain-testnet-8uk55qlld4",
+        network: "pepechain_testnet",
         chainId: 906090,
         urls: {
-          apiURL: "https://explorerl2new-pepechain-testnet-8uk55qlld4.t.conduit.xyz/api/v2",
+          apiURL: "https://explorerl2new-pepechain-testnet-8uk55qlld4.t.conduit.xyz/api",
           browserURL: "https://explorerl2new-pepechain-testnet-8uk55qlld4.t.conduit.xyz"
         }
       }
