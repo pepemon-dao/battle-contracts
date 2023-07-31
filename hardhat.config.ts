@@ -79,7 +79,8 @@ const config: HardhatUserConfig = {
     },
     pepechain_testnet: {
       url: 'https://l2-pepechain-testnet-8uk55qlld4.t.conduit.xyz',
-      accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)]
+      accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)],
+      gasPrice: 10000000000,
     }
   },
   namedAccounts: {
@@ -100,8 +101,8 @@ const config: HardhatUserConfig = {
         network: "pepechain-testnet-8uk55qlld4",
         chainId: 906090,
         urls: {
-          apiURL: "https://explorerl2-pepechain-testnet-8uk55qlld4.t.conduit.xyz/api",
-          browserURL: "https://explorerl2-pepechain-testnet-8uk55qlld4.t.conduit.xyz"
+          apiURL: "https://explorerl2new-pepechain-testnet-8uk55qlld4.t.conduit.xyz/api/v2",
+          browserURL: "https://explorerl2new-pepechain-testnet-8uk55qlld4.t.conduit.xyz"
         }
       }
     ]

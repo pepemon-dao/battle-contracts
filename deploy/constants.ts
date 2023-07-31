@@ -17,7 +17,7 @@ let addrSupportCard;
 let addrBattleCard;
 let addrCardOracle;
 
-const targetChain: String = "";
+const targetChain: String = "pepechain-testnet";
 switch (targetChain) {
   case "pepechain-testnet":
     addrSupportCard = '0x22895c1acdABC95191fe776E2953B984abCa1C40';
