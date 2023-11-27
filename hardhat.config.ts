@@ -16,7 +16,7 @@ console.log("Forking is " + (environment.disableForking ? "disabled" : "enabled"
 
 const config: HardhatUserConfig = {
   solidity: {
-    version: '0.8.0',
+    version: '0.8.6',
     // version: "0.7.4",
     settings: {
       optimizer: {
@@ -57,7 +57,7 @@ const config: HardhatUserConfig = {
       // },
       allowUnlimitedContractSize: true,
       initialBaseFeePerGas: 100,
-      blockGasLimit: 0x1fffffffffffff,
+      blockGasLimit: 50000000,
       gas: "auto",
       gasPrice: 8000000000,
     },
@@ -111,7 +111,7 @@ const config: HardhatUserConfig = {
     ]
   },
   mocha: {
-    timeout: 200000,
+    timeout: 600000,
   },
 };
 

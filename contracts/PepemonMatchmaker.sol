@@ -7,7 +7,7 @@ import "./lib/AdminRole.sol";
 import "./PepemonCardDeck.sol";
 import "./lib/RewardPool.sol";
 import "./lib/Elo.sol";
-import "./PepemonCardOracle.sol";
+import "./iface/IPepemonCardOracle.sol";
 import "./PepemonBattle.sol";
 
 contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {

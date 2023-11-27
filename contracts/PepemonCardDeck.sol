@@ -7,8 +7,8 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import "./PepemonFactory.sol";
-import "./PepemonCardOracle.sol";
+import "./iface/IPepemonFactory.sol";
+import "./iface/IPepemonCardOracle.sol";
 import "./lib/Arrays.sol";
 
 contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
@@ -104,7 +104,7 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
      */
     function mintCards() public {
         require(maxMintTestCardId > 0, "Minting test cards is disabled");
-        PepemonFactory(supportCardAddress).batchMint(minMintTestCardId, maxMintTestCardId, msg.sender);
+        IPepemonFactory(supportCardAddress).batchMint(minMintTestCardId, maxMintTestCardId, msg.sender);
     }
 
     function createDeck() public {
@@ -115,7 +115,7 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
 
     function addBattleCardToDeck(uint256 deckId, uint256 battleCardId) public sendersDeck(deckId) {
         require(
-            PepemonFactory(battleCardAddress).balanceOf(msg.sender, battleCardId) >= 1,
+            IPepemonFactory(battleCardAddress).balanceOf(msg.sender, battleCardId) >= 1,
             "PepemonCardDeck: Don't own battle card"
         );
 
@@ -124,7 +124,7 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
         uint256 oldBattleCardId = decks[deckId].battleCardId;
         decks[deckId].battleCardId = battleCardId;
 
-        PepemonFactory(battleCardAddress).safeTransferFrom(msg.sender, address(this), battleCardId, 1, "");
+        IPepemonFactory(battleCardAddress).safeTransferFrom(msg.sender, address(this), battleCardId, 1, "");
 
         returnBattleCardFromDeck(oldBattleCardId);
     }
@@ -157,7 +157,7 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
     ) internal {
         require(MAX_SUPPORT_CARDS >= decks[_deckId].supportCardCount.add(_amount), "PepemonCardDeck: Deck overflow");
         require(
-            PepemonFactory(supportCardAddress).balanceOf(msg.sender, _supportCardId) >= _amount,
+            IPepemonFactory(supportCardAddress).balanceOf(msg.sender, _supportCardId) >= _amount,
             "PepemonCardDeck: You don't have enough of this card"
         );
 
@@ -178,7 +178,7 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
 
         decks[_deckId].supportCardCount = decks[_deckId].supportCardCount.add(_amount);
 
-        PepemonFactory(supportCardAddress).safeTransferFrom(msg.sender, address(this), _supportCardId, _amount, "");
+        IPepemonFactory(supportCardAddress).safeTransferFrom(msg.sender, address(this), _supportCardId, _amount, "");
     }
 
     function removeSupportCardFromDeck(
@@ -205,12 +205,12 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
             delete decks[_deckId].supportCardTypes[_supportCardId];
         }
 
-        PepemonFactory(supportCardAddress).safeTransferFrom(address(this), msg.sender, _supportCardId, _amount, "");
+        IPepemonFactory(supportCardAddress).safeTransferFrom(address(this), msg.sender, _supportCardId, _amount, "");
     }
 
     function returnBattleCardFromDeck(uint256 _battleCardId) internal {
         if (_battleCardId != 0) {
-            PepemonFactory(battleCardAddress).safeTransferFrom(address(this), msg.sender, _battleCardId, 1, "");
+            IPepemonFactory(battleCardAddress).safeTransferFrom(address(this), msg.sender, _battleCardId, 1, "");
         }
     }
 

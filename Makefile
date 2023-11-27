@@ -29,6 +29,11 @@ test:
 	npx hardhat --config ./hardhat.config.tests.ts compile --force
 	@DISABLE_FORKING=1 npx hardhat --config ./hardhat.config.tests.ts test --no-compile
 
+integration:
+	# re-generate hardhat-exposed ontracts with compile --force
+	npx hardhat --config ./hardhat.config.tests.ts compile --force
+	@DISABLE_FORKING=1 npx hardhat --config ./hardhat.config.tests.ts --show-stack-traces test --bail --no-compile --verbose --deploy-fixture integration/IntegrationTest.ts
+
 run-node:
 	@npx hardhat node
 
