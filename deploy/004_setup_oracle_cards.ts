@@ -12,7 +12,6 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     return [
       /*battleCardId  */ id, 
       /*battleCardType*/ stats[factoryBattlecardStats.element],
-      /*name          */ stats[factoryBattlecardStats.name],
       /*hp            */ stats[factoryBattlecardStats.hp],
       /*spd           */ stats[factoryBattlecardStats.speed],
       /*inte          */ stats[factoryBattlecardStats.intelligence],

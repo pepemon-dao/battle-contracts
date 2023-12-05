@@ -253,7 +253,8 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
         uint256 idx = 0;
         for (uint256 i = 0; i < deck.supportCardTypeList.length; i++) {
             uint256 supportCardId = deck.supportCardTypeList[i];
-            for (uint256 j = 0; j < deck.supportCardTypes[supportCardId].count; j++) {
+            uint256 count = deck.supportCardTypes[supportCardId].count;
+            for (uint256 j = 0; j < count; j++) {
                 supportCards[idx++] = supportCardId;
             }
         }

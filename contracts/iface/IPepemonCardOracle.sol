@@ -46,20 +46,18 @@ interface IPepemonCardOracle {
     struct BattleCardStats {
         uint256 battleCardId;
         BattleCardTypes element;
-        string name;
-        uint256 hp; // hitpoints
-        uint256 spd; // speed
-        uint256 inte; // intelligence
-        uint256 def; // defense
-        uint256 atk; // attack
-        uint256 sAtk; // special attack
-        uint256 sDef; // special defense
+        uint16 hp; // hitpoints
+        uint16 spd; // speed
+        uint16 inte; // intelligence
+        uint16 def; // defense
+        uint16 atk; // attack
+        uint16 sAtk; // special attack
+        uint16 sDef; // special defense
     }
 
     struct SupportCardStats {
         uint256 supportCardId;
         SupportCardType supportCardType;
-        string name;
         EffectOne effectOne;
         EffectMany effectMany;
         // If true, duplicate copies of the card in the same turn will have no extra effect.
@@ -74,21 +72,21 @@ interface IPepemonCardOracle {
         // If power is 0, it is equal to the total of all normal offense/defense cards in the current turn.
         
         //basePower = power if req not met
-        int256 basePower;
+        int16 basePower;
 
         //triggeredPower = power if req met
-        int256 triggeredPower;
+        int16 triggeredPower;
         EffectTo effectTo;
         EffectFor effectFor;
-        uint256 reqCode; //requirement code
+        uint16 reqCode; //requirement code
     }
 
     struct EffectMany {
-        int256 power;
-        uint256 numTurns;
+        int16 power;
+        uint16 numTurns;
         EffectTo effectTo;
         EffectFor effectFor;
-        uint256 reqCode; //requirement code
+        uint16 reqCode; //requirement code
     }
 
     //Struct for keeping track of weakness / resistance

@@ -719,7 +719,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  27,
     /* "supportCardType"    */  2,
-    /* "name"               */  "Block",
     /* "effectOne": {       */  [
     /*     "basePower"      */    3,
     /*     "triggeredPower" */    0,
@@ -740,7 +739,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  29,
     /* "supportCardType"    */  2,
-    /* "name"               */  "Block With A Rock",
     /* "effectOne": {       */  [
     /*     "basePower"      */    5,
     /*     "triggeredPower" */    0,
@@ -761,7 +759,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  32,
     /* "supportCardType"    */  3,
-    /* "name"               */  "Degen Defence",
     /* "effectOne": {       */  [
     /*     "basePower"      */    9,
     /*     "triggeredPower" */    0,
@@ -782,7 +779,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  47,
     /* "supportCardType"    */  3,
-    /* "name"               */  "Determination",
     /* "effectOne": {       */  [
     /*     "basePower"      */    2,
     /*     "triggeredPower" */    6,
@@ -803,7 +799,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  18,
     /* "supportCardType"    */  0,
-    /* "name"               */  "Don't Think Too Much & Strike",
     /* "effectOne": {       */  [
     /*     "basePower"      */    1,
     /*     "triggeredPower" */    6,
@@ -824,7 +819,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  17,
     /* "supportCardType"    */  0,
-    /* "name"               */  "Double Quick Attack",
     /* "effectOne": {       */  [
     /*     "basePower"      */    4,
     /*     "triggeredPower" */    0,
@@ -845,7 +839,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  14,
     /* "supportCardType"    */  0,
-    /* "name"               */  "Double Quick Attack",
     /* "effectOne": {       */  [
     /*     "basePower"      */    4,
     /*     "triggeredPower" */    0,
@@ -866,7 +859,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  30,
     /* "supportCardType"    */  2,
-    /* "name"               */  "Double Team",
     /* "effectOne": {       */  [
     /*     "basePower"      */    6,
     /*     "triggeredPower" */    6,
@@ -887,7 +879,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  35,
     /* "supportCardType"    */  3,
-    /* "name"               */  "Due Dilligence",
     /* "effectOne": {       */  [
     /*     "basePower"      */    0,
     /*     "triggeredPower" */    0,
@@ -908,7 +899,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  25,
     /* "supportCardType"    */  1,
-    /* "name"               */  "Extreme Speed",
     /* "effectOne": {       */  [
     /*     "basePower"      */    0,
     /*     "triggeredPower" */    0,
@@ -929,7 +919,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  41,
     /* "supportCardType"    */  2,
-    /* "name"               */  "Flame Clone",
     /* "effectOne": {       */  [
     /*     "basePower"      */    -3,
     /*     "triggeredPower" */    -7,
@@ -950,7 +939,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  19,
     /* "supportCardType"    */  0,
-    /* "name"               */  "Found An Opening",
     /* "effectOne": {       */  [
     /*     "basePower"      */    1,
     /*     "triggeredPower" */    8,
@@ -971,7 +959,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  21,
     /* "supportCardType"    */  1,
-    /* "name"               */  "Hyper Fang",
     /* "effectOne": {       */  [
     /*     "basePower"      */    6,
     /*     "triggeredPower" */    3,
@@ -992,7 +979,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  48,
     /* "supportCardType"    */  1,
-    /* "name"               */  "Inflate",
     /* "effectOne": {       */  [
     /*     "basePower"      */    -7,
     /*     "triggeredPower" */    0,
@@ -1013,7 +999,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  23,
     /* "supportCardType"    */  1,
-    /* "name"               */  "Invested Power",
     /* "effectOne": {       */  [
     /*     "basePower"      */    0,
     /*     "triggeredPower" */    0,
@@ -1034,7 +1019,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  34,
     /* "supportCardType"    */  3,
-    /* "name"               */  "I Read You Like A Book",
     /* "effectOne": {       */  [
     /*     "basePower"      */    2,
     /*     "triggeredPower" */    12,
@@ -1055,7 +1039,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  42,
     /* "supportCardType"    */  3,
-    /* "name"               */  "Mud Slide",
     /* "effectOne": {       */  [
     /*     "basePower"      */    -3,
     /*     "triggeredPower" */    0,
@@ -1076,7 +1059,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  43,
     /* "supportCardType"    */  3,
-    /* "name"               */  "Oil Slick",
     /* "effectOne": {       */  [
     /*     "basePower"      */    -2,
     /*     "triggeredPower" */    0,
@@ -1097,7 +1079,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  31,
     /* "supportCardType"    */  2,
-    /* "name"               */  "Perry",
     /* "effectOne": {       */  [
     /*     "basePower"      */    5,
     /*     "triggeredPower" */    0,
@@ -1118,7 +1099,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  44,
     /* "supportCardType"    */  3,
-    /* "name"               */  "Pit Trap",
     /* "effectOne": {       */  [
     /*     "basePower"      */    -2,
     /*     "triggeredPower" */    0,
@@ -1139,7 +1119,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  36,
     /* "supportCardType"    */  0,
-    /* "name"               */  "Poison Fang",
     /* "effectOne": {       */  [
     /*     "basePower"      */    -4,
     /*     "triggeredPower" */    0,
@@ -1160,7 +1139,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  49,
     /* "supportCardType"    */  1,
-    /* "name"               */  "Power Surge",
     /* "effectOne": {       */  [
     /*     "basePower"      */    -10,
     /*     "triggeredPower" */    0,
@@ -1181,7 +1159,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  12,
     /* "supportCardType"    */  0,
-    /* "name"               */  "Pretty Quick Attack",
     /* "effectOne": {       */  [
     /*     "basePower"      */    2,
     /*     "triggeredPower" */    0,
@@ -1202,7 +1179,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  15,
     /* "supportCardType"    */  0,
-    /* "name"               */  "Pretty Quick Attack",
     /* "effectOne": {       */  [
     /*     "basePower"      */    2,
     /*     "triggeredPower" */    0,
@@ -1223,7 +1199,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  11,
     /* "supportCardType"    */  0,
-    /* "name"               */  "Pretty Quick Attack",
     /* "effectOne": {       */  [
     /*     "basePower"      */    2,
     /*     "triggeredPower" */    0,
@@ -1244,7 +1219,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  16,
     /* "supportCardType"    */  0,
-    /* "name"               */  "Quick Attack",
     /* "effectOne": {       */  [
     /*     "basePower"      */    3,
     /*     "triggeredPower" */    0,
@@ -1265,7 +1239,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  13,
     /* "supportCardType"    */  0,
-    /* "name"               */  "Quick Attack",
     /* "effectOne": {       */  [
     /*     "basePower"      */    3,
     /*     "triggeredPower" */    0,
@@ -1286,7 +1259,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  39,
     /* "supportCardType"    */  1,
-    /* "name"               */  "Riddle Me This",
     /* "effectOne": {       */  [
     /*     "basePower"      */    0,
     /*     "triggeredPower" */    0,
@@ -1307,7 +1279,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  45,
     /* "supportCardType"    */  3,
-    /* "name"               */  "Rug Pull",
     /* "effectOne": {       */  [
     /*     "basePower"      */    0,
     /*     "triggeredPower" */    0,
@@ -1328,7 +1299,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  46,
     /* "supportCardType"    */  1,
-    /* "name"               */  "Second Wind",
     /* "effectOne": {       */  [
     /*     "basePower"      */    1,
     /*     "triggeredPower" */    5,
@@ -1349,7 +1319,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  28,
     /* "supportCardType"    */  2,
-    /* "name"               */  "Shield",
     /* "effectOne": {       */  [
     /*     "basePower"      */    4,
     /*     "triggeredPower" */    0,
@@ -1370,7 +1339,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  37,
     /* "supportCardType"    */  0,
-    /* "name"               */  "Sucker Punch",
     /* "effectOne": {       */  [
     /*     "basePower"      */    -5,
     /*     "triggeredPower" */    0,
@@ -1391,7 +1359,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  20,
     /* "supportCardType"    */  1,
-    /* "name"               */  "Super Fang",
     /* "effectOne": {       */  [
     /*     "basePower"      */    7,
     /*     "triggeredPower" */    7,
@@ -1412,7 +1379,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  38,
     /* "supportCardType"    */  1,
-    /* "name"               */  "Taunt...",
     /* "effectOne": {       */  [
     /*     "basePower"      */    -3,
     /*     "triggeredPower" */    2,
@@ -1433,7 +1399,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  33,
     /* "supportCardType"    */  3,
-    /* "name"               */  "Think And Observe",
     /* "effectOne": {       */  [
     /*     "basePower"      */    2,
     /*     "triggeredPower" */    7,
@@ -1454,7 +1419,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  24,
     /* "supportCardType"    */  3,
-    /* "name"               */  "Think Less Strike Harder",
     /* "effectOne": {       */  [
     /*     "basePower"      */    0,
     /*     "triggeredPower" */    0,
@@ -1475,7 +1439,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  26,
     /* "supportCardType"    */  1,
-    /* "name"               */  "Think Now Strike Later",
     /* "effectOne": {       */  [
     /*     "basePower"      */    2,
     /*     "triggeredPower" */    0,
@@ -1496,7 +1459,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  22,
     /* "supportCardType"    */  1,
-    /* "name"               */  "Ultimate Power",
     /* "effectOne": {       */  [
     /*     "basePower"      */    0,
     /*     "triggeredPower" */    0,
@@ -1517,7 +1479,6 @@ export const SUPPORTCARDS_ORACLE = [
 [
     /* "supportCardId"      */  40,
     /* "supportCardType"    */  2,
-    /* "name"               */  "Water Clone",
     /* "effectOne": {       */  [
     /*     "basePower"      */    0,
     /*     "triggeredPower" */    0,
@@ -1538,7 +1499,6 @@ export const SUPPORTCARDS_ORACLE = [
   [
     50,
     1,
-    "placeholder",
     [
       1,
       0,
@@ -1559,7 +1519,6 @@ export const SUPPORTCARDS_ORACLE = [
   [
     51,
     1,
-    "placeholder",
     [
       1,
       0,
@@ -1580,7 +1539,6 @@ export const SUPPORTCARDS_ORACLE = [
   [
     52,
     1,
-    "placeholder",
     [
       1,
       0,
