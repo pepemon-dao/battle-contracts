@@ -76,7 +76,7 @@ describe('::Matchmaker', () => {
     let rng = await deployMockContract(alice, RNGArtifact.abi);
     
     await rng.mock.getRandomNumber.returns(0);
-    await cardContract.mock.getBattleCardById.returns([0,0,'',0,0,0,0,0,0,0,]);
+    await cardContract.mock.getBattleCardById.returns([0,0,0,0,0,0,0,0,0,]);
     await cardDeck.mock.decks.returns(0, 0);
 
     let dummyBattleContract = (await deployContract(alice, PepemonBattleArtifact, [
