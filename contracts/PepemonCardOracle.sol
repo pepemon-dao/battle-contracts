@@ -20,20 +20,18 @@ contract PepemonCardOracle is AdminRole {
     struct BattleCardStats {
         uint256 battleCardId;
         BattleCardTypes element;
-        string name;
-        uint256 hp; // hitpoints
-        uint256 spd; // speed
-        uint256 inte; // intelligence
-        uint256 def; // defense
-        uint256 atk; // attack
-        uint256 sAtk; // special attack
-        uint256 sDef; // special defense
+        uint16 hp; // hitpoints
+        uint16 spd; // speed
+        uint16 inte; // intelligence
+        uint16 def; // defense
+        uint16 atk; // attack
+        uint16 sAtk; // special attack
+        uint16 sDef; // special defense
     }
 
     struct SupportCardStats {
         uint256 supportCardId;
         SupportCardType supportCardType;
-        string name;
         EffectOne effectOne;
         EffectMany effectMany;
         // If true, duplicate copies of the card in the same turn will have no extra effect.
@@ -48,20 +46,20 @@ contract PepemonCardOracle is AdminRole {
         // If power is 0, it is equal to the total of all normal offense/defense cards in the current turn.
 
         //basePower = power if req not met
-        int256 basePower;
+        int16 basePower;
         //triggeredPower = power if req met
-        int256 triggeredPower;
+        int16 triggeredPower;
         EffectTo effectTo;
         EffectFor effectFor;
-        uint256 reqCode; //requirement code
+        uint16 reqCode; //requirement code
     }
 
     struct EffectMany {
-        int256 power;
-        uint256 numTurns;
+        int16 power;
+        uint16 numTurns;
         EffectTo effectTo;
         EffectFor effectFor;
-        uint256 reqCode; //requirement code
+        uint16 reqCode; //requirement code
     }
 
     //Struct for keeping track of weakness / resistance
@@ -111,7 +109,6 @@ contract PepemonCardOracle is AdminRole {
         BattleCardStats storage _card = battleCardStats[cardData.battleCardId];
         _card.battleCardId = cardData.battleCardId;
         _card.element = cardData.element;
-        _card.name = cardData.name;
         _card.hp = cardData.hp;
         _card.spd = cardData.spd;
         _card.inte = cardData.inte;
@@ -129,7 +126,6 @@ contract PepemonCardOracle is AdminRole {
         BattleCardStats storage _card = battleCardStats[cardData.battleCardId];
         _card.hp = cardData.hp;
         _card.element = cardData.element;
-        _card.name = cardData.name;
         _card.spd = cardData.spd;
         _card.inte = cardData.inte;
         _card.def = cardData.def;
@@ -141,7 +137,6 @@ contract PepemonCardOracle is AdminRole {
     }
 
     function getBattleCardById(uint256 _id) public view returns (BattleCardStats memory) {
-        require(battleCardStats[_id].battleCardId != 0, "PepemonCard: BattleCard not found");
         return battleCardStats[_id];
     }
 
@@ -151,7 +146,6 @@ contract PepemonCardOracle is AdminRole {
         SupportCardStats storage _card = supportCardStats[cardData.supportCardId];
         _card.supportCardId = cardData.supportCardId;
         _card.supportCardType = cardData.supportCardType;
-        _card.name = cardData.name;
         _card.effectOne = cardData.effectOne;
         _card.effectMany = cardData.effectMany;
         _card.unstackable = cardData.unstackable;
@@ -166,7 +160,6 @@ contract PepemonCardOracle is AdminRole {
         SupportCardStats storage _card = supportCardStats[cardData.supportCardId];
         _card.supportCardId = cardData.supportCardId;
         _card.supportCardType = cardData.supportCardType;
-        _card.name = cardData.name;
         _card.effectOne = cardData.effectOne;
         _card.effectMany = cardData.effectMany;
         _card.unstackable = cardData.unstackable;
@@ -176,7 +169,6 @@ contract PepemonCardOracle is AdminRole {
     }
 
     function getSupportCardById(uint256 _id) public view returns (SupportCardStats memory) {
-        require(supportCardStats[_id].supportCardId != 0, "PepemonCard: SupportCard not found");
         return supportCardStats[_id];
     }
 

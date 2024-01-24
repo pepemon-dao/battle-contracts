@@ -157,12 +157,12 @@ contract PepemonBattle is AdminRole {
         // Initiate battle ID
         newBattle.battleId = _nextBattleId;
         // Initiate player1
-        newBattle.player1.hand.health = int256(p1BattleCard.hp);
+        newBattle.player1.hand.health = int256(uint256(p1BattleCard.hp));
         newBattle.player1.hand.battleCardId = p1BattleCardId;
         newBattle.player1.playerAddr = p1Addr;
         newBattle.player1.deckId = p1DeckId;
         // Initiate player2
-        newBattle.player2.hand.health = int256(p2BattleCard.hp);
+        newBattle.player2.hand.health = int256(uint256(p2BattleCard.hp));
         newBattle.player2.hand.battleCardId = p2BattleCardId;
         newBattle.player2.playerAddr = p2Addr;
         newBattle.player2.deckId = p2DeckId;
@@ -686,12 +686,12 @@ contract PepemonBattle is AdminRole {
     function getCardStats(IPepemonCardOracle.BattleCardStats memory x) internal pure returns (CurrentBattleCardStats memory){
         CurrentBattleCardStats memory ret;
 
-        ret.spd = int(x.spd);
+        ret.spd = int(uint(x.spd));
         ret.inte = x.inte;
-        ret.def = int(x.def);
-        ret.atk = int(x.atk);
-        ret.sAtk = int(x.sAtk);
-        ret.sDef = int(x.sDef);
+        ret.def = int(uint(x.def));
+        ret.atk = int(uint(x.atk));
+        ret.sAtk = int(uint(x.sAtk));
+        ret.sDef = int(uint(x.sDef));
 
         return ret;
     }
@@ -768,7 +768,7 @@ function checkReqCode(
     }
 
     function lessThanHalfHP(Hand memory hand) internal view returns (bool){
-        return hand.health * 2 <= int256(_cardContract.getBattleCardById(hand.battleCardId).hp);
+        return hand.health * 2 <= int256(uint256(_cardContract.getBattleCardById(hand.battleCardId).hp));
     }
     
     function countCards(Hand memory hand, IPepemonCardOracle.SupportCardType cardType, int basePower) internal view returns (bool, uint){

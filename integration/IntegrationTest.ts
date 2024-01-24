@@ -116,23 +116,47 @@ describe('Integration Tests', async () => {
     return deckId;
   }
 
-  // describe('Reproduce Problematic Battle', async() => {
-  //   it("Battles", async() => {
-  //     // Created deck 7
-  //     // Adding 30 cards to deck 7
-  //     // Cards: 7 47,48,13,18,45,13,22,49,18,11,30,24,38,40,38,19,35,43,25,39,30,17,24,30,31,20,14,46,49
-  //     // Created deck 8
-  //     // Adding 25 cards to deck 8
-  //     // Cards: 1 13,49,41,46,38,46,46,25,30,30,38,13,40,14,33,39,23,16,41,16,40,26,20,37
-  //     // Battling decks 7 and 8
-  //     let deck1 = await mintDeck(7, [47,48,13,18,45,13,22,49,18,11,30,24,38,40,38,19,35,43,25,39,30,17,24,30,31,20,14,46,49]);
-  //     let deck2 = await mintDeck(1, [13,49,41,46,38,46,46,25,30,30,38,13,40,14,33,39,23,16,41,16,40,26,20,37]);
-      
-  //     console.log("Battling decks " + deck1 + " and " + deck2);
-  //     await pepemonMatchmaker.enter(deck1);
-  //     await pepemonMatchmaker.enter(deck2);
-  //   });
-  // });
+  describe('Reproduce Problematic Battles', async() => {
+    it("Battle Scenario 1 (slow)", async() => {
+      let deck1 = await mintDeck(2, [29,28,36,22,30,31,37,14,31,16,41,18,48,32,18,11,24,20,16,47,43,47,39,23]);
+      let deck2 = await mintDeck(10, [22,14,33,18,25,40,48,16,39,49,12,33,46,39,36,24,45,31,35,38,38,44,42,26,40,11,31,17,22,19,13,17,43,21]);
+
+      console.log("Battling decks " + deck1 + " and " + deck2);
+      let d0 = Date.now();
+      await pepemonMatchmaker.enter(deck1);
+      let d1 = Date.now();
+      await pepemonMatchmaker.enter(deck2);
+      let d2 = Date.now();
+      console.log("Enter duration: " + (d1 - d0) + "ms");
+      console.log("Battle duration: " + (d2 - d1) + "ms");
+    });
+    it("Battle Scenario 2 (slow)", async() => {
+      let deck1 = await mintDeck(9, [11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,36,37,38,39]);
+      let deck2 = await mintDeck(9, [27,27,28,28,28,29,29,30,30,31,31,32,33,34,35,40,40]);
+
+      console.log("Battling decks " + deck1 + " and " + deck2);
+      let d0 = Date.now();
+      await pepemonMatchmaker.enter(deck1);
+      let d1 = Date.now();
+      await pepemonMatchmaker.enter(deck2);
+      let d2 = Date.now();
+      console.log("Enter duration: " + (d1 - d0) + "ms");
+      console.log("Battle duration: " + (d2 - d1) + "ms");
+    });
+    it("Battle Scenario 3 (fast)", async() => {
+      let deck1 = await mintDeck(7, [38,35,19,30,12,42,35,28,32,41,38,16,35,21,14,29,11,47,38,34,25,23,20,19,25,36,27,27,49,40,41,15,37,37,14,44]);
+      let deck2 = await mintDeck(7, [21,17,26]);
+
+      console.log("Battling decks " + deck1 + " and " + deck2);
+      let d0 = Date.now();
+      await pepemonMatchmaker.enter(deck1);
+      let d1 = Date.now();
+      await pepemonMatchmaker.enter(deck2);
+      let d2 = Date.now();
+      console.log("Enter duration: " + (d1 - d0) + "ms");
+      console.log("Battle duration: " + (d2 - d1) + "ms");
+    });
+  });
 
   describe('10 Random Battles', async () => {
     for (let n = 0; n < 20; n++) {
