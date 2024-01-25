@@ -50,6 +50,17 @@ contract PepemonBattle is AdminRole {
         TurnHalves turnHalves;
     }
 
+    // Used to keep a local copy of players battle/support cards instead of reloading
+    // from the oracle
+    struct PlayersCards {
+        uint256 player1SupportCardsCount;
+        uint256 player2SupportCardsCount;
+        IPepemonCardOracle.BattleCardStats player1Battlecard;
+        IPepemonCardOracle.BattleCardStats player2Battlecard;
+        uint256[] player1SupportCards;
+        uint256[] player2SupportCards;
+    }
+
     //playerAddr
     //deckId = Id of deck
     //hand = keeps track of current player's stats (such as health)
@@ -174,10 +185,46 @@ contract PepemonBattle is AdminRole {
         return (newBattle, _nextBattleId++);
     }
 
+    function getPlayersCards(
+        uint256 player1BattleCardId,
+        uint256 player2BattleCardId,
+        uint256 player1DeckId,
+        uint256 player2DeckId
+    ) internal view returns (PlayersCards memory) {
+        // Get Battle Cards for Player 1 and Player 2
+        IPepemonCardOracle.BattleCardStats memory player1Battlecard = _cardContract.getBattleCardById(player1BattleCardId);
+        IPepemonCardOracle.BattleCardStats memory player2Battlecard = _cardContract.getBattleCardById(player2BattleCardId);
+
+        // Get Support Cards for Player 1 and Player 2
+        uint256[] memory player1SupportCards = _deckContract.getAllSupportCardsInDeck(player1DeckId);
+        uint256[] memory player2SupportCards = _deckContract.getAllSupportCardsInDeck(player2DeckId);
+
+        // Get Support Card count for Player 1 and Player 2
+        uint256 player1SupportCardsCount = _deckContract.getSupportCardCountInDeck(player1DeckId);
+        uint256 player2SupportCardsCount = _deckContract.getSupportCardCountInDeck(player2DeckId);
+
+        // Create and return the PlayersCards struct instance
+        return PlayersCards({
+            player1Battlecard: player1Battlecard,
+            player1SupportCards: player1SupportCards,
+            player1SupportCardsCount: player1SupportCardsCount,
+            player2Battlecard: player2Battlecard,
+            player2SupportCards: player2SupportCards,
+            player2SupportCardsCount: player2SupportCardsCount
+        });
+    }
+
     function goForBattle(Battle memory battle) public view returns (Battle memory, address winner) {
+        // local cache for cards and decks info to reduce gas usage
+        PlayersCards memory cards = getPlayersCards(
+            battle.player1.hand.battleCardId,
+            battle.player2.hand.battleCardId,
+            battle.player1.deckId,
+            battle.player2.deckId
+        );
 
         //Initialize battle by starting the first turn
-        battle = goForNewTurn(battle);
+        battle = goForNewTurn(battle, cards);
         address winnerAddr;
         // Battle goes!
         while (true) {
@@ -194,20 +241,20 @@ contract PepemonBattle is AdminRole {
             }
 
             // Resolve turn halves
-            battle = updateTurnInfo(battle);
+            battle = updateTurnInfo(battle, cards);
         }
         return (battle, winnerAddr);
     }
 
     //If currently in first half -> go to second half
     //If currently in second half -> make a new turn
-    function updateTurnInfo(Battle memory battle) internal view returns (Battle memory) {
+    function updateTurnInfo(Battle memory battle, PlayersCards memory cards) internal view returns (Battle memory) {
         // If the current half is first, go over second half
         // or go over next turn
         if (battle.turnHalves == TurnHalves.FIRST_HALF) {
             battle.turnHalves = TurnHalves.SECOND_HALF;
         } else {
-            battle = goForNewTurn(battle);
+            battle = goForNewTurn(battle, cards);
         }
 
         return battle;
@@ -219,24 +266,17 @@ contract PepemonBattle is AdminRole {
     //Redeal support cards if necessary
     //Calculate support card's power
     //Finally, draw Pepemon's intelligence number of cards.
-    function goForNewTurn(Battle memory battle) internal view returns (Battle memory) {
+    function goForNewTurn(Battle memory battle, PlayersCards memory cards) internal view returns (Battle memory) {
         Player memory player1 = battle.player1;
         Player memory player2 = battle.player2;
 
-        // Get base battle card stats (stats without any powerups)
-        IPepemonCardOracle.BattleCardStats memory p1BattleCard = _cardContract.getBattleCardById(
-            player1.hand.battleCardId
-        );
-        IPepemonCardOracle.BattleCardStats memory p2BattleCard = _cardContract.getBattleCardById(
-            player2.hand.battleCardId
-        );
+        // Load base battle card stats (stats without any powerups)
+        // and reset both players' hand infos to base stats
+        player1.hand.currentBCstats = getCardStats(cards.player1Battlecard);
+        player2.hand.currentBCstats = getCardStats(cards.player2Battlecard);
 
-        //Reset both players' hand infos to base stats
-        player1.hand.currentBCstats = getCardStats(p1BattleCard);
-        player2.hand.currentBCstats = getCardStats(p2BattleCard);
-
-        uint256 p1SupportCardIdsLength = _deckContract.getSupportCardCountInDeck(player1.deckId);
-        uint256 p2SupportCardIdsLength = _deckContract.getSupportCardCountInDeck(player2.deckId);
+        uint256 p1SupportCardIdsLength = cards.player1SupportCardsCount;
+        uint256 p2SupportCardIdsLength = cards.player2SupportCardsCount;
 
         //Refresh cards every 5 turns
         bool isRefreshTurn = (battle.currentTurn % _refreshTurn == 0);
@@ -245,12 +285,8 @@ contract PepemonBattle is AdminRole {
             //Need to refresh decks
 
             // Shuffle player1 support cards
-            //Create a pseudorandom seed and shuffle the cards 
-            uint[] memory scrambled = _deckContract.shuffleDeck(player1.deckId, // tbd: use in-place shuffling
-                _randMod(
-                    69, battle
-                )
-            );
+            uint[] memory scrambled = Arrays.shuffle(cards.player1SupportCards, _randMod(69, battle));
+
             //Copy back scrambled cards to original list
             for (uint i = 0 ; i < p1SupportCardIdsLength; i++){
                 player1.totalSupportCardIds[i]=scrambled[i];
@@ -261,11 +297,7 @@ contract PepemonBattle is AdminRole {
 
             //Shuffling player 2 support cards
             //Create a pseudorandom seed and shuffle the cards
-            uint[] memory scrambled2 = _deckContract.shuffleDeck(player2.deckId, 
-                _randMod(
-                    420, battle
-                )
-            );
+            uint[] memory scrambled2 = Arrays.shuffle(cards.player2SupportCards, _randMod(420, battle));
 
             //Copy the support cards back into the list
             for (uint256 i = 0; i < p2SupportCardIdsLength; i++) {
