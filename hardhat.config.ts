@@ -97,7 +97,8 @@ const config: HardhatUserConfig = {
   etherscan: {
     apiKey: {
       ethereum: environment.etherScanKey,
-      pepechain_testnet: "NONE"
+      pepechain_testnet: "NONE",
+      ftmTestnet: environment.ftmTestnetApiKey // get a key from: https://ftmscan.com/myapikey
     },
     customChains: [
       {
