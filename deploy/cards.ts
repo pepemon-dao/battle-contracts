@@ -32,7 +32,6 @@ export enum factoryBattlecardStats {
     specialAttack,
     specialDefense,
     level,
-    name,
     description,
     ipfsAddr,
     rarity,
