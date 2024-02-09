@@ -346,6 +346,24 @@ describe('::Matchmaker', () => {
       expect(opponent.toNumber()).to.be.equal(aliceDeck);
     });
 
+    it('Should not revert after waiting a lot of time', async () => {
+      // make Bob lose 2000 points in the ranking, because we cant set rankings manually.
+      //await forceDiversifyRankings();
+
+      // put alice in the waitlist.
+      await matchmaker.enter(aliceDeck);
+
+      await matchmaker.setMatchRange(1000, 500); // 100 per min
+
+      // change the time.
+      await incrementBlockTimestamp(10*60) // 10min. after this, the block will have +00h10m00s as its timestamp
+
+      // after 10min, matchrange will be 6000 (500*10+1000).
+      // when calculating the player ranking difference the matchRange parameter will be bigger than the player ranking
+      // so it will become a negative number and an integer underflow could happen
+      await expect(bobSignedMatchmaker.xfindMatchmakingOpponent(bobDeck)).not.to.be.reverted;
+    });
+
     it('Should prevent a battle between players with large ranking difference if matchRangePerMinute is zero', async () => {
       // Get an instance of the "Battle" object, which is too big to be created inline
       let emptyBattleData = await getDummyBattleInstance();

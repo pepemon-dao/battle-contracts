@@ -334,7 +334,10 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
             uint256 playerMatchRange = _matchRange + (mins * _matchRangePerMinute) / 120;
             // Assume deckOwner[deckId] is msg.sender, because we are not storing msg.sender in deckOwner[deckId], saving gas
             if (
-                playerRanking[msg.sender] > (playerRanking[deckOwner[currentIterDeck]] - playerMatchRange) &&
+                // instead of doing the following:
+                // playerRanking[msg.sender] > (playerRanking[deckOwner[currentIterDeck]] - playerMatchRange) &&
+                // we invert the math operation to avoid casting everything to int256, thus saving some gas
+                (playerRanking[msg.sender] + playerMatchRange) > playerRanking[deckOwner[currentIterDeck]] &&
                 playerRanking[msg.sender] < (playerRanking[deckOwner[currentIterDeck]] + playerMatchRange)
             ) {
                 return waitingDecks[i].deckId;
