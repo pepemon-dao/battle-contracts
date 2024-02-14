@@ -123,7 +123,7 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
      * @dev Requires that `count` is less than or equal to the number of players on the leaderboard minus `offset`, and that `offset` is less than the number of players on the leaderboard.
      */
     function getPlayersRankings(
-        uint256 count, 
+        uint256 count,
         uint256 offset
     ) public view returns (address[] memory addresses, uint256[] memory rankings) {
         require(offset < leaderboardPlayers.length, "Invalid offset");
@@ -144,15 +144,13 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
     }
 
     /**
-     * @notice Tries to initiate a battle using a specified deck. Opponents are not other players but a set of decks added by admins.
-     * @dev This function cannot be used if _pveMode is set to false. In that case, players should join using "enter" instead, which 
-     * allows them to fight each other.
+     * @notice Tries to initiate a battle using a specified deck.
+     * @dev This function tries to initiate a battle either in PvE or PvP depending on how the contract is operating. 
      * @param deckId The Deck of who called this function
      */
-    function enterPve(uint256 deckId) public {
+    function enter(uint256 deckId) public {
         require(msg.sender == PepemonCardDeck(_deckAddress).ownerOf(deckId), "PepemonMatchmaker: Not your deck");
         require(PepemonCardDeck(_deckAddress).getBattleCardInDeck(deckId) != 0, "PepemonMatchmaker: Invalid battlecard");
-        require(_pveMode == true, "PepemonMatchmaker: PvE mode disabled");
 
         // Make sure the player has the minimum amount of support cards required
         (,uint256 supportCardCount) = PepemonCardDeck(_deckAddress).decks(deckId);
@@ -164,6 +162,19 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
             leaderboardPlayers.push(msg.sender);
         }
 
+        if (_pveMode == false) {
+            enterPvp(deckId);
+        } else {
+            enterPve(deckId);
+        }
+    }
+
+    /**
+     * @notice Tries to initiate a battle using a specified deck. Opponents are not other players but a set of decks added by admins.
+     * @dev This function cannot be used if _pveMode is set to false.
+     * @param deckId The Deck of the player
+     */
+    function enterPve(uint256 deckId) internal {
         // Get a matchmaking opponent
         uint256 opponentDeckId = getPveMatchmakingOpponent(deckId);
 
@@ -180,24 +191,10 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
     /**
      * @notice Tries to initiate a battle using a specified deck. If no opponents are found, the deck
      * is placed in a wait list.
-     * @dev This function cannot be used if _pveMode is set to true, players should join using "enterPve" instead.
-     * @param deckId The Deck of who called this function
+     * @dev This function cannot be used if _pveMode is set to true.
+     * @param deckId The Deck of the player
      */
-    function enter(uint256 deckId) public {
-        require(msg.sender == PepemonCardDeck(_deckAddress).ownerOf(deckId), "PepemonMatchmaker: Not your deck");
-        require(PepemonCardDeck(_deckAddress).getBattleCardInDeck(deckId) != 0, "PepemonMatchmaker: Invalid battlecard");
-        require(_pveMode == false, "PepemonMatchmaker: PvE mode enabled");
-
-        // Make sure the player has the minimum amount of support cards required
-        (,uint256 supportCardCount) = PepemonCardDeck(_deckAddress).decks(deckId);
-        require(supportCardCount >= PepemonCardDeck(_deckAddress).MIN_SUPPORT_CARDS(), "PepemonMatchmaker: Not enough support cards");
-
-        // If playerRanking is empty, set default ranking
-        if (playerRanking[msg.sender] == 0) {
-            playerRanking[msg.sender] = _defaultRanking;
-            leaderboardPlayers.push(msg.sender);
-        }
-
+    function enterPvp(uint256 deckId) internal {
         // Try find matchmaking partner
         uint256 opponentDeckId = findMatchmakingOpponent(deckId);
 

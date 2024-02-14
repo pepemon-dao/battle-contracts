@@ -138,12 +138,14 @@ describe('::Matchmaker', () => {
     });
 
     it('Should allow exiting', async () => {
+      await expect(matchmaker.setPveMode(false)).not.to.be.reverted;
       await matchmaker.enter(aliceDeck);
       await matchmaker.exit(aliceDeck);
       expect(await matchmaker.getWaitingCount()).to.eq(0);
     });
 
     it('Should allow multiple players to enter and exit consistently', async () => {
+      await expect(matchmaker.setPveMode(false)).not.to.be.reverted;
       await forceDiversifyRankings(5000);
 
       await matchmaker.enter(aliceDeck);
@@ -156,29 +158,35 @@ describe('::Matchmaker', () => {
 
   describe('#Permissions', () => {
     it('Should prevent anyone but the owner from entering', async () => {
+      await expect(matchmaker.setPveMode(false)).not.to.be.reverted;
       await expect(bobSignedMatchmaker.enter(aliceDeck)).to.be.revertedWith(
         'PepemonMatchmaker: Not your deck'
       );
     });
     it('Should prevent anyone but the owner from exiting', async () => {
+      await expect(matchmaker.setPveMode(false)).not.to.be.reverted;
       await matchmaker.enter(aliceDeck);
       await expect(bobSignedMatchmaker.exit(aliceDeck)).to.be.revertedWith(
         'PepemonMatchmaker: Not your deck'
       );
     });
     it('Should prevent anyone but the admins from setting the kFactor', async () => {
+      await expect(matchmaker.setPveMode(false)).not.to.be.reverted;
       await matchmaker.enter(aliceDeck);
       await expect(bobSignedMatchmaker.setKFactor(34)).to.be.reverted;
     });
     it('Should prevent anyone but the admins from changing the MatchRange', async () => {
+      await expect(matchmaker.setPveMode(false)).not.to.be.reverted;
       await matchmaker.enter(aliceDeck);
       await expect(bobSignedMatchmaker.setMatchRange(34, 68)).to.be.reverted;
     });
     it('Should prevent anyone but the admins from forcibly removing a deck from the waitlist', async () => {
+      await expect(matchmaker.setPveMode(false)).not.to.be.reverted;
       await matchmaker.enter(aliceDeck);
       await expect(bobSignedMatchmaker.forceExit(1)).to.be.reverted;
     });
     it('Should allow admins to forcibly remove a deck from the waitlist', async () => {
+      await expect(matchmaker.setPveMode(false)).not.to.be.reverted;
       await bobSignedMatchmaker.enter(bobDeck);
       expect(await matchmaker.getWaitingCount()).to.eq(1);
       await expect(matchmaker.forceExit(bobDeck)).to.not.be.reverted;
@@ -207,21 +215,9 @@ describe('::Matchmaker', () => {
       expect(await matchmaker.getWaitingCount()).to.eq(1);
       await expect(bobSignedMatchmaker.removePveDeck(aliceDeck)).to.be.reverted;
     });
-    it('Should prevent players from entering a PvE match with PvP mode enabled', async () => {
-      await matchmaker.setPveMode(false);
-      await expect(bobSignedMatchmaker.enterPve(bobDeck)).to.be.revertedWith(
-        "PepemonMatchmaker: PvE mode disabled"
-      );
-    });
-    it('Should prevent players from entering a PvP match with PvE mode enabled', async () => {
-      await matchmaker.setPveMode(true);
-      await expect(bobSignedMatchmaker.enter(bobDeck)).to.be.revertedWith(
-        "PepemonMatchmaker: PvE mode enabled"
-      );
-    });
     it('Should prevent players from entering a PvE match when there are no opponents set by admins', async () => {
       await matchmaker.setPveMode(true);
-      await expect(bobSignedMatchmaker.enterPve(bobDeck)).to.be.revertedWith(
+      await expect(bobSignedMatchmaker.enter(bobDeck)).to.be.revertedWith(
         "PepemonMatchmaker: No PvE opponents available"
       );
     });
@@ -400,9 +396,9 @@ describe('::Matchmaker', () => {
       await matchmaker.addPveDeck(aliceDeck);
 
       // battle 3x in a row
-      await bobSignedMatchmaker.enterPve(bobDeck); 
-      await bobSignedMatchmaker.enterPve(bobDeck);
-      await bobSignedMatchmaker.enterPve(bobDeck);
+      await bobSignedMatchmaker.enter(bobDeck); 
+      await bobSignedMatchmaker.enter(bobDeck);
+      await bobSignedMatchmaker.enter(bobDeck);
 
       let aliceRanking = await bobSignedMatchmaker.playerRanking(alice.address);
       let bobRanking = await bobSignedMatchmaker.playerRanking(bob.address);
