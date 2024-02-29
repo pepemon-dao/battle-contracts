@@ -166,6 +166,13 @@ contract ERC1155Tradable is ERC1155, ERC1155MintBurn, ERC1155Metadata, Ownable, 
     }
 
     /**
+     * @dev returns the last minted token ID based on value of _currentTokenID
+     */
+    function getLastTokenID() public view returns (uint256) {
+        return _currentTokenID;
+    }
+
+    /**
      * @dev increments the value of _currentTokenID
      */
     function _incrementTokenTypeId() private {
