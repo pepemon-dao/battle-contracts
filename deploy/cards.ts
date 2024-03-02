@@ -64,7 +64,7 @@ export const BATTLECARDS = [
         /*level         */ 1,
         /*name          */ 'Fafny',
         /*description   */ 'Fafny (Battle ver.)',
-        /*ipfsAddr      */ 'https://degen-battleground-monsters-beta.4everland.store/fafny.png',
+        /*ipfsAddr      */ 'bafybeidlnhr2lbagflwvmsfn2jxo4o4nfbpxvl5moisjg7mpjouultjdvu.ipfs.4everland.io',
         /*rarity        */ 'Common'
     ],
     [
@@ -79,7 +79,7 @@ export const BATTLECARDS = [
         /*level         */ 1,
         /*name          */ 'Druky',
         /*description   */ 'Druky (Battle ver.)',
-        /*ipfsAddr      */ 'https://degen-battleground-monsters-beta.4everland.store/druky.png',
+        /*ipfsAddr      */ 'bafybeif2gvjhmrt7f5urjkozphacfixznxv2at4vz57nn665e7dj6q23g4.ipfs.4everland.io',
         /*rarity        */ 'Common'
     ],
     [
@@ -94,7 +94,7 @@ export const BATTLECARDS = [
         /*level         */ 1,
         /*name          */ 'Sairy',
         /*description   */ 'Sairy (Battle ver.)',
-        /*ipfsAddr      */ 'https://degen-battleground-monsters-beta.4everland.store/sairy.png',
+        /*ipfsAddr      */ 'bafybeid6fcfd7u4majcppyw4fm4kurtppyaxrd3moh2ohwd6en6zuu7qce.ipfs.4everland.io',
         /*rarity        */ 'Common'
     ],
     [
@@ -109,7 +109,7 @@ export const BATTLECARDS = [
         /*level         */ 1,
         /*name          */ 'Venumu',
         /*description   */ 'Venumu (Battle ver.)',
-        /*ipfsAddr      */ 'https://degen-battleground-monsters-beta.4everland.store/venumu.png',
+        /*ipfsAddr      */ 'bafybeia6y7u3opxyfx2fbnjzaqk5epu5s5nzwsmwicb74boqeoc2c5xgru.ipfs.4everland.io',
         /*rarity        */ 'Common'
     ],
     [
@@ -124,7 +124,7 @@ export const BATTLECARDS = [
         /*level         */ 1,
         /*name          */ 'Shapu',
         /*description   */ 'Shapu (Battle ver.)',
-        /*ipfsAddr      */ 'https://degen-battleground-monsters-beta.4everland.store/shapu.png',
+        /*ipfsAddr      */ 'bafybeiftmddhvivn4eqqctfdbkfvbxrm7gstb6w5yyobigajuef36bci7e.ipfs.4everland.io',
         /*rarity        */ 'Common'
     ],
     [
@@ -139,7 +139,7 @@ export const BATTLECARDS = [
         /*level         */ 1,
         /*name          */ 'Kirimu',
         /*description   */ 'Kirimu (Battle ver.)',
-        /*ipfsAddr      */ 'https://degen-battleground-monsters-beta.4everland.store/kirimu.png',
+        /*ipfsAddr      */ 'bafybeid6wha7u4xuq5um4akebrdel6eyfswbmwkqhrqkytw5xeleg2adke.ipfs.4everland.io',
         /*rarity        */ 'Common'
     ],
     [
@@ -154,7 +154,7 @@ export const BATTLECARDS = [
         /*level         */ 1,
         /*name          */ 'Mandraky',
         /*description   */ 'Mandraky (Battle ver.)',
-        /*ipfsAddr      */ 'https://degen-battleground-monsters-beta.4everland.store/mandraky.png',
+        /*ipfsAddr      */ 'bafybeifcf7g3antv22jqmbjp4lmfw2j6on3wa7ymxjrgb4jiar44dkgizm.ipfs.4everland.io',
         /*rarity        */ 'Common'
     ],
     [
@@ -169,7 +169,7 @@ export const BATTLECARDS = [
         /*level         */ 1,
         /*name          */ 'Cosmony',
         /*description   */ 'Cosmony (Battle ver.)',
-        /*ipfsAddr      */ 'https://degen-battleground-monsters-beta.4everland.store/cosmony.png',
+        /*ipfsAddr      */ 'bafybeiepzyh57bqkqm56pxz47m6nfuytbrbbka56xn4b2xigovxeu3jyre.ipfs.4everland.io',
         /*rarity        */ 'Common'
     ],
     [
@@ -184,7 +184,7 @@ export const BATTLECARDS = [
         /*level         */ 1,
         /*name          */ 'Witchenry',
         /*description   */ 'Witchenry (Battle ver.)',
-        /*ipfsAddr      */ 'https://degen-battleground-monsters-beta.4everland.store/witchenry.png',
+        /*ipfsAddr      */ 'bafybeigvgrxnkzzfoezvhucnbgrdbfxuwoafmqajygsidyzlbqwkuvmcda.ipfs.4everland.io',
         /*rarity        */ 'Common'
     ],
     [
@@ -199,7 +199,7 @@ export const BATTLECARDS = [
         /*level         */ 1,
         /*name          */ 'Unifairy',
         /*description   */ 'Unifairy (Battle ver.)',
-        /*ipfsAddr      */ 'https://degen-battleground-monsters-beta.4everland.store/unifairy.png',
+        /*ipfsAddr      */ 'bafybeickwajtkzp5tpuuvg5et6b5fzpuqie2yg2cm7tpssyne536deh32e.ipfs.4everland.io',
         /*rarity        */ 'Common'
     ]
 ]
@@ -215,7 +215,7 @@ export const SUPPORTCARDS = [
         /*isStackable        */  false,
         /*name               */  'Pretty Quick Attack',
         /*description        */  'Pepemon adds +2 to its Attack Power until end of turn',
-        /*ipfsAddr           */  'https://degen-battleground-supportcards-beta.4everland.store/Pretty%20Quick%20Attack.png',
+        /*ipfsAddr           */  'bafybeicmjksqu6sdeunqwad2symlvhhsccflbrqqy2uuereipvrtdv2jbq.ipfs.4everland.io',
         /*rarity             */  'Common'
     ],
     [
@@ -228,7 +228,7 @@ export const SUPPORTCARDS = [
         false,
         'Pretty Quick Attack',
         "Pepemon adds +2 to its Attack Power until end of turn",
-        'https://degen-battleground-supportcards-beta.4everland.store/Pretty%20Quick%20Attack.png',
+        'bafybeicmjksqu6sdeunqwad2symlvhhsccflbrqqy2uuereipvrtdv2jbq.ipfs.4everland.io',
         'Common'
     ],
     [
@@ -241,7 +241,7 @@ export const SUPPORTCARDS = [
         false,
         'Quick attack',
         "Pepemon adds +3 to its Attack Power until end of turn",
-        'https://degen-battleground-supportcards-beta.4everland.store/Quick%20Attack.png',
+        'bafybeigvy64f5fm565ulm7fbkifq6mxu4nskyyl5dzt7zdzuaizhakn6va.ipfs.4everland.io',
         'Common'
     ],
     [
@@ -254,7 +254,7 @@ export const SUPPORTCARDS = [
         false,
         'Double Quick Attack',
         "Pepemon adds +4 to its Attack Power until end of turn",
-        'https://degen-battleground-supportcards-beta.4everland.store/Double%20Quick%20Attack.png',
+        'bafybeia2d746ifydj24nwpopzxrlhshwnsu3auwcvbyiimtrj5vacafjly.ipfs.4everland.io',
         'Common'
     ],
     [
@@ -267,7 +267,7 @@ export const SUPPORTCARDS = [
         false,
         'Pretty Quick Attack',
         "Pepemon adds +2 to its Attack Power until end of turn",
-        'https://degen-battleground-supportcards-beta.4everland.store/Pretty%20Quick%20Attack.png',
+        'bafybeicmjksqu6sdeunqwad2symlvhhsccflbrqqy2uuereipvrtdv2jbq.ipfs.4everland.io',
         'Common'
     ],
     [
@@ -280,7 +280,7 @@ export const SUPPORTCARDS = [
         false,
         'Quick attack',
         "Pepemon adds +3 to its Attack Power until end of turn",
-        'https://degen-battleground-supportcards-beta.4everland.store/Quick%20Attack.png',
+        'bafybeigvy64f5fm565ulm7fbkifq6mxu4nskyyl5dzt7zdzuaizhakn6va.ipfs.4everland.io',
         'Common'
     ],
     [
@@ -293,7 +293,7 @@ export const SUPPORTCARDS = [
         false,
         'Double Quick Attack',
         "Pepemon adds +4 to its Attack Power until end of turn",
-        'https://degen-battleground-supportcards-beta.4everland.store/Double%20Quick%20Attack.png',
+        'bafybeia2d746ifydj24nwpopzxrlhshwnsu3auwcvbyiimtrj5vacafjly.ipfs.4everland.io',
         'Common'
     ],
     [
@@ -306,7 +306,7 @@ export const SUPPORTCARDS = [
         false,
         "Don't think too much & strike!",
         "Pepemon adds +1 to its Attack Power until end of turn. If the Pepemon's Intelligence is 5 or less, add an additional +5 more to its Attack Power until end of turn",
-        "https://degen-battleground-supportcards-beta.4everland.store/Don_t%20Think%20Too%20Much%20&%20Strike!.png",
+        "bafybeibmdlxm2dinpjckjvzixwxiv2rgj4pobljrgkausudoi533lwbd6q.ipfs.4everland.io",
         'Rare'
     ],
     [
@@ -319,7 +319,7 @@ export const SUPPORTCARDS = [
         false,
         'Found an opening!',
         "Pepemon adds +1 to its Attack Power until end of turn. If the player of the defending Pepemon does not lay any Defense cards, Pepemon adds an additional +7 to its Attack Power until end of turn.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Found%20an%20Opening!.png',
+        'bafybeickp3mu3slocwrihfe6eopl5nrwhnoqsrjnr256exfgk42yvmo6qi.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -332,7 +332,7 @@ export const SUPPORTCARDS = [
         false,
         'Super Fang',
         "Pepemon adds +7 to its Attack Power until end of turn for each +2 offense card used by its player during this turn",
-        'https://degen-battleground-supportcards-beta.4everland.store/Super%20Fang.png',
+        'bafybeieuhp5jddt5ookwvv5xpv44rguos2yl5cqrn22t67m4btamnrgcte.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -345,7 +345,7 @@ export const SUPPORTCARDS = [
         false,
         'Hyper Fang',
         "Pepemon adds +6 to its Attack Power until end of turn for each +3 offense card used during this turn",
-        'https://degen-battleground-supportcards-beta.4everland.store/Hyper%20Fang.png',
+        'bafybeicdbyfeclm5wnas4s5luwova5earfatszebqwwof2me46lfyrbzie.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -358,7 +358,7 @@ export const SUPPORTCARDS = [
         false,
         'Ultimate Power',
         "Pepemon uses its Special Attack instead of its Normal Attack during this turn (no bonuses for using two copies of the same card in the same turn)",
-        'https://degen-battleground-supportcards-beta.4everland.store/Ultimate%20Power.png',
+        'bafybeibgrghywajjixdzzwhv3qxxnkmj7lfrkopnzii76hz3yng6aprn5e.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -371,7 +371,7 @@ export const SUPPORTCARDS = [
         false,
         'Invested Power',
         "Pepemon adds +4 to its Attack Power until end of turn for each offense card used by its player during this turn",
-        'https://degen-battleground-supportcards-beta.4everland.store/Invested%20Power.png',
+        'bafybeia5r2x5htgm6rwn3ai7rkpkdbe6sqpqvsfrojumbguh6owno6s32y.ipfs.4everland.io',
         'Epic'
     ],
     [
@@ -384,7 +384,7 @@ export const SUPPORTCARDS = [
         false,
         'Think less, strike harder!',
         "If the Pepemon's Intelligence is 5 or less, then until end of turn, the Pepemon receives an additional Attack Power equal to the total of all the offense cards used by its player this turn (excluding offense card bonuses).",
-        'https://degen-battleground-supportcards-beta.4everland.store/Think%20Less,%20Strike%20Harder!.png',
+        'bafybeidkhl7xz6fw5xfsvvh2z5lxcmwfurklmmbnb72j3odnuhezrwbovy.ipfs.4everland.io',
         'Epic'
     ],
     [
@@ -397,7 +397,7 @@ export const SUPPORTCARDS = [
         true,
         'Extreme Speed',
         "Pepemon adds +5 Speed for the next 3 turns. (Unstackable 3, Unresettable 3) Effects do not stack or reset with another card of the same name.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Extreme%20Speed.png',
+        'bafybeidzacvsklpjfrnq6figx2rlraamb47uipms7ogdn3itjojhy44poq.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -410,7 +410,7 @@ export const SUPPORTCARDS = [
         true,
         'Think now, strike later.',
         "Pepemon adds an +2 Attack Power effect for this turn and the next 3 turns. (Unstackable 3, Unresettable 3) Effects do not stack or reset with another card of the same name.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Think%20Now,%20Strike%20Later..png',
+        'bafybeihhe64rax6zdb6ljw4xbwouwybjczz6ovqrqzzae7lj5c5tckzu5y.ipfs.4everland.io',
         'Epic'
     ],
     [
@@ -423,7 +423,7 @@ export const SUPPORTCARDS = [
         false,
         'Block',
         "Pepemon adds +3 to its Defense Power until end of turn",
-        'https://degen-battleground-supportcards-beta.4everland.store/Block.png',
+        'bafybeihnf3vomt6uev6l6b3nwoqiqugkfjqosc7th3mzgfqp3duxrgaia4.ipfs.4everland.io',
         'Common'
     ],
     [
@@ -436,7 +436,7 @@ export const SUPPORTCARDS = [
         false,
         'Shield',
         "Pepemon adds +4 to its Defense Power until end of turn",
-        'https://degen-battleground-supportcards-beta.4everland.store/Shield.png',
+        'bafybeigqjzncagntypofo7bqdzitmuf7ocyrt7wxlpiifhiigcj7orea6y.ipfs.4everland.io',
         'Common'
     ],
     [
@@ -449,7 +449,7 @@ export const SUPPORTCARDS = [
         false,
         'Block with a rock!',
         "Pepemon adds +5 to its Defense Power until end of turn.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Block%20with%20a%20Rock!.png',
+        'bafybeiblie3yg7art332zms5s6kwthlhuwhejs3mhe56ysvpl5qkwyincu.ipfs.4everland.io',
         'Common'
     ],
     [
@@ -462,7 +462,7 @@ export const SUPPORTCARDS = [
         false,
         'Double Team',
         "Pepemon adds +6 to its Defense Power for each +3 Defense card used by its player during this turn.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Double%20Team.png',
+        'bafybeib4m7poladvte7edj6j7wictbi2fwjfmwxpavm5dywah3mycsvm7q.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -475,7 +475,7 @@ export const SUPPORTCARDS = [
         false,
         'Parry',
         "Pepemon adds +5 to its Defense Power for each +4 Defense card used by the player during this turn",
-        'https://degen-battleground-supportcards-beta.4everland.store/Parry.png',
+        'bafybeibwxcfly6ix7y3goqu3ymun3zamfryjgqrmukl2ag2p32v46svqa4.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -488,7 +488,7 @@ export const SUPPORTCARDS = [
         false,
         'Degen Defense',
         "Pepemon adds +2 to its Defense Power until end of turn. If the Pepemon has 5 Intelligence or lower, the Pepemon adds an additional +7 Defense Power until end of turn.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Degen%20Defense.png',
+        'bafybeicoqppwgjq2ljeptltmn4537qhkphq7slquhflelwn7kecivof5h4.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -501,7 +501,7 @@ export const SUPPORTCARDS = [
         false,
         'Think and observe.',
         "Pepemon adds +2 to its Defense Power until end of turn. If the Pepemon's Intelligence is 7 or more, add an additional +5 Defense Power to the Pepemon until end of turn.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Think%20and%20Observe.png',
+        'bafybeicackkbh2nzkaswcnhwfhej4feovfcs2cplerhowj2fvw2jc2ruo4.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -514,7 +514,7 @@ export const SUPPORTCARDS = [
         false,
         'I read you like a book!',
         "Pepemon adds +2 to its Defense Power until end of turn. Pepemon adds an additional +10 to its Defense Power until end of turn, if the attacking Pepemon used its strong attack this turn.",
-        'https://degen-battleground-supportcards-beta.4everland.store/I%20Read%20You%20Like%20a%20Book!.png',
+        'bafybeihm6kxyb3e7xvnkawrieblnrb5zjskhz5mhwvqthsavmcivlswzyy.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -527,7 +527,7 @@ export const SUPPORTCARDS = [
         true,
         'Due Dilligence',
         "Pepemon adds +1 Intelligence for the next 2 turns. (Unstackable 2, Unresettable 2) Effects do not stack or reset with another card of the same name.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Due%20Dilligence.png',
+        'bafybeihnruqptiv5a5dz2oiw6blni5njmzgc4aq5esaedz4exlomswipvu.ipfs.4everland.io',
         'Epic'
     ],
     [
@@ -540,7 +540,7 @@ export const SUPPORTCARDS = [
         false,
         'Poison Fang',
         "Pepemon gets +1 to its Attack Power until end of turn, while the target defending Pepemon gets -4 to its Defense Power until end of turn.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Poison%20Fang.png',
+        'bafybeigiyn7ttwpwzqblas7x4bluv5jvzhawujnrkvtj3q6eyozvkxuena.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -553,7 +553,7 @@ export const SUPPORTCARDS = [
         false,
         'Sucker Punch',
         "Opposing Pepemon gets -5 to its Defense Power until end of turn",
-        'https://degen-battleground-supportcards-beta.4everland.store/Sucker%20Punch.png',
+        'bafybeickbm3eg3xibyhyz4gih7msn3bqmoouif2yvqljtchc3ydgxuv2iu.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -566,7 +566,7 @@ export const SUPPORTCARDS = [
         true,
         'Taunt..*',
         "Target defending Pepemon gets -3 to its Defense Power for this turn and in the next 2 turns. (Unstackable 2, Unresettable 2). Effects do not stack or reset with another card of the same name.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Taunt.png',
+        'bafybeifzx66i7xwgdouvbknesskyzsujinca2k4picznm4yxmdiq4wrzme.ipfs.4everland.io',
         'Epic'
     ],
     [
@@ -579,7 +579,7 @@ export const SUPPORTCARDS = [
         true,
         'Riddle Me This',
         "Target defending Pepemon gets -1 Intelligence for the next 2 turns. (Unstackable 2, Unresettable 2). Effects do not stack or reset with another card of the same name.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Riddle%20Me%20This.png',
+        'bafybeicjrlxz3zqyisnlftopm6porsckvtmfffpsoagmfs66h4maznse74.ipfs.4everland.io',
         'Epic'
     ],
     [
@@ -592,7 +592,7 @@ export const SUPPORTCARDS = [
         false,
         'Water Clone',
         "Target attacking Pepemon gets -4 Attack Power until end of turn.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Water%20Clone.png',
+        'bafybeihl7dt3fpwlgukbosb37dsart32izvswya4nwgcxnwjsblv4ikuqi.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -605,7 +605,7 @@ export const SUPPORTCARDS = [
         false,
         'Flame Clone',
         "Target attacking Pepemon gets -3 Attack Power until end of turn. If the attacking Pepemon has 5 or less Intelligence, attacking Pepemon gets a further -4 Attack Power until end of turn.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Flame%20Clone.png',
+        'bafybeihebp6alafiwlf753qvwdzodoswvb2qbchtaljwhdcmujd5ffhyty.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -618,7 +618,7 @@ export const SUPPORTCARDS = [
         true,
         'Mud Slide',
         "Target attacking Pepemon gets -3 to its Attack Power for this turn and the next 2 turns. (Unstackable 2, Unresettable 2). Effects do not stack with another card of the same name.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Mud%20Slide.png',
+        'bafybeihuzfel7kllr4zzv5nbphs6heciqraaddro2ibpkevyeujigkrzgq.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -631,7 +631,7 @@ export const SUPPORTCARDS = [
         true,
         'Oil Slick',
         "Target attacking Pepemon gets -2 to its Attack Power for this turn and the next 3 turns. (Unstackable 3, Unresettable 3) Effects do not stack with another card of the same name.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Oil%20Slick.png',
+        'bafybeidj4mdwdn4k3dydu7tonz36ymdi2oc3im3mw2lhjqeltsvpum4wgu.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -644,7 +644,7 @@ export const SUPPORTCARDS = [
         true,
         'Pit Trap',
         "Target attacking Pepemon gets -2 Defense Power for this turn and the next 3 turns. (Unstackable 3, Unresettable 3) Effects do not stack with another card of the same name.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Pit%20Trap.png',
+        'bafybeihf6fjgsy4seaprz4gtjsqoht47upym4ojea42tgxjptmlyvxwfcm.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -657,7 +657,7 @@ export const SUPPORTCARDS = [
         true,
         'Rug Pull',
         "Target attacking Pepemon gets -5 Defense Power for this turn and the next 2 turns. (Unstackable 2, Unresettable 2) Effects do not stack with another card of the same name.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Rug%20Pull.png',
+        'bafybeiezl76oqtive2lc5zj3jgcfuoa5nv6oofk6w6632qz4grbzvwgufy.ipfs.4everland.io',
         'Epic'
     ],
     [
@@ -670,7 +670,7 @@ export const SUPPORTCARDS = [
         false,
         'Second Wind',
         "Pepemon adds +1 to Attack Power until end of turn. However, if the current HP of the Pepemon is less than half that of the start of the battle, add an additional gets +5 attack Power until end of turn.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Second%20Wind.png',
+        'bafybeigrapod643nq2x7np6d6xp7rn3nwdlvx7gzagome6uuzaquvpltp4.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -683,7 +683,7 @@ export const SUPPORTCARDS = [
         false,
         'Determination',
         "Pepemon adds +2 to Defense Power until end of turn. However, if the current HP is less than 50% than of the start of the battle, the Pepemon has an additional +6 Defense until end of turn.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Determination.png',
+        'bafybeiavo6bi4pf6uyiyputpu3lb3gdspuwdhlx7k3ewn4uthllgvkngji.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -696,7 +696,7 @@ export const SUPPORTCARDS = [
         true,
         'Inflate',
         "Pepemon reduces its attack power by -7 for this turn, to gain +7 Attack Power for the next two turns. (Unstackable 2, Unresettable 2) Effects do not stack with another card of the same name.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Inflate.png',
+        'bafybeib4bdt2swxv3irmgrhkjlv4d6xv4rezf4qh74ath457dxvb4pzqca.ipfs.4everland.io',
         'Rare'
     ],
     [
@@ -709,7 +709,7 @@ export const SUPPORTCARDS = [
         true,
         'Power Surge',
         "Pepemon reduces its attack power by -10 for this turn, to gain +10 Attack Power for the next two turns. (Unstackable 2, Unresettable 2) Effects do not stack with another card of the same name.",
-        'https://degen-battleground-supportcards-beta.4everland.store/Power%20Surge.png',
+        'bafybeiekegco35mo4ugx6fvcuikcig4zwqdqi3xoj4mm7f5qpp5b6qup5q.ipfs.4everland.io',
         'Epic'
     ]
 ]
