@@ -83,7 +83,7 @@ contract PepemonStats is WhitelistAdminRole{
     }
 
     function batchGetBattleCardStats(uint minId, uint maxId) public view returns (BattleCardStats[] memory) {
-        require(minId <= maxId, "minId must be less than or equal to maxId");
+        require(minId <= maxId);
         BattleCardStats[] memory results = new BattleCardStats[](maxId - minId + 1);
 
         for (uint256 i = minId; i <= maxId; i++) {
@@ -94,7 +94,7 @@ contract PepemonStats is WhitelistAdminRole{
     }
 
     function batchGetSupportCardStats(uint minId, uint maxId) public view returns (SupportCardStats[] memory) {
-        require(minId <= maxId, "minId must be less than or equal to maxId");
+        require(minId <= maxId);
         SupportCardStats[] memory results = new SupportCardStats[](maxId - minId + 1);
 
         for (uint256 i = minId; i <= maxId; i++) {
