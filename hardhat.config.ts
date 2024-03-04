@@ -47,7 +47,7 @@ const config: HardhatUserConfig = {
     hardhat: {
       forking: {
         enabled: !environment.disableForking,
-        url: 'https://l2-pepechain-testnet-8uk55qlld4.t.conduit.xyz'
+        url: 'https://rpc.ankr.com/fantom_testnet'
       },
       // accounts: {
       //   mnemonic: '',

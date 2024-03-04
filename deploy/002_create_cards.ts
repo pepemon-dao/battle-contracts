@@ -23,7 +23,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   console.log(`Creating support cards..`);
   for(const stats of SUPPORTCARDS){
-    console.log(`Creating BattleCard: ${stats[7]}`);
+    console.log(`Creating SupportCard: ${stats[7]}`);
     await execute(PEPEMON_FACTORY, { from: deployer, log: true }, 'createSupportCard', 
       stats,    // _stats
       99999999, // _maxSupply
