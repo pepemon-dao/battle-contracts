@@ -2,8 +2,8 @@ import { deployDeckContract, getWallets } from './helpers/contract';
 import { PepemonCardDeck } from '../typechain';
 import { PepemonFactory } from '../typechain';
 import { ChainLinkRngOracle } from '../typechain';
-import PepemonFactoryArtifact from '../contracts/abi/PepemonFactory.json';
-import RNGArtifact from '../artifacts/contracts/SampleChainLinkRngOracle.sol/SampleChainLinkRngOracle.json';
+import PepemonFactoryArtifact from '../artifacts/contracts-exposed/PepemonFactory.sol/XPepemonFactory.json';
+import RNGArtifact from '../artifacts/contracts-exposed/SampleChainLinkRngOracle.sol/XSampleChainLinkRngOracle.json';
 
 import { expect } from 'chai';
 import { deployMockContract, MockContract } from 'ethereum-waffle';
@@ -21,19 +21,41 @@ describe('::Deck', async () => {
   beforeEach(async () => {
     deck = await deployDeckContract(alice);
     bobSignedDeck = deck.connect(bob);
-    battleCard = await deployMockContract(alice, PepemonFactoryArtifact);
-    supportCard = await deployMockContract(alice, PepemonFactoryArtifact);
+    battleCard = await deployMockContract(alice, PepemonFactoryArtifact.abi);
+    supportCard = await deployMockContract(alice, PepemonFactoryArtifact.abi);
     rngOracle = await deployMockContract(alice, RNGArtifact.abi);
 
     await deck.setBattleCardAddress(battleCard.address);
     await deck.setSupportCardAddress(supportCard.address);
+    await deck.setRandNrGenContractAddress(rngOracle.address);
 
     await battleCard.mock.balanceOf.withArgs(alice.address, 1).returns(1);
+    await rngOracle.mock.getRandomNumber.returns(321321231);
   });
 
   describe('#Deck', async () => {
     it('Should allow a deck to be created', async () => {
       await deck.createDeck();
+
+      await deck.ownerOf(1).then((ownerAddress: string) => {
+        expect(ownerAddress).to.eq(alice.address);
+      });
+    });
+
+    it('Should allow a starter initial deck to be created when there\'s none', async () => {
+      await battleCard.mock.batchMintList.returns();
+      await battleCard.mock.safeTransferFrom.withArgs(alice.address, deck.address, 3, 1, '0x').returns();
+      await supportCard.mock.safeTransferFrom.withArgs(alice.address, deck.address, 21, 1, '0x').returns();
+      await supportCard.mock.safeTransferFrom.withArgs(alice.address, deck.address, 20, 1, '0x').returns();
+      await battleCard.mock.balanceOf.withArgs(alice.address, 3).returns(1);
+      await supportCard.mock.balanceOf.withArgs(alice.address, 20).returns(5);
+      await supportCard.mock.balanceOf.withArgs(alice.address, 21).returns(5);
+
+      await deck.setInitialDeckOptions([3,4,5], [20, 21], 5);
+      await deck.mintInitialDeck(3);
+      await deck.playerToDecks(alice.address, 0).then((deckId: BigNumber) => {
+        expect(deckId).to.eq(1);
+      });
 
       await deck.ownerOf(1).then((ownerAddress: string) => {
         expect(ownerAddress).to.eq(alice.address);

@@ -108,11 +108,11 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable, AdminRole {
     function setInitialDeckOptions(
         uint256[] calldata battleCardIds,
         uint256[] calldata supportCards,
-        uint256 supportCardAmount
+        uint256 maxInitialSupportCards
     ) public onlyAdmin {
         require(Arrays.isSortedAscending(battleCardIds));
 
-        initialDeckSupportCardAmount = supportCardAmount;
+        initialDeckSupportCardAmount = maxInitialSupportCards;
         allowedInitialDeckBattleCards = battleCardIds;
         allowedInitialDeckSupportCards = supportCards;
     }
@@ -135,7 +135,6 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable, AdminRole {
     function mintInitialDeck(uint256 battleCardId) public {
         require(Arrays.contains(allowedInitialDeckBattleCards, battleCardId), "Invalid battlecard");
         require(playerToDecks[msg.sender].length == 0, "Not your first deck");
-
         // battlecard + support cards
         uint amount = initialDeckSupportCardAmount + 1;
         uint256[] memory cards = new uint256[](amount);
@@ -333,7 +332,7 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable, AdminRole {
         uint chainlinkNumber = ChainLinkRngOracle(randNrGenContract).getRandomNumber();
         //Create a new pseudorandom number using the seed and block info as entropy
         //This makes sure the RNG returns a different number every time
-        uint256 randomNumber = uint(keccak256(abi.encodePacked(block.number, block.timestamp, block.prevrandao, chainlinkNumber)));
+        uint256 randomNumber = uint(keccak256(abi.encodePacked(block.number, block.timestamp, chainlinkNumber)));
         return randomNumber;
     }
 }

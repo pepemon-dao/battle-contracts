@@ -91,7 +91,7 @@ library Arrays {
         return true;
     }
 
-    function contains(uint256[] calldata arr, uint256 value) public pure returns (bool) {
+    function contains(uint256[] memory arr, uint256 value) internal pure returns (bool) {
         uint256 index = lowerBoundMemory(arr, value);
         if (index == arr.length || unsafeMemoryAccess(arr, index) != value) {
             return false;
