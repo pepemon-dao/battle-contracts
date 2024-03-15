@@ -10,8 +10,10 @@ import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "./iface/IPepemonFactory.sol";
 import "./iface/IPepemonCardOracle.sol";
 import "./lib/Arrays.sol";
+import "./lib/AdminRole.sol";
+import "./lib/ChainLinkRngOracle.sol";
 
-contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
+contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable, AdminRole {
     using SafeMath for uint256;
 
     struct Deck {
@@ -36,6 +38,11 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
     uint256 public MAX_SUPPORT_CARDS;
     uint256 public MIN_SUPPORT_CARDS;
 
+    // cards allowed to be picked on when creating the Starter Deck 
+    uint256[] public allowedInitialDeckBattleCards;
+    uint256[] allowedInitialDeckSupportCards;
+    uint256 initialDeckSupportCardAmount;
+
     // set this to 0 to disable minting test cards.
     uint256 maxMintTestCardId;
     uint256 minMintTestCardId;
@@ -43,6 +50,7 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
     uint256 nextDeckId;
     address public battleCardAddress;
     address public supportCardAddress;
+    address public randNrGenContract;
 
     mapping(uint256 => Deck) public decks;
     mapping(address => uint256[]) public playerToDecks;
@@ -77,29 +85,46 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
 
 
     // PUBLIC METHODS
-    function setBattleCardAddress(address _battleCardAddress) public onlyOwner {
+    function setBattleCardAddress(address _battleCardAddress) public onlyAdmin {
         battleCardAddress = _battleCardAddress;
     }
 
-    function setSupportCardAddress(address _supportCardAddress) public onlyOwner {
+    function setSupportCardAddress(address _supportCardAddress) public onlyAdmin {
         supportCardAddress = _supportCardAddress;
     }
 
-    function setMaxSupportCards(uint256 _maxSupportCards) public onlyOwner {
+    function setMaxSupportCards(uint256 _maxSupportCards) public onlyAdmin {
         MAX_SUPPORT_CARDS = _maxSupportCards;
     }
 
-    function setMinSupportCards(uint256 _minSupportCards) public onlyOwner {
+    function setMinSupportCards(uint256 _minSupportCards) public onlyAdmin {
         MIN_SUPPORT_CARDS = _minSupportCards;
     }
 
+    function setRandNrGenContractAddress(address randOracleAddress) public onlyAdmin {
+        randNrGenContract = randOracleAddress;
+    }
+
+    function setInitialDeckOptions(
+        uint256[] calldata battleCardIds,
+        uint256[] calldata supportCards,
+        uint256 supportCardAmount
+    ) public onlyAdmin {
+        require(Arrays.isSortedAscending(battleCardIds));
+
+        initialDeckSupportCardAmount = supportCardAmount;
+        allowedInitialDeckBattleCards = battleCardIds;
+        allowedInitialDeckSupportCards = supportCards;
+    }
+
     // ALLOW TEST MINTING
-    function setMintingCards(uint256 minCardId, uint256 maxCardId) public onlyOwner {
+    function setMintingCards(uint256 minCardId, uint256 maxCardId) public onlyAdmin {
         maxMintTestCardId = maxCardId;
         minMintTestCardId = minCardId;
     }
+
     /**
-     * @dev right now there are 40 different cards that can be minted, but the maximum is configurable with maxMintTestCard. 
+     * @dev right now there are 40 different cards that can be minted, but the maximum is configurable with maxMintTestCard.
      * setting maxMintTestCard to 0 disables this card minting.
      */
     function mintCards() public {
@@ -107,10 +132,38 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
         IPepemonFactory(supportCardAddress).batchMint(minMintTestCardId, maxMintTestCardId, msg.sender);
     }
 
+    function mintInitialDeck(uint256 battleCardId) public {
+        require(Arrays.contains(allowedInitialDeckBattleCards, battleCardId), "Invalid battlecard");
+        require(playerToDecks[msg.sender].length == 0, "Not your first deck");
+
+        // battlecard + support cards
+        uint amount = initialDeckSupportCardAmount + 1;
+        uint256[] memory cards = new uint256[](amount);
+
+        // First step: Mint cards
+
+        uint256 allowedCardsCount = allowedInitialDeckSupportCards.length;
+        uint256 randomNumber = randSeed();
+        cards[0] = battleCardId;
+        // begin from index 1 instead of 0 because battlecard was already added
+        for (uint256 i = 1; i < amount; ++i) {
+            randomNumber = uint256(keccak256(abi.encodePacked(i, randomNumber)));
+            cards[i] = allowedInitialDeckSupportCards[randomNumber % allowedCardsCount];
+        }
+        IPepemonFactory(battleCardAddress).batchMintList(cards, msg.sender);
+    
+        // Second step: Add cards into new the deck
+        
+        uint256 newDeckId = createDeckInternal();
+        addBattleCardToDeck(newDeckId, battleCardId);
+        // begin from index 1 again because battlecard is in index 0
+        for (uint256 i = 1; i < amount; ++i) {
+            addSupportCardToDeck(newDeckId,cards[i], 1);
+        }
+    }
+
     function createDeck() public {
-        _safeMint(msg.sender, nextDeckId);
-        playerToDecks[msg.sender].push(nextDeckId);
-        nextDeckId = nextDeckId.add(1);
+        createDeckInternal();
     }
 
     function addBattleCardToDeck(uint256 deckId, uint256 battleCardId) public sendersDeck(deckId) {
@@ -150,11 +203,15 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
     }
 
     // INTERNALS
-    function addSupportCardToDeck(
-        uint256 _deckId,
-        uint256 _supportCardId,
-        uint256 _amount
-    ) internal {
+    function createDeckInternal() internal returns (uint256) {
+        _safeMint(msg.sender, nextDeckId);
+        playerToDecks[msg.sender].push(nextDeckId);
+        uint256 playerDeck = nextDeckId;
+        nextDeckId = nextDeckId.add(1);
+        return playerDeck;
+    }
+
+    function addSupportCardToDeck(uint256 _deckId, uint256 _supportCardId, uint256 _amount) internal {
         require(MAX_SUPPORT_CARDS >= decks[_deckId].supportCardCount.add(_amount), "PepemonCardDeck: Deck overflow");
         require(
             IPepemonFactory(supportCardAddress).balanceOf(msg.sender, _supportCardId) >= _amount,
@@ -268,5 +325,15 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable {
     function shuffleDeck(uint256 _deckId, uint256 _seed) public view returns (uint256[] memory) {
         uint256[] memory totalSupportCards = getAllSupportCardsInDeck(_deckId);
         return Arrays.shuffle(totalSupportCards, _seed);
+    }
+
+    //Create a random seed
+    function randSeed() private view returns (uint256) {
+        //Get the chainlink random number
+        uint chainlinkNumber = ChainLinkRngOracle(randNrGenContract).getRandomNumber();
+        //Create a new pseudorandom number using the seed and block info as entropy
+        //This makes sure the RNG returns a different number every time
+        uint256 randomNumber = uint(keccak256(abi.encodePacked(block.number, block.timestamp, block.prevrandao, chainlinkNumber)));
+        return randomNumber;
     }
 }
