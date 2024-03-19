@@ -296,6 +296,27 @@ describe('::Matchmaker', () => {
       let bobRanking = await matchmaker.playerRanking(bob.address);
       expect(bobRanking.toNumber()).to.be.equal(1);
     });
+
+    it('Should allow getting the leaderboard with offsets', async () => {
+      // should add 2 players onto the leaderboard
+      await forceDiversifyRankings(4200)
+
+      // get leaderboard with offset 0
+      let rankings = await matchmaker.getPlayersRankings(3, 0);
+      // when the count param is bigger than the length of the leaderboard, the length of the leaderboard
+      // is used instead
+      expect(rankings.length).to.be.equal(2);
+      // the mapping has random order in it so it can either be bob or alice
+      expect(rankings[0][0]).to.be.oneOf([alice.address, bob.address]);
+      expect(rankings[0][1]).to.be.oneOf([alice.address, bob.address]);
+
+      // get leaderboard with offset 1
+      rankings = await matchmaker.getPlayersRankings(3, 1);
+      // since the fetch size is 3, an array of 3 is allocated but only 1 value is modified.
+      expect(rankings[0][0]).to.be.oneOf([alice.address, bob.address]);
+      expect(rankings[0][1]).to.be.equal("0x0000000000000000000000000000000000000000");
+      expect(rankings[0][2]).to.be.equal("0x0000000000000000000000000000000000000000");
+    });
   });
 
   describe('#Battle', () => {
