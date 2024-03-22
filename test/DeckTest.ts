@@ -61,6 +61,28 @@ describe('::Deck', async () => {
         expect(ownerAddress).to.eq(alice.address);
       });
     });
+
+    it('Should not allow minting starter deck if the player has one or more decks already', async () => {
+      await battleCard.mock.batchMintList.returns();
+      await battleCard.mock.safeTransferFrom.withArgs(alice.address, deck.address, 3, 1, '0x').returns();
+      await supportCard.mock.safeTransferFrom.withArgs(alice.address, deck.address, 21, 1, '0x').returns();
+      await supportCard.mock.safeTransferFrom.withArgs(alice.address, deck.address, 20, 1, '0x').returns();
+      await battleCard.mock.balanceOf.withArgs(alice.address, 3).returns(1);
+      await supportCard.mock.balanceOf.withArgs(alice.address, 20).returns(5);
+      await supportCard.mock.balanceOf.withArgs(alice.address, 21).returns(5);
+
+      await deck.setInitialDeckOptions([3,4,5], [20, 21], 5);
+
+      // create a deck for alice
+      await expect(deck.createDeck()).to.not.be.reverted;
+
+      // make sure the deck is there
+      expect(await deck.playerToDecks(alice.address, 0)).to.be.eq(1);
+
+      await expect(deck.mintInitialDeck(3)).to.be.revertedWith(
+        "Not your first deck"
+      );
+    });
   });
 
   describe('#Battle card', async () => {
