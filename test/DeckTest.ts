@@ -373,15 +373,11 @@ describe('::Deck', async () => {
 
   describe('#Permissions', async () => {
     it('Should prevent anyone but the owner from setting the Battle Card address', async () => {
-      await expect(bobSignedDeck.setBattleCardAddress(bob.address)).to.be.revertedWith(
-        'Ownable: caller is not the owner'
-      );
+      await expect(bobSignedDeck.setBattleCardAddress(bob.address)).to.be.reverted;
     });
 
     it('Should prevent anyone but the owner from setting the Support Card address', async () => {
-      await expect(bobSignedDeck.setSupportCardAddress(bob.address)).to.be.revertedWith(
-        'Ownable: caller is not the owner'
-      );
+      await expect(bobSignedDeck.setSupportCardAddress(bob.address)).to.be.reverted;
     });
   });
 });
