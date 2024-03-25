@@ -83,6 +83,11 @@ describe('::Deck', async () => {
         "Not your first deck"
       );
     });
+
+    it('Should not allow an admin to set unsorted initial deck options', async () => {
+      await expect(deck.setInitialDeckOptions([4,3,5], [20, 22, 21], 5)).to.be.reverted;
+    });
+
   });
 
   describe('#Battle card', async () => {
@@ -372,12 +377,32 @@ describe('::Deck', async () => {
   });
 
   describe('#Permissions', async () => {
-    it('Should prevent anyone but the owner from setting the Battle Card address', async () => {
+    it('Should prevent anyone but the admins from setting the Battle Card address', async () => {
       await expect(bobSignedDeck.setBattleCardAddress(bob.address)).to.be.reverted;
     });
 
-    it('Should prevent anyone but the owner from setting the Support Card address', async () => {
+    it('Should prevent anyone but the admins from setting the Support Card address', async () => {
       await expect(bobSignedDeck.setSupportCardAddress(bob.address)).to.be.reverted;
+    });
+
+    it('Should prevent anyone but the admins from setting initial deck options', async () => {
+      await expect(bobSignedDeck.setInitialDeckOptions([3,4,5], [20, 21, 22], 5)).to.be.reverted;
+    });
+
+    it('Should prevent anyone but the admins from setting MAX_SUPPORT_CARDS', async () => {
+      await expect(bobSignedDeck.setMaxSupportCards(1)).to.be.reverted;
+    });
+
+    it('Should prevent anyone but the admins from setting MIN_SUPPORT_CARDS', async () => {
+      await expect(bobSignedDeck.setMinSupportCards(1)).to.be.reverted;
+    });
+
+    it('Should prevent anyone but the admins from setting the RandNrGen contract address', async () => {
+      await expect(bobSignedDeck.setRandNrGenContractAddress("0x0000000000000000000000000000000000000000")).to.be.reverted;
+    });
+
+    it('Should prevent anyone but the admins from setting the allowed minting cards', async () => {
+      await expect(bobSignedDeck.setMintingCards(0, 1)).to.be.reverted;
     });
   });
 });
