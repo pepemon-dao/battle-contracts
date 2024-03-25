@@ -5,9 +5,10 @@ pragma experimental ABIEncoderV2;
 import "./lib/AdminRole.sol";
 import "./PepemonCardDeck.sol";
 import "./iface/IPepemonCardOracle.sol";
+import "./iface/IConfigurable.sol";
 import "./lib/ChainLinkRngOracle.sol";
 
-contract PepemonBattle is AdminRole {
+contract PepemonBattle is AdminRole, IConfigurable {
 
     event BattleCreated(
         address indexed player1Addr,
@@ -115,6 +116,8 @@ contract PepemonBattle is AdminRole {
     PepemonCardDeck private _deckContract;
     ChainLinkRngOracle private _randNrGenContract;
 
+    address public configAddress;
+
     constructor(
         address cardOracleAddress,
         address deckOracleAddress,
@@ -127,16 +130,14 @@ contract PepemonBattle is AdminRole {
         _allowBattleAgainstOneself = false;
     }
 
-    function setCardContractAddress(address cardOracleAddress) public onlyAdmin {
-        _cardContract = IPepemonCardOracle(cardOracleAddress);
+    function setConfigAddress(address _configAddress) external onlyAdmin {
+        configAddress = _configAddress;
     }
 
-    function setBattleContractAddress(address deckOracleAddress) public onlyAdmin {
-        _deckContract = PepemonCardDeck(deckOracleAddress);
-    }
-
-    function setRandNrGenContractAddress(address randOracleAddress) public onlyAdmin {
-        _randNrGenContract = ChainLinkRngOracle(randOracleAddress);
+    function syncConfig() external override onlyAdmin {
+        _cardContract = IPepemonCardOracle(PepemonConfig(configAddress).contractAddresses("PepemonCardDeck"));
+        _deckContract = PepemonCardDeck(PepemonConfig(configAddress).contractAddresses("PepemonFactory"));
+        _randNrGenContract = ChainLinkRngOracle(PepemonConfig(configAddress).contractAddresses("SampleChainLinkRngOracle"));
     }
 
     function setAllowBattleAgainstOneself(bool allow) public onlyAdmin {
