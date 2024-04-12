@@ -5,14 +5,15 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "./iface/IPepemonFactory.sol";
 import "./iface/IPepemonCardOracle.sol";
+import "./lib/AdminRole.sol";
 import "./lib/Arrays.sol";
 import "./lib/PepemonConfig.sol";
+import "hardhat/console.sol";
 
-contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable, IConfigurable {
+contract PepemonCardDeck is ERC721, ERC1155Holder, AdminRole, IConfigurable {
     using SafeMath for uint256;
 
     struct Deck {
@@ -48,12 +49,13 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable, IConfigurable {
     mapping(uint256 => Deck) public decks;
     mapping(address => uint256[]) public playerToDecks;
 
-    constructor() ERC721("Pepedeck", "Pepedeck") {
+    constructor(address _configAddress) ERC721("Pepedeck", "Pepedeck") {
         nextDeckId = 1;
         MAX_SUPPORT_CARDS = 60;
         MIN_SUPPORT_CARDS = 40;
         
         minMintTestCardId = 1;
+        configAddress = _configAddress;
     }
 
     /**
@@ -78,24 +80,25 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable, IConfigurable {
 
 
     // PUBLIC METHODS
-    function setConfigAddress(address _configAddress) external onlyOwner {
+    function setConfigAddress(address _configAddress) external onlyAdmin {
         configAddress = _configAddress;
     }
 
-    function syncConfig() external override onlyOwner {
+    function syncConfig() external override onlyAdmin {
+        console.log("cfg address ", configAddress);
         factoryAddress = PepemonConfig(configAddress).contractAddresses("PepemonFactory");
     }
 
-    function setMaxSupportCards(uint256 _maxSupportCards) public onlyOwner {
+    function setMaxSupportCards(uint256 _maxSupportCards) public onlyAdmin {
         MAX_SUPPORT_CARDS = _maxSupportCards;
     }
 
-    function setMinSupportCards(uint256 _minSupportCards) public onlyOwner {
+    function setMinSupportCards(uint256 _minSupportCards) public onlyAdmin {
         MIN_SUPPORT_CARDS = _minSupportCards;
     }
 
     // ALLOW TEST MINTING
-    function setMintingCards(uint256 minCardId, uint256 maxCardId) public onlyOwner {
+    function setMintingCards(uint256 minCardId, uint256 maxCardId) public onlyAdmin {
         maxMintTestCardId = maxCardId;
         minMintTestCardId = minCardId;
     }

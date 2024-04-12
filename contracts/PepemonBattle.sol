@@ -118,14 +118,8 @@ contract PepemonBattle is AdminRole, IConfigurable {
 
     address public configAddress;
 
-    constructor(
-        address cardOracleAddress,
-        address deckOracleAddress,
-        address randOracleAddress
-    ) {
-        _cardContract = IPepemonCardOracle(cardOracleAddress);
-        _deckContract = PepemonCardDeck(deckOracleAddress);
-        _randNrGenContract = ChainLinkRngOracle(randOracleAddress);
+    constructor(address _configAddress) {
+        configAddress = _configAddress;
         _nextBattleId = 1;
         _allowBattleAgainstOneself = false;
     }
@@ -135,8 +129,8 @@ contract PepemonBattle is AdminRole, IConfigurable {
     }
 
     function syncConfig() external override onlyAdmin {
-        _cardContract = IPepemonCardOracle(PepemonConfig(configAddress).contractAddresses("PepemonCardDeck"));
-        _deckContract = PepemonCardDeck(PepemonConfig(configAddress).contractAddresses("PepemonFactory"));
+        _cardContract = IPepemonCardOracle(PepemonConfig(configAddress).contractAddresses("PepemonCardOracle"));
+        _deckContract = PepemonCardDeck(PepemonConfig(configAddress).contractAddresses("PepemonCardDeck"));
         _randNrGenContract = ChainLinkRngOracle(PepemonConfig(configAddress).contractAddresses("SampleChainLinkRngOracle"));
     }
 

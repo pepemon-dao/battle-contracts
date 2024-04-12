@@ -9,6 +9,11 @@ import "../iface/IConfigurable.sol";
  * @dev This contract must be added as an Admin on contracts before "syncContractConfig" can be called.
  */
 contract PepemonConfig is AdminRole {
+    struct ContractDisplayData {
+        address contractAddress;
+        string contractName;
+    } 
+
     string[] private contactsNames;
     mapping(string => address) public contractAddresses;
 
@@ -16,9 +21,15 @@ contract PepemonConfig is AdminRole {
      * @notice Adds or updates contracts addresses associated by contract names
      * @param contractName Name of the contract that will be stored
      * @param contractAddress Address of the contract that will be stored
-     * @param callSync When true, the function "syncConfig" of the contract being stored will be executed
+     * @param callSync When true, the function "syncConfig" of the contract being stored will be invoked
      */
     function setContractAddress(string calldata contractName, address contractAddress, bool callSync) external onlyAdmin {
+        require(contractAddress != address(0));
+
+        // If its the first time adding the contract, store its name in the array
+        if (contractAddresses[contractName] == address(0)) {
+            contactsNames.push(contractName);
+        }
         contractAddresses[contractName] = contractAddress;
         if (callSync) {
             IConfigurable(contractAddress).syncConfig();
@@ -36,29 +47,18 @@ contract PepemonConfig is AdminRole {
     }
 
     /**
-     * @dev Sets the names of mapped contracts which are used in `getContracts`
-     * @param names Names of the mapped contracts 
+     * @dev Displays contracts names and addresses.
      */
-    function setContactsNames(string[] memory names) external onlyAdmin {
-        contactsNames = names;
-    }
-
-    /**
-     * @dev Displays contracts names and addresses. Names are set with `setContactsNames`
-     * @return names All contract names
-     * @return addresses All contract addresses
-     */
-    function getContracts() external view returns (string[] memory names, address[] memory addresses) {
+    function getContracts() external view returns (ContractDisplayData[] memory data) {
         uint256 len = contactsNames.length;
         
-        names = new string[](len);
-        addresses = new address[](len);
+        data = new ContractDisplayData[](len);
 
         for (uint256 i = 0; i < len; ++i) {
             string memory contractName = contactsNames[i];
-            names[i] = contractName;
-            addresses[i] = contractAddresses[contractName];
+            data[i].contractName = contractName;
+            data[i].contractAddress = contractAddresses[contractName];
         }
-        return (names, addresses);
+        return data;
     }
 }
