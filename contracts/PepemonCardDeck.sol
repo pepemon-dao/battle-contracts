@@ -11,7 +11,6 @@ import "./iface/IPepemonCardOracle.sol";
 import "./lib/AdminRole.sol";
 import "./lib/Arrays.sol";
 import "./lib/PepemonConfig.sol";
-import "hardhat/console.sol";
 
 contract PepemonCardDeck is ERC721, ERC1155Holder, AdminRole, IConfigurable {
     using SafeMath for uint256;
@@ -85,7 +84,6 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, AdminRole, IConfigurable {
     }
 
     function syncConfig() external override onlyAdmin {
-        console.log("cfg address ", configAddress);
         factoryAddress = PepemonConfig(configAddress).contractAddresses("PepemonFactory");
     }
 
