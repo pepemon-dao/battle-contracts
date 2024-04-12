@@ -1,5 +1,5 @@
-import { deployMatchmakerContract, getWallets } from './helpers/contract';
-import { PepemonMatchmaker, PepemonCardDeck, PepemonBattle, PepemonRewardPool } from '../typechain';
+import { deployConfigContract, deployMatchmakerContract, getWallets } from './helpers/contract';
+import { PepemonMatchmaker, PepemonCardDeck, PepemonBattle, PepemonRewardPool, PepemonConfig } from '../typechain';
 import PepemonBattleArtifact from '../artifacts/contracts-exposed/PepemonBattle.sol/XPepemonBattle.json';
 import PepemonCardDeckArtifact from '../artifacts/contracts-exposed/PepemonCardDeck.sol/XPepemonCardDeck.json';
 import PepemonRewardPoolArtifact from '../artifacts/contracts-exposed/PepemonRewardPool.sol/XPepemonRewardPool.json';
@@ -21,6 +21,7 @@ const bobDeck = 2;
 const defaultRanking = 2000;
 
 describe('::Matchmaker', () => {
+  let config: PepemonConfig;
   let matchmaker: PepemonMatchmaker;
   let bobSignedMatchmaker: PepemonMatchmaker;
   let cardDeck: PepemonCardDeck | MockContract;
@@ -28,12 +29,17 @@ describe('::Matchmaker', () => {
   let rewardPool: PepemonRewardPool | MockContract;
 
   beforeEach(async () => {
+    config = await deployConfigContract(alice);
     cardDeck = await deployMockContract(alice, PepemonCardDeckArtifact.abi);
     battle = await deployMockContract(alice, PepemonBattleArtifact.abi);
     rewardPool = await deployMockContract(alice, PepemonRewardPoolArtifact.abi);
-    matchmaker = await deployMatchmakerContract(alice, defaultRanking, battle.address, cardDeck.address, rewardPool.address);
+    matchmaker = await deployMatchmakerContract(alice, defaultRanking, config.address);
     bobSignedMatchmaker = matchmaker.connect(bob);
 
+    await config.setContractAddress("PepemonBattle", battle.address, false);
+    await config.setContractAddress("PepemonRewardPool", rewardPool.address, false);
+    await config.setContractAddress("PepemonCardDeck", cardDeck.address, false);
+    await matchmaker.syncConfig();
     await cardDeck.mock.balanceOf.withArgs(alice.address).returns(1);
     await cardDeck.mock.balanceOf.withArgs(bob.address).returns(1);
     await setupDecks();
@@ -79,13 +85,20 @@ describe('::Matchmaker', () => {
     await cardContract.mock.getBattleCardById.returns([0,0,0,0,0,0,0,0,0,]);
     await cardDeck.mock.decks.returns(0, 0);
 
+    await config.setContractAddress("PepemonCardDeck", cardDeck.address, false);
+    await config.setContractAddress("PepemonCardOracle", cardContract.address, false);
+    await config.setContractAddress("SampleChainLinkRngOracle", rng.address, false);
+
     let dummyBattleContract = (await deployContract(alice, PepemonBattleArtifact, [
-      cardContract.address,
-      cardDeck.address,
-      rng.address,
+      config.address
     ])) as PepemonBattle;
 
+    console.log(1)
+    await dummyBattleContract.syncConfig();
+
+    console.log(2)
     cachedDummyBattleInstance = (await dummyBattleContract.callStatic.createBattle(alice.address, 1, bob.address, 2))[0];
+    console.log(3)
     return cachedDummyBattleInstance;
   }
 

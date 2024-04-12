@@ -19,7 +19,7 @@ describe('::Deck', async () => {
   let rngOracle: ChainLinkRngOracle | MockContract;
 
   beforeEach(async () => {
-    config = await deployConfigContract(alice)
+    config = await deployConfigContract(alice);
     deck = await deployDeckContract(alice, config.address);
     bobSignedDeck = deck.connect(bob);
     pepemonFactory = await deployMockContract(alice, PepemonFactoryArtifact);
