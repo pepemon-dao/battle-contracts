@@ -93,12 +93,9 @@ describe('::Matchmaker', () => {
       config.address
     ])) as PepemonBattle;
 
-    console.log(1)
     await dummyBattleContract.syncConfig();
 
-    console.log(2)
     cachedDummyBattleInstance = (await dummyBattleContract.callStatic.createBattle(alice.address, 1, bob.address, 2))[0];
-    console.log(3)
     return cachedDummyBattleInstance;
   }
 
