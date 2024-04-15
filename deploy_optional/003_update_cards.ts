@@ -1,8 +1,8 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { ethers } from 'ethers';
 import { DeployFunction } from 'hardhat-deploy/types';
-import { PEPEMON_FACTORY } from './constants';
-import { BATTLECARDS, SUPPORTCARDS } from './cards';
+import { PEPEMON_FACTORY } from '../deploy/constants';
+import { BATTLECARDS, SUPPORTCARDS } from '../deploy/cards';
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts } = hre;

@@ -25,7 +25,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   console.log(`Creating battle cards on contract: ${PEPEMON_CARD_ORACLE}...`);
   for(let i = 0; i < BATTLECARDS.length; i++){
     const stats = BATTLECARDS[i];
-    console.log(`Creating BattleCard: ${stats[factoryBattlecardStats.name]} `);
+    console.log(`Creating BattleCard: ${stats[9]} `);
     await execute(PEPEMON_CARD_ORACLE, { from: deployer, log: true }, 'addBattleCard', 
       makeOracleBattlecard(i + 1, stats),  // cardData with id offset
     )
