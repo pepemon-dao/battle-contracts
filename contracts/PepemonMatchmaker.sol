@@ -126,16 +126,20 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
         uint256 count,
         uint256 offset
     ) public view returns (address[] memory addresses, uint256[] memory rankings) {
-        require(offset < leaderboardPlayers.length, "Invalid offset");
+        uint leaderboardLength = leaderboardPlayers.length;
+        require(offset < leaderboardLength, "Invalid offset");
         
-        if(count - offset > leaderboardPlayers.length) {
-            count = leaderboardPlayers.length;
+        if(count - offset > leaderboardLength) {
+            count = leaderboardLength;
         }
 
         addresses = new address[](count);
         rankings = new uint256[](count);
 
         for (uint256 i = offset; i < offset + count; ++i) {
+            if (i >= leaderboardLength) {
+                break;
+            }
             address playerAddress = leaderboardPlayers[i];
             addresses[i - offset] = playerAddress;
             rankings[i - offset] = playerRanking[playerAddress];
