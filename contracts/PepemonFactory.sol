@@ -63,4 +63,14 @@ contract PepemonFactory is ERC1155Tradable {
             mintPepe(to, i, 1, hex"");
         }
     }
+
+    function batchMintList(
+        uint256[] calldata ids,
+        address to
+    ) external onlyMinter {
+        uint256 length = ids.length;
+        for (uint256 i = 0; i <= length; i++) {
+            mintPepe(to, ids[i], 1, hex"");
+        }
+    }
 }
