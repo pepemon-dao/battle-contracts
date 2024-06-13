@@ -86,7 +86,7 @@ contract ERC1155Tradable is ERC1155, ERC1155MintBurn, ERC1155Metadata, Ownable, 
     ) internal  returns (uint256 tokenId) {
         require(_initialSupply <= _maxSupply, "Initial supply cannot be more than max supply");
         uint256 _id = _getNextTokenID();
-        _incrementTokenTypeId();
+        _currentTokenID++;
         creators[_id] = msg.sender;
 
         if (bytes(_uri).length > 0) {
@@ -166,9 +166,9 @@ contract ERC1155Tradable is ERC1155, ERC1155MintBurn, ERC1155Metadata, Ownable, 
     }
 
     /**
-     * @dev increments the value of _currentTokenID
+     * @dev returns the last minted token ID based on value of _currentTokenID
      */
-    function _incrementTokenTypeId() private {
-        _currentTokenID++;
+    function getLastTokenID() public view returns (uint256) {
+        return _currentTokenID;
     }
 }

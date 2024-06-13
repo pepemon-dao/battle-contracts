@@ -81,7 +81,29 @@ contract PepemonStats is WhitelistAdminRole{
     function setElementDecode(uint16 element, string calldata x) public onlyWhitelistAdmin{
         elementDecode[element] = x;
     }
-    
+
+    function batchGetBattleCardStats(uint minId, uint maxId) public view returns (BattleCardStats[] memory) {
+        require(minId <= maxId);
+        BattleCardStats[] memory results = new BattleCardStats[](maxId - minId + 1);
+
+        for (uint256 i = minId; i <= maxId; i++) {
+            results[i - minId] = battleCardStats[i];
+        }
+
+        return results;
+    }
+
+    function batchGetSupportCardStats(uint minId, uint maxId) public view returns (SupportCardStats[] memory) {
+        require(minId <= maxId);
+        SupportCardStats[] memory results = new SupportCardStats[](maxId - minId + 1);
+
+        for (uint256 i = minId; i <= maxId; i++) {
+            results[i - minId] = supportCardStats[i];
+        }
+
+        return results;
+    }
+
     //Pos 0-7 = hp, spd, int, def, atk, sp atk, sp def
     //Pos 8-13 = same but for opponent
     function deconvert(bytes32 num) public pure returns(int16[14] memory){
