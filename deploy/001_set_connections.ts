@@ -1,6 +1,6 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
-import { PEPEMON_FACTORY, PEPEMON_DECK, PEPEMON_MATCHMAKER, PEPEMON_BATTLE, PEPEMON_REWARDPOOL } from './constants';
+import { PEPEMON_FACTORY, PEPEMON_DECK, PEPEMON_MATCHMAKER, PEPEMON_BATTLE, PEPEMON_REWARDPOOL, PEPEMON_CONFIG } from './constants';
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { getNamedAccounts, deployments } = hre;
@@ -8,13 +8,19 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const { deployer } = await getNamedAccounts();
   
-  let pepemonFactory = await hre.deployments.get(PEPEMON_FACTORY);
+  let pepemonConfig = await hre.deployments.get(PEPEMON_CONFIG);
 
-  console.log(`Setting support card address: ${pepemonFactory.address}`);
-  await execute(PEPEMON_DECK, { from: deployer, log: true }, 'setSupportCardAddress', pepemonFactory.address);
+  async function sync_config(contract: string) {
+    console.log(`Setting PepemonConfig Contract as a ${contract} admin...`)
+    await execute(contract, {from: deployer, log: true }, "addAdmin", pepemonConfig.address);
 
-  console.log(`Setting battle card address: ${pepemonFactory.address}`);
-  await execute(PEPEMON_DECK, { from: deployer, log: true }, 'setBattleCardAddress', pepemonFactory.address);
+    console.log(`Syncig ${contract} config...`)
+    await execute(PEPEMON_CONFIG, { from: deployer, log: true }, "syncContractConfig", contract);
+  }
+
+  await sync_config(PEPEMON_BATTLE);
+  await sync_config(PEPEMON_MATCHMAKER);
+  await sync_config(PEPEMON_DECK);
 
   let pepemonMatchmaker = await hre.deployments.get(PEPEMON_MATCHMAKER);
 

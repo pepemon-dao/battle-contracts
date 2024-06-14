@@ -1,13 +1,14 @@
 import {providers, Wallet} from 'ethers';
 import hre from 'hardhat'
 import { deployContract, MockProvider } from 'ethereum-waffle';
+import ConfigArtifact from '../../artifacts/contracts/lib/PepemonConfig.sol/PepemonConfig.json';
 import DeckArtifact from '../../artifacts/contracts/PepemonCardDeck.sol/PepemonCardDeck.json';
 import BattleArtifact from '../../artifacts/contracts/PepemonBattle.sol/PepemonBattle.json';
 import PepemonMatchmakerArtifact from '../../artifacts/contracts-exposed/PepemonMatchmaker.sol/XPepemonMatchmaker.json';
 import PepemonRewardPoolArtifact from '../../artifacts/contracts-exposed/PepemonRewardPool.sol/XPepemonRewardPool.json';
 
 import { Signer } from 'ethers';
-import { PepemonCardDeck, PepemonBattle, PepemonMatchmaker, PepemonRewardPool } from '../../typechain';
+import { PepemonCardDeck, PepemonBattle, PepemonMatchmaker, PepemonRewardPool, PepemonConfig } from '../../typechain';
 
 let provider: providers.JsonRpcProvider;
 
@@ -29,29 +30,29 @@ export function getWallets() {
   ];
 }
 
-export async function deployDeckContract(signer: Signer) {
-  return (await deployContract(signer, DeckArtifact)) as PepemonCardDeck;
+export async function deployConfigContract(signer: Signer) {
+  return (await deployContract(signer, ConfigArtifact)) as PepemonConfig;
 }
 
-export async function deployBattleContract(signer: Signer) {
-  return (await deployContract(signer, BattleArtifact)) as PepemonBattle;
+export async function deployDeckContract(signer: Signer, configAddress: string) {
+  return (await deployContract(signer, DeckArtifact, [configAddress])) as PepemonCardDeck;
+}
+
+export async function deployBattleContract(signer: Signer, configAddress: string) {
+  return (await deployContract(signer, BattleArtifact, [configAddress])) as PepemonBattle;
 }
 
 export async function deployMatchmakerContract(
   signer: Signer,
   defaultRanking: Number,
-  battleContractAddress: string,
-  cardContractAddress: string,
-  rewardPoolAddress: string
+  configAddress: string,
 ) {
   return (await deployContract(
     signer,
     PepemonMatchmakerArtifact,
     [
       defaultRanking, 
-      battleContractAddress, 
-      cardContractAddress, 
-      rewardPoolAddress
+      configAddress,
     ]
   )) as PepemonMatchmaker;
 }
