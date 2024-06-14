@@ -12,18 +12,16 @@ contract PepemonConfig is AdminRole {
     struct ContractDisplayData {
         address contractAddress;
         string contractName;
-    } 
+    }
 
     string[] private contactsNames;
     mapping(string => address) public contractAddresses;
 
     /**
-     * @notice Adds or updates contracts addresses associated by contract names
-     * @param contractName Name of the contract that will be stored
-     * @param contractAddress Address of the contract that will be stored
-     * @param callSync When true, the function "syncConfig" of the contract being stored will be invoked
+     * @dev Actual implementation for both setContractAddress and batchSetContractAddress, making a call to
+     * a common 'internal' function uses less gas than calling a 'public' one
      */
-    function setContractAddress(string calldata contractName, address contractAddress, bool callSync) external onlyAdmin {
+    function setContractAddressInternal(string calldata contractName, address contractAddress, bool callSync) internal {
         require(contractAddress != address(0));
 
         // If its the first time adding the contract, store its name in the array
@@ -33,6 +31,38 @@ contract PepemonConfig is AdminRole {
         contractAddresses[contractName] = contractAddress;
         if (callSync) {
             IConfigurable(contractAddress).syncConfig();
+        }
+    }
+
+    /**
+     * @notice Adds or updates contracts addresses associated by contract names
+     * @param contractName Name of the contract that will be stored
+     * @param contractAddress Address of the contract that will be stored
+     * @param callSync When true, the function "syncConfig" of the contract being stored will be invoked
+     */
+    function setContractAddress(
+        string calldata contractName,
+        address contractAddress,
+        bool callSync
+    ) external onlyAdmin {
+        setContractAddressInternal(contractName, contractAddress, callSync);
+    }
+
+    /**
+     * @notice Batch version of `setContractAddress`
+     * @param contractNameList Names of the contracts that will be stored
+     * @param contractAddressesList Addresses of the contracts that will be stored
+     * @param callSyncList When true, the function "syncConfig" of the contracts being stored will be invoked
+     */
+    function batchSetContractAddress(
+        string[] calldata contractNameList,
+        address[] calldata contractAddressesList,
+        bool[] calldata callSyncList
+    ) external onlyAdmin {
+        uint256 len = contractNameList.length;
+        require(len == contractAddressesList.length && len == callSyncList.length, "Mismatching batch length");
+        for (uint256 i = 0; i < len; ++i) {
+            setContractAddressInternal(contractNameList[i], contractAddressesList[i], callSyncList[i]);
         }
     }
 
@@ -47,11 +77,22 @@ contract PepemonConfig is AdminRole {
     }
 
     /**
+     * @dev Batch version of syncContractConfig
+     */
+    function batchSyncContractConfig(string[] calldata contractNames) external onlyAdmin {
+        uint256 len = contractNames.length;
+        for (uint256 i = 0; i < len; ++i) {
+            require(contractAddresses[contractNames[i]] != address(0));
+            IConfigurable(contractAddresses[contractNames[i]]).syncConfig();
+        }
+    }
+
+    /**
      * @dev Displays contracts names and addresses.
      */
     function getContracts() external view returns (ContractDisplayData[] memory data) {
         uint256 len = contactsNames.length;
-        
+
         data = new ContractDisplayData[](len);
 
         for (uint256 i = 0; i < len; ++i) {
