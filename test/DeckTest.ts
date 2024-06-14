@@ -2,8 +2,8 @@ import { deployDeckContract, getWallets } from './helpers/contract';
 import { PepemonCardDeck } from '../typechain';
 import { PepemonFactory } from '../typechain';
 import { ChainLinkRngOracle } from '../typechain';
-import PepemonFactoryArtifact from '../contracts/abi/PepemonFactory.json';
-import RNGArtifact from '../artifacts/contracts/SampleChainLinkRngOracle.sol/SampleChainLinkRngOracle.json';
+import PepemonFactoryArtifact from '../artifacts/contracts-exposed/PepemonFactory.sol/XPepemonFactory.json';
+import RNGArtifact from '../artifacts/contracts-exposed/SampleChainLinkRngOracle.sol/XSampleChainLinkRngOracle.json';
 
 import { expect } from 'chai';
 import { deployMockContract, MockContract } from 'ethereum-waffle';
@@ -21,14 +21,16 @@ describe('::Deck', async () => {
   beforeEach(async () => {
     deck = await deployDeckContract(alice);
     bobSignedDeck = deck.connect(bob);
-    battleCard = await deployMockContract(alice, PepemonFactoryArtifact);
-    supportCard = await deployMockContract(alice, PepemonFactoryArtifact);
+    battleCard = await deployMockContract(alice, PepemonFactoryArtifact.abi);
+    supportCard = await deployMockContract(alice, PepemonFactoryArtifact.abi);
     rngOracle = await deployMockContract(alice, RNGArtifact.abi);
 
     await deck.setBattleCardAddress(battleCard.address);
     await deck.setSupportCardAddress(supportCard.address);
+    await deck.setRandNrGenContractAddress(rngOracle.address);
 
     await battleCard.mock.balanceOf.withArgs(alice.address, 1).returns(1);
+    await rngOracle.mock.getRandomNumber.returns(321321231);
   });
 
   describe('#Deck', async () => {
@@ -39,6 +41,53 @@ describe('::Deck', async () => {
         expect(ownerAddress).to.eq(alice.address);
       });
     });
+
+    it('Should allow a starter initial deck to be created when there\'s none', async () => {
+      await battleCard.mock.batchMintList.returns();
+      await battleCard.mock.safeTransferFrom.withArgs(alice.address, deck.address, 3, 1, '0x').returns();
+      await supportCard.mock.safeTransferFrom.withArgs(alice.address, deck.address, 21, 1, '0x').returns();
+      await supportCard.mock.safeTransferFrom.withArgs(alice.address, deck.address, 20, 1, '0x').returns();
+      await battleCard.mock.balanceOf.withArgs(alice.address, 3).returns(1);
+      await supportCard.mock.balanceOf.withArgs(alice.address, 20).returns(5);
+      await supportCard.mock.balanceOf.withArgs(alice.address, 21).returns(5);
+
+      await deck.setInitialDeckOptions([3,4,5], [20, 21], 5);
+      await deck.mintInitialDeck(3);
+      await deck.playerToDecks(alice.address, 0).then((deckId: BigNumber) => {
+        expect(deckId).to.eq(1);
+      });
+
+      await deck.ownerOf(1).then((ownerAddress: string) => {
+        expect(ownerAddress).to.eq(alice.address);
+      });
+    });
+
+    it('Should not allow minting starter deck if the player has one or more decks already', async () => {
+      await battleCard.mock.batchMintList.returns();
+      await battleCard.mock.safeTransferFrom.withArgs(alice.address, deck.address, 3, 1, '0x').returns();
+      await supportCard.mock.safeTransferFrom.withArgs(alice.address, deck.address, 21, 1, '0x').returns();
+      await supportCard.mock.safeTransferFrom.withArgs(alice.address, deck.address, 20, 1, '0x').returns();
+      await battleCard.mock.balanceOf.withArgs(alice.address, 3).returns(1);
+      await supportCard.mock.balanceOf.withArgs(alice.address, 20).returns(5);
+      await supportCard.mock.balanceOf.withArgs(alice.address, 21).returns(5);
+
+      await deck.setInitialDeckOptions([3,4,5], [20, 21], 5);
+
+      // create a deck for alice
+      await expect(deck.createDeck()).to.not.be.reverted;
+
+      // make sure the deck is there
+      expect(await deck.playerToDecks(alice.address, 0)).to.be.eq(1);
+
+      await expect(deck.mintInitialDeck(3)).to.be.revertedWith(
+        "Not your first deck"
+      );
+    });
+
+    it('Should not allow an admin to set unsorted initial deck options', async () => {
+      await expect(deck.setInitialDeckOptions([4,3,5], [20, 22, 21], 5)).to.be.reverted;
+    });
+
   });
 
   describe('#Battle card', async () => {
@@ -328,16 +377,32 @@ describe('::Deck', async () => {
   });
 
   describe('#Permissions', async () => {
-    it('Should prevent anyone but the owner from setting the Battle Card address', async () => {
-      await expect(bobSignedDeck.setBattleCardAddress(bob.address)).to.be.revertedWith(
-        'Ownable: caller is not the owner'
-      );
+    it('Should prevent anyone but the admins from setting the Battle Card address', async () => {
+      await expect(bobSignedDeck.setBattleCardAddress(bob.address)).to.be.reverted;
     });
 
-    it('Should prevent anyone but the owner from setting the Support Card address', async () => {
-      await expect(bobSignedDeck.setSupportCardAddress(bob.address)).to.be.revertedWith(
-        'Ownable: caller is not the owner'
-      );
+    it('Should prevent anyone but the admins from setting the Support Card address', async () => {
+      await expect(bobSignedDeck.setSupportCardAddress(bob.address)).to.be.reverted;
+    });
+
+    it('Should prevent anyone but the admins from setting initial deck options', async () => {
+      await expect(bobSignedDeck.setInitialDeckOptions([3,4,5], [20, 21, 22], 5)).to.be.reverted;
+    });
+
+    it('Should prevent anyone but the admins from setting MAX_SUPPORT_CARDS', async () => {
+      await expect(bobSignedDeck.setMaxSupportCards(1)).to.be.reverted;
+    });
+
+    it('Should prevent anyone but the admins from setting MIN_SUPPORT_CARDS', async () => {
+      await expect(bobSignedDeck.setMinSupportCards(1)).to.be.reverted;
+    });
+
+    it('Should prevent anyone but the admins from setting the RandNrGen contract address', async () => {
+      await expect(bobSignedDeck.setRandNrGenContractAddress("0x0000000000000000000000000000000000000000")).to.be.reverted;
+    });
+
+    it('Should prevent anyone but the admins from setting the allowed minting cards', async () => {
+      await expect(bobSignedDeck.setMintingCards(0, 1)).to.be.reverted;
     });
   });
 });

@@ -32,6 +32,11 @@ interface IPepemonFactory {
         address to) 
     external;
 
+    function batchMintList(
+        uint256[] calldata ids,
+        address to) 
+    external;
+
     function addMinter(
         address account
     ) external;
