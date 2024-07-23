@@ -5,15 +5,16 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC1155/utils/ERC1155Holder.sol";
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "./iface/IPepemonFactory.sol";
 import "./iface/IPepemonCardOracle.sol";
+import "./lib/AdminRole.sol";
 import "./lib/Arrays.sol";
+import "./lib/PepemonConfig.sol";
 import "./lib/AdminRole.sol";
 import "./lib/ChainLinkRngOracle.sol";
 
-contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable, AdminRole {
+contract PepemonCardDeck is ERC721, ERC1155Holder, AdminRole, IConfigurable {
     using SafeMath for uint256;
 
     struct Deck {
@@ -48,19 +49,20 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable, AdminRole {
     uint256 minMintTestCardId;
 
     uint256 nextDeckId;
-    address public battleCardAddress;
-    address public supportCardAddress;
+    address public configAddress;
+    address public factoryAddress;
     address public randNrGenContract;
 
     mapping(uint256 => Deck) public decks;
     mapping(address => uint256[]) public playerToDecks;
 
-    constructor() ERC721("Pepedeck", "Pepedeck") {
+    constructor(address _configAddress) ERC721("Pepedeck", "Pepedeck") {
         nextDeckId = 1;
         MAX_SUPPORT_CARDS = 60;
         MIN_SUPPORT_CARDS = 40;
         
         minMintTestCardId = 1;
+        configAddress = _configAddress;
     }
 
     /**
@@ -85,12 +87,12 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable, AdminRole {
 
 
     // PUBLIC METHODS
-    function setBattleCardAddress(address _battleCardAddress) public onlyAdmin {
-        battleCardAddress = _battleCardAddress;
+    function setConfigAddress(address _configAddress) external onlyAdmin {
+        configAddress = _configAddress;
     }
 
-    function setSupportCardAddress(address _supportCardAddress) public onlyAdmin {
-        supportCardAddress = _supportCardAddress;
+    function syncConfig() external override onlyAdmin {
+        factoryAddress = PepemonConfig(configAddress).contractAddresses("PepemonFactory");
     }
 
     function setMaxSupportCards(uint256 _maxSupportCards) public onlyAdmin {
@@ -129,7 +131,7 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable, AdminRole {
      */
     function mintCards() public {
         require(maxMintTestCardId > 0, "Minting test cards is disabled");
-        IPepemonFactory(supportCardAddress).batchMint(minMintTestCardId, maxMintTestCardId, msg.sender);
+        IPepemonFactory(factoryAddress).batchMint(minMintTestCardId, maxMintTestCardId, msg.sender);
     }
 
     function mintInitialDeck(uint256 battleCardId) public {
@@ -149,7 +151,7 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable, AdminRole {
             randomNumber = uint256(keccak256(abi.encodePacked(i, randomNumber)));
             cards[i] = allowedInitialDeckSupportCards[randomNumber % allowedCardsCount];
         }
-        IPepemonFactory(battleCardAddress).batchMintList(cards, msg.sender);
+        IPepemonFactory(factoryAddress).batchMintList(cards, msg.sender);
     
         // Second step: Add cards into new the deck
         
@@ -167,7 +169,7 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable, AdminRole {
 
     function addBattleCardToDeck(uint256 deckId, uint256 battleCardId) public sendersDeck(deckId) {
         require(
-            IPepemonFactory(battleCardAddress).balanceOf(msg.sender, battleCardId) >= 1,
+            IPepemonFactory(factoryAddress).balanceOf(msg.sender, battleCardId) >= 1,
             "PepemonCardDeck: Don't own battle card"
         );
 
@@ -176,7 +178,7 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable, AdminRole {
         uint256 oldBattleCardId = decks[deckId].battleCardId;
         decks[deckId].battleCardId = battleCardId;
 
-        IPepemonFactory(battleCardAddress).safeTransferFrom(msg.sender, address(this), battleCardId, 1, "");
+        IPepemonFactory(factoryAddress).safeTransferFrom(msg.sender, address(this), battleCardId, 1, "");
 
         returnBattleCardFromDeck(oldBattleCardId);
     }
@@ -213,7 +215,7 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable, AdminRole {
     function addSupportCardToDeck(uint256 _deckId, uint256 _supportCardId, uint256 _amount) internal {
         require(MAX_SUPPORT_CARDS >= decks[_deckId].supportCardCount.add(_amount), "PepemonCardDeck: Deck overflow");
         require(
-            IPepemonFactory(supportCardAddress).balanceOf(msg.sender, _supportCardId) >= _amount,
+            IPepemonFactory(factoryAddress).balanceOf(msg.sender, _supportCardId) >= _amount,
             "PepemonCardDeck: You don't have enough of this card"
         );
 
@@ -234,7 +236,7 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable, AdminRole {
 
         decks[_deckId].supportCardCount = decks[_deckId].supportCardCount.add(_amount);
 
-        IPepemonFactory(supportCardAddress).safeTransferFrom(msg.sender, address(this), _supportCardId, _amount, "");
+        IPepemonFactory(factoryAddress).safeTransferFrom(msg.sender, address(this), _supportCardId, _amount, "");
     }
 
     function removeSupportCardFromDeck(
@@ -261,12 +263,12 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, Ownable, AdminRole {
             delete decks[_deckId].supportCardTypes[_supportCardId];
         }
 
-        IPepemonFactory(supportCardAddress).safeTransferFrom(address(this), msg.sender, _supportCardId, _amount, "");
+        IPepemonFactory(factoryAddress).safeTransferFrom(address(this), msg.sender, _supportCardId, _amount, "");
     }
 
     function returnBattleCardFromDeck(uint256 _battleCardId) internal {
         if (_battleCardId != 0) {
-            IPepemonFactory(battleCardAddress).safeTransferFrom(address(this), msg.sender, _battleCardId, 1, "");
+            IPepemonFactory(factoryAddress).safeTransferFrom(address(this), msg.sender, _battleCardId, 1, "");
         }
     }
 

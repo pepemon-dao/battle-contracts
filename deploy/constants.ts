@@ -2,6 +2,7 @@ import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
 
 export const RNG_ORACLE = 'SampleChainLinkRngOracle';
+export const PEPEMON_CONFIG = 'PepemonConfig';
 export const PEPEMON_DECK = 'PepemonCardDeck';
 export const PEPEMON_CARD_ORACLE = 'PepemonCardOracle';
 export const PEPEMON_BATTLE = 'PepemonBattle';
