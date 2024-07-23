@@ -39,7 +39,7 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, AdminRole, IConfigurable {
     uint256 public MAX_SUPPORT_CARDS;
     uint256 public MIN_SUPPORT_CARDS;
 
-    // cards allowed to be picked on when creating the Starter Deck 
+    // cards allowed to be picked on when creating the Starter Deck
     uint256[] public allowedInitialDeckBattleCards;
     uint256[] allowedInitialDeckSupportCards;
     uint256 initialDeckSupportCardAmount;
@@ -60,7 +60,7 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, AdminRole, IConfigurable {
         nextDeckId = 1;
         MAX_SUPPORT_CARDS = 60;
         MIN_SUPPORT_CARDS = 40;
-        
+
         minMintTestCardId = 1;
         configAddress = _configAddress;
     }
@@ -68,13 +68,9 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, AdminRole, IConfigurable {
     /**
      * @dev Override supportInterface .
      */
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        virtual
-        override(ERC721, ERC1155Receiver)
-        returns (bool)
-    {
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view virtual override(ERC721, ERC1155Receiver) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 
@@ -83,8 +79,6 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, AdminRole, IConfigurable {
         require(msg.sender == ownerOf(_deckId), "PepemonCardDeck: Not your deck");
         _;
     }
-
-
 
     // PUBLIC METHODS
     function setConfigAddress(address _configAddress) external onlyAdmin {
@@ -113,6 +107,7 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, AdminRole, IConfigurable {
         uint256 maxInitialSupportCards
     ) public onlyAdmin {
         require(Arrays.isSortedAscending(battleCardIds));
+        require(maxInitialSupportCards <= MAX_SUPPORT_CARDS);
 
         initialDeckSupportCardAmount = maxInitialSupportCards;
         allowedInitialDeckBattleCards = battleCardIds;
@@ -151,15 +146,21 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, AdminRole, IConfigurable {
             randomNumber = uint256(keccak256(abi.encodePacked(i, randomNumber)));
             cards[i] = allowedInitialDeckSupportCards[randomNumber % allowedCardsCount];
         }
-        IPepemonFactory(factoryAddress).batchMintList(cards, msg.sender);
-    
+        // mint cards directly for this contract instead of msg.sender, so that we dont have to
+        // transfer it back and forth
+        IPepemonFactory(factoryAddress).batchMintList(cards, address(this));
+
         // Second step: Add cards into new the deck
-        
+
         uint256 newDeckId = createDeckInternal();
-        addBattleCardToDeck(newDeckId, battleCardId);
+
+        // no need to call addBattleCardToDeck since the new deck never had a battlecard before, plus
+        // the battlecard is already owned by this contract
+        decks[newDeckId].battleCardId = battleCardId;
+
         // begin from index 1 again because battlecard is in index 0
         for (uint256 i = 1; i < amount; ++i) {
-            addSupportCardToDeck(newDeckId,cards[i], 1);
+            addSupportCardToDeckDirectly(newDeckId, cards[i], 1);
         }
     }
 
@@ -191,13 +192,19 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, AdminRole, IConfigurable {
         returnBattleCardFromDeck(oldBattleCardId);
     }
 
-    function addSupportCardsToDeck(uint256 deckId, SupportCardRequest[] memory supportCards) public sendersDeck(deckId) {
+    function addSupportCardsToDeck(
+        uint256 deckId,
+        SupportCardRequest[] memory supportCards
+    ) public sendersDeck(deckId) {
         for (uint256 i = 0; i < supportCards.length; i++) {
             addSupportCardToDeck(deckId, supportCards[i].supportCardId, supportCards[i].amount);
         }
     }
 
-    function removeSupportCardsFromDeck(uint256 _deckId, SupportCardRequest[] memory _supportCards) public sendersDeck(_deckId) {
+    function removeSupportCardsFromDeck(
+        uint256 _deckId,
+        SupportCardRequest[] memory _supportCards
+    ) public sendersDeck(_deckId) {
         for (uint256 i = 0; i < _supportCards.length; i++) {
             removeSupportCardFromDeck(_deckId, _supportCards[i].supportCardId, _supportCards[i].amount);
         }
@@ -219,6 +226,12 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, AdminRole, IConfigurable {
             "PepemonCardDeck: You don't have enough of this card"
         );
 
+        addSupportCardToDeckDirectly(_deckId, _supportCardId, _amount);
+
+        IPepemonFactory(factoryAddress).safeTransferFrom(msg.sender, address(this), _supportCardId, _amount, "");
+    }
+
+    function addSupportCardToDeckDirectly(uint256 _deckId, uint256 _supportCardId, uint256 _amount) internal {
         if (!decks[_deckId].supportCardTypes[_supportCardId].isEntity) {
             decks[_deckId].supportCardTypes[_supportCardId] = SupportCardType({
                 supportCardId: _supportCardId,
@@ -235,15 +248,9 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, AdminRole, IConfigurable {
         }
 
         decks[_deckId].supportCardCount = decks[_deckId].supportCardCount.add(_amount);
-
-        IPepemonFactory(factoryAddress).safeTransferFrom(msg.sender, address(this), _supportCardId, _amount, "");
     }
 
-    function removeSupportCardFromDeck(
-        uint256 _deckId,
-        uint256 _supportCardId,
-        uint256 _amount
-    ) internal {
+    function removeSupportCardFromDeck(uint256 _deckId, uint256 _supportCardId, uint256 _amount) internal {
         SupportCardType storage supportCardList = decks[_deckId].supportCardTypes[_supportCardId];
         supportCardList.count = supportCardList.count.sub(_amount);
 
@@ -257,7 +264,9 @@ contract PepemonCardDeck is ERC721, ERC1155Holder, AdminRole, IConfigurable {
             decks[_deckId].supportCardTypes[lastSupportCardId].pointer = supportCardList.pointer;
 
             // swap the last item of the list with the one to be deleted
-            decks[_deckId].supportCardTypeList[supportCardList.pointer] = decks[_deckId].supportCardTypeList[lastItemIndex];
+            decks[_deckId].supportCardTypeList[supportCardList.pointer] = decks[_deckId].supportCardTypeList[
+                lastItemIndex
+            ];
             decks[_deckId].supportCardTypeList.pop();
 
             delete decks[_deckId].supportCardTypes[_supportCardId];
