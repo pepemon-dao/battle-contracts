@@ -40,7 +40,7 @@ contract PepemonFactory is ERC1155Tradable {
         uint256 _id,
         uint256 _amount
     ) public onlyMinter {
-        require(balanceOf(_account, _id) >= _amount, "Cannot burn more than addres has");
+        require(balanceOf(_account, _id) >= _amount, "Exceeded available amount");
         _burn(_account, _id, _amount);
     }
 
