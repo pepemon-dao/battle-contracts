@@ -1,6 +1,6 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction, DeployResult } from 'hardhat-deploy/types';
-import { PEPEMON_DECK, PEPEMON_BATTLE, PEPEMON_FACTORY, PEPEMON_CARD_ORACLE, RNG_ORACLE, PEPEMON_MATCHMAKER, PEPEMON_REWARDPOOL, DEFAULT_RANKING, PEPEMON_CONFIG } from './constants';
+import { PEPEMON_DECK, PEPEMON_BATTLE, PEPEMON_FACTORY, PEPEMON_CARD_ORACLE, RNG_ORACLE, PEPEMON_MATCHMAKER, PEPEMON_REWARDPOOL, DEFAULT_RANKING, PEPEMON_CONFIG, PEPEMON_MATCHMAKER_PVE } from './constants';
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts } = hre;
@@ -57,6 +57,19 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     }
   );
 
+  log(`Deploying ${PEPEMON_MATCHMAKER_PVE} Contract from ${deployer}....`);
+  let pepemonMatchmakerPve = await deploy(
+    PEPEMON_MATCHMAKER_PVE,
+    {
+      from: deployer,
+      log: true,
+      args: [
+        DEFAULT_RANKING,
+        pepemonConfig.address
+      ]
+    }
+  );
+
   async function save_address_config(contract: string, deployment: DeployResult) {
     console.log(`Saving address of ${contract} in ${PEPEMON_CONFIG}...`)
     await execute(PEPEMON_CONFIG, { from: deployer, log: true }, "setContractAddress", contract, deployment.address, false);
@@ -75,6 +88,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   await save_address_config(PEPEMON_BATTLE, pepemonBattle);
   await save_address_config(PEPEMON_REWARDPOOL, rewardPoolContract);
   await save_address_config(PEPEMON_MATCHMAKER, pepemonMatchmaker);
+  await save_address_config(PEPEMON_MATCHMAKER_PVE, pepemonMatchmakerPve);
 
   await hre.deployments.save(PEPEMON_CONFIG, {
     abi: pepemonConfig.abi,
@@ -84,4 +98,4 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
 export default func;
 
-func.tags = [PEPEMON_DECK, PEPEMON_BATTLE, PEPEMON_FACTORY, PEPEMON_CARD_ORACLE, RNG_ORACLE, PEPEMON_MATCHMAKER, PEPEMON_REWARDPOOL];
+func.tags = [PEPEMON_DECK, PEPEMON_BATTLE, PEPEMON_FACTORY, PEPEMON_CARD_ORACLE, RNG_ORACLE, PEPEMON_MATCHMAKER, PEPEMON_MATCHMAKER_PVE, PEPEMON_REWARDPOOL];
