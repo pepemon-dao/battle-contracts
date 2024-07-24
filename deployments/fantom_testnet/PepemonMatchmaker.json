@@ -1,5 +1,5 @@
 {
-  "address": "0xCa9210d0b04C75AAadd471FbDFBdcBf5A1876189",
+  "address": "0x1A06A3de6858d425b22C9B93328de9ae38386C72",
   "abi": [
     {
       "inputs": [
@@ -10,17 +10,7 @@
         },
         {
           "internalType": "address",
-          "name": "battleAddress",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "deckAddress",
-          "type": "address"
-        },
-        {
-          "internalType": "address",
-          "name": "rewardPoolAddress",
+          "name": "_configAddress",
           "type": "address"
         }
       ],
@@ -102,6 +92,19 @@
       "name": "addPveDeck",
       "outputs": [],
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "configAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     },
     {
@@ -460,24 +463,11 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "battleContractAddress",
+          "name": "_configAddress",
           "type": "address"
         }
       ],
-      "name": "setBattleContractAddress",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "deckContractAddress",
-          "type": "address"
-        }
-      ],
-      "name": "setDeckContractAddress",
+      "name": "setConfigAddress",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -529,19 +519,6 @@
     {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "rewardPoolAddress",
-          "type": "address"
-        }
-      ],
-      "name": "setRewardPoolAddress",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
           "internalType": "bytes4",
           "name": "interfaceId",
           "type": "bytes4"
@@ -556,6 +533,13 @@
         }
       ],
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "syncConfig",
+      "outputs": [],
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -583,5 +567,5 @@
       "type": "function"
     }
   ],
-  "numDeployments": 4
+  "numDeployments": 2
 }
