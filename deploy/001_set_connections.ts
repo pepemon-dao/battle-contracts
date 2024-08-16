@@ -1,6 +1,6 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { DeployFunction } from 'hardhat-deploy/types';
-import { PEPEMON_FACTORY, PEPEMON_DECK, PEPEMON_MATCHMAKER, PEPEMON_BATTLE, PEPEMON_REWARDPOOL, PEPEMON_CONFIG } from './constants';
+import { PEPEMON_DECK, PEPEMON_MATCHMAKER, PEPEMON_BATTLE, PEPEMON_REWARDPOOL, PEPEMON_CONFIG, PEPEMON_MATCHMAKER_PVE } from './constants';
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { getNamedAccounts, deployments } = hre;
@@ -20,15 +20,23 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   await sync_config(PEPEMON_BATTLE);
   await sync_config(PEPEMON_MATCHMAKER);
+  await sync_config(PEPEMON_MATCHMAKER_PVE);
   await sync_config(PEPEMON_DECK);
 
   let pepemonMatchmaker = await hre.deployments.get(PEPEMON_MATCHMAKER);
+  let pepemonMatchmakerPve = await hre.deployments.get(PEPEMON_MATCHMAKER_PVE);
 
   console.log("Setting PepemonMatchmaker's Contract as a PepemonBattle admin...")
   await execute(PEPEMON_BATTLE, {from: deployer, log: true }, "addAdmin", pepemonMatchmaker.address);
 
   console.log("Setting PepemonMatchmaker's Contract as a PepemonRewardPool admin...")
   await execute(PEPEMON_REWARDPOOL, {from: deployer, log: true }, "addAdmin", pepemonMatchmaker.address);
+
+  console.log("Setting PepemonMatchmakerPve's Contract as a PepemonBattle admin...")
+  await execute(PEPEMON_BATTLE, {from: deployer, log: true }, "addAdmin", pepemonMatchmakerPve.address);
+
+  console.log("Setting PepemonMatchmakerPve's Contract as a PepemonRewardPool admin...")
+  await execute(PEPEMON_REWARDPOOL, {from: deployer, log: true }, "addAdmin", pepemonMatchmakerPve.address);
 };
 
 export default func;
