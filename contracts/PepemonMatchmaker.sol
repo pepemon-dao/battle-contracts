@@ -9,8 +9,9 @@ import "./lib/RewardPool.sol";
 import "./lib/Elo.sol";
 import "./iface/IPepemonCardOracle.sol";
 import "./PepemonBattle.sol";
+import "./lib/PepemonConfig.sol";
 
-contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
+contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole, IConfigurable {
     event BattleFinished(address indexed winner, address indexed loser, uint256 battleId);
 
     struct waitingDeckData {
@@ -29,6 +30,7 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
     uint256 private _matchRangePerMinute = 1;
     uint256 private _kFactor = 16;
 
+    address public configAddress;
     mapping(uint256 => uint256) internal _waitingDecksIndex; // _waitingDecksIndex[deckId] -> index of waitingDecks
     mapping(uint256 => address) public deckOwner;
     waitingDeckData[] public waitingDecks;
@@ -36,11 +38,9 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
     mapping(address => uint256) public playerRanking;
     address[] public leaderboardPlayers;
 
-    constructor (uint256 defaultRanking, address battleAddress, address deckAddress, address rewardPoolAddress) {
+    constructor (uint256 defaultRanking, address _configAddress) {
         _defaultRanking = defaultRanking; // suggested: 2000
-        _battleAddress = battleAddress;
-        _deckAddress = deckAddress;
-        _rewardPoolAddress = rewardPoolAddress;
+        configAddress = _configAddress;
         _allowBattleAgainstOneself = false;
     }
 
@@ -69,16 +69,14 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
         _allowBattleAgainstOneself = allow;
     }
 
-    function setDeckContractAddress(address deckContractAddress) public onlyAdmin {
-        _deckAddress = deckContractAddress;
+    function setConfigAddress(address _configAddress) public onlyAdmin {
+        configAddress = _configAddress;
     }
 
-    function setBattleContractAddress(address battleContractAddress) public onlyAdmin {
-        _battleAddress = battleContractAddress;
-    }
-
-    function setRewardPoolAddress(address rewardPoolAddress) public onlyAdmin {
-        _rewardPoolAddress = rewardPoolAddress;
+    function syncConfig() external override onlyAdmin {
+        _battleAddress = PepemonConfig(configAddress).contractAddresses("PepemonBattle");
+        _deckAddress = PepemonConfig(configAddress).contractAddresses("PepemonCardDeck");
+        _rewardPoolAddress = PepemonConfig(configAddress).contractAddresses("PepemonRewardPool");
     }
 
     function setMatchRange(uint256 matchRange, uint256 matchRangePerMinute) public onlyAdmin {
@@ -126,16 +124,20 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
         uint256 count,
         uint256 offset
     ) public view returns (address[] memory addresses, uint256[] memory rankings) {
-        require(offset < leaderboardPlayers.length, "Invalid offset");
+        uint leaderboardLength = leaderboardPlayers.length;
+        require(offset < leaderboardLength, "Invalid offset");
         
-        if(count - offset > leaderboardPlayers.length) {
-            count = leaderboardPlayers.length;
+        if(count - offset > leaderboardLength) {
+            count = leaderboardLength;
         }
 
         addresses = new address[](count);
         rankings = new uint256[](count);
 
         for (uint256 i = offset; i < offset + count; ++i) {
+            if (i >= leaderboardLength) {
+                break;
+            }
             address playerAddress = leaderboardPlayers[i];
             addresses[i - offset] = playerAddress;
             rankings[i - offset] = playerRanking[playerAddress];
@@ -149,12 +151,13 @@ contract PepemonMatchmaker is ERC1155Holder, ERC721Holder, AdminRole {
      * @param deckId The Deck of who called this function
      */
     function enter(uint256 deckId) public {
-        require(msg.sender == PepemonCardDeck(_deckAddress).ownerOf(deckId), "PepemonMatchmaker: Not your deck");
-        require(PepemonCardDeck(_deckAddress).getBattleCardInDeck(deckId) != 0, "PepemonMatchmaker: Invalid battlecard");
+        PepemonCardDeck deckContract = PepemonCardDeck(_deckAddress);
+        require(msg.sender == deckContract.ownerOf(deckId), "PepemonMatchmaker: Not your deck");
+        require(deckContract.getBattleCardInDeck(deckId) != 0, "PepemonMatchmaker: Invalid battlecard");
 
         // Make sure the player has the minimum amount of support cards required
-        (,uint256 supportCardCount) = PepemonCardDeck(_deckAddress).decks(deckId);
-        require(supportCardCount >= PepemonCardDeck(_deckAddress).MIN_SUPPORT_CARDS(), "PepemonMatchmaker: Not enough support cards");
+        (,uint256 supportCardCount) = deckContract.decks(deckId);
+        require(supportCardCount >= deckContract.MIN_SUPPORT_CARDS(), "PepemonMatchmaker: Not enough support cards");
 
         // If playerRanking is empty, set default ranking
         if (playerRanking[msg.sender] == 0) {

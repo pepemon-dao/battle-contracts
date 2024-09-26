@@ -1,13 +1,16 @@
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
-import { DeployFunction } from 'hardhat-deploy/types';
-import { PEPEMON_DECK, PEPEMON_BATTLE, PEPEMON_FACTORY, PEPEMON_CARD_ORACLE, RNG_ORACLE, PEPEMON_MATCHMAKER, PEPEMON_REWARDPOOL, DEFAULT_RANKING } from './constants';
+import { DeployFunction, DeployResult } from 'hardhat-deploy/types';
+import { PEPEMON_DECK, PEPEMON_BATTLE, PEPEMON_FACTORY, PEPEMON_CARD_ORACLE, RNG_ORACLE, PEPEMON_MATCHMAKER, PEPEMON_REWARDPOOL, DEFAULT_RANKING, PEPEMON_CONFIG, PEPEMON_MATCHMAKER_PVE } from './constants';
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts } = hre;
-  const { deploy, log } = deployments;
+  const { deploy, log, execute } = deployments;
 
   const { deployer } = await getNamedAccounts();
-  
+
+  log(`Deploying ${PEPEMON_CONFIG} Contract from ${deployer}...`);
+  let pepemonConfig = await deploy(PEPEMON_CONFIG, { from: deployer, log: true });
+
   log(`Deploying ${PEPEMON_FACTORY} Contract from ${deployer}...`);
   let pepemonFactory = await deploy(PEPEMON_FACTORY, { from: deployer, log: true });
 
@@ -18,7 +21,13 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   let rngOracle = await deploy(RNG_ORACLE, { from: deployer, log: true });
 
   log(`Deploying ${PEPEMON_DECK} Contract from ${deployer}....`);
-  let deckContract = await deploy(PEPEMON_DECK, { from: deployer, log: true });
+  let deckContract = await deploy(PEPEMON_DECK, {
+    from: deployer, 
+    log: true, 
+    args: [
+      pepemonConfig.address
+    ]
+  });
 
   log(`Deploying ${PEPEMON_BATTLE} Contract from ${deployer}....`);
   let pepemonBattle = await deploy(
@@ -27,9 +36,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       from: deployer,
       log: true,
       args: [
-        PepemonCardOracle.address,
-        deckContract.address,
-        rngOracle.address
+        pepemonConfig.address
       ]
     },
   );
@@ -45,26 +52,50 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       log: true,
       args: [
         DEFAULT_RANKING,
-        pepemonBattle.address,
-        deckContract.address,
-        rewardPoolContract.address
+        pepemonConfig.address
       ]
     }
   );
 
-  // save this deployment to use its address in 002_prepare_test_env.ts
-  await hre.deployments.save(PEPEMON_MATCHMAKER, {
-    abi: pepemonMatchmaker.abi,
-    address: pepemonMatchmaker.address,
+  log(`Deploying ${PEPEMON_MATCHMAKER_PVE} Contract from ${deployer}....`);
+  let pepemonMatchmakerPve = await deploy(
+    PEPEMON_MATCHMAKER_PVE,
+    {
+      from: deployer,
+      log: true,
+      args: [
+        DEFAULT_RANKING,
+        pepemonConfig.address
+      ]
+    }
+  );
+
+  async function save_address_config(contract: string, deployment: DeployResult) {
+    console.log(`Saving address of ${contract} in ${PEPEMON_CONFIG}...`)
+    await execute(PEPEMON_CONFIG, { from: deployer, log: true }, "setContractAddress", contract, deployment.address, false);
+
+    // save this deployment to use its address in 001_set_connections.ts
+    await hre.deployments.save(contract, {
+      abi: deployment.abi,
+      address: deployment.address,
+    });
+  }
+
+  await save_address_config(PEPEMON_FACTORY, pepemonFactory);
+  await save_address_config(PEPEMON_CARD_ORACLE, PepemonCardOracle);
+  await save_address_config(PEPEMON_DECK, deckContract);
+  await save_address_config(RNG_ORACLE, rngOracle);
+  await save_address_config(PEPEMON_BATTLE, pepemonBattle);
+  await save_address_config(PEPEMON_REWARDPOOL, rewardPoolContract);
+  await save_address_config(PEPEMON_MATCHMAKER, pepemonMatchmaker);
+  await save_address_config(PEPEMON_MATCHMAKER_PVE, pepemonMatchmakerPve);
+
+  await hre.deployments.save(PEPEMON_CONFIG, {
+    abi: pepemonConfig.abi,
+    address: pepemonConfig.address,
   });
-  
-  await hre.deployments.save(PEPEMON_DECK, {
-    abi: deckContract.abi,
-    address: deckContract.address,
-  });
-  
-}; 
+};
 
 export default func;
 
-func.tags = [PEPEMON_DECK, PEPEMON_BATTLE, PEPEMON_FACTORY, PEPEMON_CARD_ORACLE, RNG_ORACLE, PEPEMON_MATCHMAKER, PEPEMON_REWARDPOOL];
+func.tags = [PEPEMON_DECK, PEPEMON_BATTLE, PEPEMON_FACTORY, PEPEMON_CARD_ORACLE, RNG_ORACLE, PEPEMON_MATCHMAKER, PEPEMON_MATCHMAKER_PVE, PEPEMON_REWARDPOOL];

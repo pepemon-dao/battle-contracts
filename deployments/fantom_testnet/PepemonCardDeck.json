@@ -1,10 +1,42 @@
 {
-  "address": "0x12EaA00470d8160DC43C11c32fD8c30E5fca0C05",
+  "address": "0x91a489d0262A7627dc2b202C8799C71cAa620630",
   "abi": [
     {
-      "inputs": [],
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_configAddress",
+          "type": "address"
+        }
+      ],
       "stateMutability": "nonpayable",
       "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "AdminAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "AdminRemoved",
+      "type": "event"
     },
     {
       "anonymous": false,
@@ -62,25 +94,6 @@
         {
           "indexed": true,
           "internalType": "address",
-          "name": "previousOwner",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "newOwner",
-          "type": "address"
-        }
-      ],
-      "name": "OwnershipTransferred",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
           "name": "from",
           "type": "address"
         },
@@ -124,6 +137,19 @@
         }
       ],
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "addAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -177,6 +203,25 @@
     {
       "inputs": [
         {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "allowedInitialDeckBattleCards",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "address",
           "name": "to",
           "type": "address"
@@ -213,7 +258,7 @@
     },
     {
       "inputs": [],
-      "name": "battleCardAddress",
+      "name": "configAddress",
       "outputs": [
         {
           "internalType": "address",
@@ -250,6 +295,19 @@
           "internalType": "uint256",
           "name": "supportCardCount",
           "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "factoryAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
         }
       ],
       "stateMutability": "view",
@@ -397,6 +455,25 @@
       "inputs": [
         {
           "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "isAdmin",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
           "name": "owner",
           "type": "address"
         },
@@ -420,6 +497,19 @@
     {
       "inputs": [],
       "name": "mintCards",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "battleCardId",
+          "type": "uint256"
+        }
+      ],
+      "name": "mintInitialDeck",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -516,19 +606,6 @@
       "type": "function"
     },
     {
-      "inputs": [],
-      "name": "owner",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "inputs": [
         {
           "internalType": "uint256",
@@ -566,6 +643,19 @@
           "internalType": "uint256",
           "name": "",
           "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "randNrGenContract",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
         }
       ],
       "stateMutability": "view",
@@ -616,7 +706,7 @@
     },
     {
       "inputs": [],
-      "name": "renounceOwnership",
+      "name": "renounceAdmin",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -663,7 +753,7 @@
         },
         {
           "internalType": "bytes",
-          "name": "_data",
+          "name": "data",
           "type": "bytes"
         }
       ],
@@ -694,11 +784,34 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_battleCardAddress",
+          "name": "_configAddress",
           "type": "address"
         }
       ],
-      "name": "setBattleCardAddress",
+      "name": "setConfigAddress",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "battleCardIds",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "supportCards",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "uint256",
+          "name": "maxInitialSupportCards",
+          "type": "uint256"
+        }
+      ],
+      "name": "setInitialDeckOptions",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -751,11 +864,11 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "_supportCardAddress",
+          "name": "randOracleAddress",
           "type": "address"
         }
       ],
-      "name": "setSupportCardAddress",
+      "name": "setRandNrGenContractAddress",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -779,19 +892,6 @@
           "internalType": "uint256[]",
           "name": "",
           "type": "uint256[]"
-        }
-      ],
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "name": "supportCardAddress",
-      "outputs": [
-        {
-          "internalType": "address",
-          "name": "",
-          "type": "address"
         }
       ],
       "stateMutability": "view",
@@ -827,6 +927,13 @@
         }
       ],
       "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "syncConfig",
+      "outputs": [],
+      "stateMutability": "nonpayable",
       "type": "function"
     },
     {
@@ -870,20 +977,7 @@
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "address",
-          "name": "newOwner",
-          "type": "address"
-        }
-      ],
-      "name": "transferOwnership",
-      "outputs": [],
-      "stateMutability": "nonpayable",
-      "type": "function"
     }
   ],
-  "numDeployments": 3
+  "numDeployments": 2
 }

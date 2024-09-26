@@ -21,7 +21,7 @@ contract WhitelistAdminRole is Context {
     }
 
     modifier onlyWhitelistAdmin() {
-        require(isWhitelistAdmin(_msgSender()), "WhitelistAdminRole: caller does not have the WhitelistAdmin role");
+        require(isWhitelistAdmin(_msgSender()), "Not an admin");
         _;
     }
 

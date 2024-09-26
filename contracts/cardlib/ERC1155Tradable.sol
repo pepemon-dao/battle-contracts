@@ -46,28 +46,9 @@ contract ERC1155Tradable is ERC1155, ERC1155MintBurn, ERC1155Metadata, Ownable, 
     }
 
     function uri(uint256 _id) public view returns (string memory) {
-        require(_exists(_id), "ERC1155Tradable#uri: NONEXISTENT_TOKEN");
+        require(_exists(_id), "NONEXISTENT_TOKEN");
         return _getUri(_id);
     }
-
-    /**
-     * @dev Returns the total quantity for a token ID
-     * @param _id uint256 ID of the token to query
-     * @return amount of token in existence
-     */
-    function totalSupply(uint256 _id) public view returns (uint256) {
-        return tokenSupply[_id];
-    }
-
-    /**
-     * @dev Returns the max quantity for a token ID
-     * @param _id uint256 ID of the token to query
-     * @return amount of token in existence
-     */
-    function maxSupply(uint256 _id) public view returns (uint256) {
-        return tokenMaxSupply[_id];
-    }
-
 
     /**
      * @dev Creates a new token type and assigns _initialSupply to an address
@@ -84,9 +65,9 @@ contract ERC1155Tradable is ERC1155, ERC1155MintBurn, ERC1155Metadata, Ownable, 
         bytes memory _data
         
     ) internal  returns (uint256 tokenId) {
-        require(_initialSupply <= _maxSupply, "Initial supply cannot be more than max supply");
-        uint256 _id = _getNextTokenID();
+        require(_initialSupply <= _maxSupply);
         _currentTokenID++;
+        uint256 _id = _currentTokenID;
         creators[_id] = msg.sender;
 
         if (bytes(_uri).length > 0) {
@@ -155,14 +136,6 @@ contract ERC1155Tradable is ERC1155, ERC1155MintBurn, ERC1155Metadata, Ownable, 
      */
     function _exists(uint256 _id) internal view returns (bool) {
         return creators[_id] != address(0);
-    }
-
-    /**
-     * @dev calculates the next token ID based on value of _currentTokenID
-     * @return uint256 for the next token ID
-     */
-    function _getNextTokenID() private view returns (uint256) {
-        return _currentTokenID+1;
     }
 
     /**

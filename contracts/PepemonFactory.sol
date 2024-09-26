@@ -40,7 +40,7 @@ contract PepemonFactory is ERC1155Tradable {
         uint256 _id,
         uint256 _amount
     ) public onlyMinter {
-        require(balanceOf(_account, _id) >= _amount, "Cannot burn more than addres has");
+        require(balanceOf(_account, _id) >= _amount, "Exceeded available amount");
         _burn(_account, _id, _amount);
     }
 
@@ -61,6 +61,16 @@ contract PepemonFactory is ERC1155Tradable {
     ) external onlyMinter {
         for (uint256 i = start; i <= end; i++) {
             mintPepe(to, i, 1, hex"");
+        }
+    }
+
+    function batchMintList(
+        uint256[] calldata ids,
+        address to
+    ) external onlyMinter {
+        uint256 length = ids.length;
+        for (uint256 i = 0; i <= length; i++) {
+            mintPepe(to, ids[i], 1, hex"");
         }
     }
 }

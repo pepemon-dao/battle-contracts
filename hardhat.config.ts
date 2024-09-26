@@ -17,7 +17,6 @@ console.log("Forking is " + (environment.disableForking ? "disabled" : "enabled"
 const config: HardhatUserConfig = {
   solidity: {
     version: '0.8.6',
-    // version: "0.7.4",
     settings: {
       optimizer: {
         enabled: true,
