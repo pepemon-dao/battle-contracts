@@ -76,6 +76,10 @@ const config: HardhatUserConfig = {
       url: 'https://rpc.ankr.com/fantom',
       accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)]
     },
+    fantom_sonic_testnet: {
+      url: 'https://rpc.testnet.soniclabs.com',
+      accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)]
+    },
     pepechain_testnet: {
       url: 'https://l2-pepechain-testnet-8uk55qlld4.t.conduit.xyz',
       accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)],

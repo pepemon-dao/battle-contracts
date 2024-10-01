@@ -1,0 +1,891 @@
+{
+  "address": "0x5aC1254f6c8cD976e796c951D7fE92eEF0eB70BE",
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "AdminAdded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "AdminRemoved",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "cardId",
+          "type": "uint256"
+        }
+      ],
+      "name": "BattleCardCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "cardId",
+          "type": "uint256"
+        }
+      ],
+      "name": "BattleCardUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "cardId",
+          "type": "uint256"
+        }
+      ],
+      "name": "SupportCardCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "sender",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "cardId",
+          "type": "uint256"
+        }
+      ],
+      "name": "SupportCardUpdated",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "addAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "battleCardId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum PepemonCardOracle.BattleCardTypes",
+              "name": "element",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint16",
+              "name": "hp",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "spd",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "inte",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "def",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "atk",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "sAtk",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "sDef",
+              "type": "uint16"
+            }
+          ],
+          "internalType": "struct PepemonCardOracle.BattleCardStats",
+          "name": "cardData",
+          "type": "tuple"
+        }
+      ],
+      "name": "addBattleCard",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "supportCardId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum PepemonCardOracle.SupportCardType",
+              "name": "supportCardType",
+              "type": "uint8"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "int16",
+                  "name": "basePower",
+                  "type": "int16"
+                },
+                {
+                  "internalType": "int16",
+                  "name": "triggeredPower",
+                  "type": "int16"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectTo",
+                  "name": "effectTo",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectFor",
+                  "name": "effectFor",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint16",
+                  "name": "reqCode",
+                  "type": "uint16"
+                }
+              ],
+              "internalType": "struct PepemonCardOracle.EffectOne",
+              "name": "effectOne",
+              "type": "tuple"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "int16",
+                  "name": "power",
+                  "type": "int16"
+                },
+                {
+                  "internalType": "uint16",
+                  "name": "numTurns",
+                  "type": "uint16"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectTo",
+                  "name": "effectTo",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectFor",
+                  "name": "effectFor",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint16",
+                  "name": "reqCode",
+                  "type": "uint16"
+                }
+              ],
+              "internalType": "struct PepemonCardOracle.EffectMany",
+              "name": "effectMany",
+              "type": "tuple"
+            },
+            {
+              "internalType": "bool",
+              "name": "unstackable",
+              "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "unresettable",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct PepemonCardOracle.SupportCardStats",
+          "name": "cardData",
+          "type": "tuple"
+        }
+      ],
+      "name": "addSupportCard",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "battleCardStats",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "battleCardId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum PepemonCardOracle.BattleCardTypes",
+          "name": "element",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint16",
+          "name": "hp",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint16",
+          "name": "spd",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint16",
+          "name": "inte",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint16",
+          "name": "def",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint16",
+          "name": "atk",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint16",
+          "name": "sAtk",
+          "type": "uint16"
+        },
+        {
+          "internalType": "uint16",
+          "name": "sDef",
+          "type": "uint16"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum PepemonCardOracle.BattleCardTypes",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "name": "elementDecode",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "getBattleCardById",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "battleCardId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum PepemonCardOracle.BattleCardTypes",
+              "name": "element",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint16",
+              "name": "hp",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "spd",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "inte",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "def",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "atk",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "sAtk",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "sDef",
+              "type": "uint16"
+            }
+          ],
+          "internalType": "struct PepemonCardOracle.BattleCardStats",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "getSupportCardById",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "supportCardId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum PepemonCardOracle.SupportCardType",
+              "name": "supportCardType",
+              "type": "uint8"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "int16",
+                  "name": "basePower",
+                  "type": "int16"
+                },
+                {
+                  "internalType": "int16",
+                  "name": "triggeredPower",
+                  "type": "int16"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectTo",
+                  "name": "effectTo",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectFor",
+                  "name": "effectFor",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint16",
+                  "name": "reqCode",
+                  "type": "uint16"
+                }
+              ],
+              "internalType": "struct PepemonCardOracle.EffectOne",
+              "name": "effectOne",
+              "type": "tuple"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "int16",
+                  "name": "power",
+                  "type": "int16"
+                },
+                {
+                  "internalType": "uint16",
+                  "name": "numTurns",
+                  "type": "uint16"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectTo",
+                  "name": "effectTo",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectFor",
+                  "name": "effectFor",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint16",
+                  "name": "reqCode",
+                  "type": "uint16"
+                }
+              ],
+              "internalType": "struct PepemonCardOracle.EffectMany",
+              "name": "effectMany",
+              "type": "tuple"
+            },
+            {
+              "internalType": "bool",
+              "name": "unstackable",
+              "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "unresettable",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct PepemonCardOracle.SupportCardStats",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "_id",
+          "type": "uint256"
+        }
+      ],
+      "name": "getSupportCardTypeById",
+      "outputs": [
+        {
+          "internalType": "enum PepemonCardOracle.SupportCardType",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum PepemonCardOracle.BattleCardTypes",
+          "name": "element",
+          "type": "uint8"
+        }
+      ],
+      "name": "getWeakResist",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "enum PepemonCardOracle.BattleCardTypes",
+              "name": "weakness",
+              "type": "uint8"
+            },
+            {
+              "internalType": "enum PepemonCardOracle.BattleCardTypes",
+              "name": "resistance",
+              "type": "uint8"
+            }
+          ],
+          "internalType": "struct PepemonCardOracle.elementWR",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "isAdmin",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceAdmin",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "supportCardStats",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "supportCardId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum PepemonCardOracle.SupportCardType",
+          "name": "supportCardType",
+          "type": "uint8"
+        },
+        {
+          "components": [
+            {
+              "internalType": "int16",
+              "name": "basePower",
+              "type": "int16"
+            },
+            {
+              "internalType": "int16",
+              "name": "triggeredPower",
+              "type": "int16"
+            },
+            {
+              "internalType": "enum PepemonCardOracle.EffectTo",
+              "name": "effectTo",
+              "type": "uint8"
+            },
+            {
+              "internalType": "enum PepemonCardOracle.EffectFor",
+              "name": "effectFor",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint16",
+              "name": "reqCode",
+              "type": "uint16"
+            }
+          ],
+          "internalType": "struct PepemonCardOracle.EffectOne",
+          "name": "effectOne",
+          "type": "tuple"
+        },
+        {
+          "components": [
+            {
+              "internalType": "int16",
+              "name": "power",
+              "type": "int16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "numTurns",
+              "type": "uint16"
+            },
+            {
+              "internalType": "enum PepemonCardOracle.EffectTo",
+              "name": "effectTo",
+              "type": "uint8"
+            },
+            {
+              "internalType": "enum PepemonCardOracle.EffectFor",
+              "name": "effectFor",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint16",
+              "name": "reqCode",
+              "type": "uint16"
+            }
+          ],
+          "internalType": "struct PepemonCardOracle.EffectMany",
+          "name": "effectMany",
+          "type": "tuple"
+        },
+        {
+          "internalType": "bool",
+          "name": "unstackable",
+          "type": "bool"
+        },
+        {
+          "internalType": "bool",
+          "name": "unresettable",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "battleCardId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum PepemonCardOracle.BattleCardTypes",
+              "name": "element",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint16",
+              "name": "hp",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "spd",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "inte",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "def",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "atk",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "sAtk",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint16",
+              "name": "sDef",
+              "type": "uint16"
+            }
+          ],
+          "internalType": "struct PepemonCardOracle.BattleCardStats",
+          "name": "cardData",
+          "type": "tuple"
+        }
+      ],
+      "name": "updateBattleCard",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "supportCardId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum PepemonCardOracle.SupportCardType",
+              "name": "supportCardType",
+              "type": "uint8"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "int16",
+                  "name": "basePower",
+                  "type": "int16"
+                },
+                {
+                  "internalType": "int16",
+                  "name": "triggeredPower",
+                  "type": "int16"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectTo",
+                  "name": "effectTo",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectFor",
+                  "name": "effectFor",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint16",
+                  "name": "reqCode",
+                  "type": "uint16"
+                }
+              ],
+              "internalType": "struct PepemonCardOracle.EffectOne",
+              "name": "effectOne",
+              "type": "tuple"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "int16",
+                  "name": "power",
+                  "type": "int16"
+                },
+                {
+                  "internalType": "uint16",
+                  "name": "numTurns",
+                  "type": "uint16"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectTo",
+                  "name": "effectTo",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "enum PepemonCardOracle.EffectFor",
+                  "name": "effectFor",
+                  "type": "uint8"
+                },
+                {
+                  "internalType": "uint16",
+                  "name": "reqCode",
+                  "type": "uint16"
+                }
+              ],
+              "internalType": "struct PepemonCardOracle.EffectMany",
+              "name": "effectMany",
+              "type": "tuple"
+            },
+            {
+              "internalType": "bool",
+              "name": "unstackable",
+              "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "unresettable",
+              "type": "bool"
+            }
+          ],
+          "internalType": "struct PepemonCardOracle.SupportCardStats",
+          "name": "cardData",
+          "type": "tuple"
+        }
+      ],
+      "name": "updateSupportCard",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "enum PepemonCardOracle.BattleCardTypes",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "name": "weakResist",
+      "outputs": [
+        {
+          "internalType": "enum PepemonCardOracle.BattleCardTypes",
+          "name": "weakness",
+          "type": "uint8"
+        },
+        {
+          "internalType": "enum PepemonCardOracle.BattleCardTypes",
+          "name": "resistance",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "numDeployments": 2
+}
