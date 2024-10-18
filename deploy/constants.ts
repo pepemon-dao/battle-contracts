@@ -8,6 +8,7 @@ export const PEPEMON_CARD_ORACLE = 'PepemonCardOracle';
 export const PEPEMON_BATTLE = 'PepemonBattle';
 export const PEPEMON_FACTORY = 'PepemonFactory';
 export const PEPEMON_MATCHMAKER = 'PepemonMatchmaker';
+export const PEPEMON_MATCHMAKER_PVE = 'PepemonMatchmakerPve';
 export const PEPEMON_REWARDPOOL = 'PepemonRewardPool';
 
 export const DEFAULT_RANKING = 2000;

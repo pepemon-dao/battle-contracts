@@ -37,6 +37,12 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   console.log("Setting PepemonMatchmakerPve's Contract as a PepemonRewardPool admin...")
   await execute(PEPEMON_REWARDPOOL, {from: deployer, log: true }, "addAdmin", pepemonMatchmakerPve.address);
+
+  console.log("Allow PepemonMatchmakerPve's Contract to manage Decks of the deployer (needed to add a deck to the pve)")
+  await hre.deployments.execute(PEPEMON_DECK, { from: deployer, log: true }, 'setApprovalForAll', pepemonMatchmakerPve.address, true);
+
+  // Note: after everything is deployed, addPveDeck has to be called by the same deployer
+  // to add admin decks in the pve matchmaker, this way people can fight against that deck 
 };
 
 export default func;
