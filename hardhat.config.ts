@@ -46,7 +46,7 @@ const config: HardhatUserConfig = {
     hardhat: {
       forking: {
         enabled: !environment.disableForking,
-        url: 'https://rpc.ankr.com/fantom_testnet'
+        url: 'https://rpc.blaze.soniclabs.com'
       },
       // accounts: {
       //   mnemonic: '',
@@ -76,8 +76,8 @@ const config: HardhatUserConfig = {
       url: 'https://rpc.ankr.com/fantom',
       accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)]
     },
-    fantom_sonic_testnet: {
-      url: 'https://rpc.testnet.soniclabs.com',
+    sonic_testnet: {
+      url: 'https://rpc.blaze.soniclabs.com',
       accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)]
     },
     pepechain_testnet: {
@@ -101,7 +101,8 @@ const config: HardhatUserConfig = {
     apiKey: {
       ethereum: environment.etherScanKey,
       pepechain_testnet: "NONE",
-      ftmTestnet: environment.ftmTestnetApiKey // get a key from: https://ftmscan.com/myapikey
+      ftmTestnet: environment.ftmTestnetApiKey, // get a key from: https://ftmscan.com/myapikey
+      sonic_testnet: environment.sonicApiKey
     },
     customChains: [
       {
@@ -111,7 +112,15 @@ const config: HardhatUserConfig = {
           apiURL: "https://explorerl2new-pepechain-testnet-8uk55qlld4.t.conduit.xyz/api",
           browserURL: "https://explorerl2new-pepechain-testnet-8uk55qlld4.t.conduit.xyz"
         }
-      }
+      },
+	  {
+        network: "sonic_testnet",
+        chainId: 57054,
+        urls: {
+          apiURL: "https://api-testnet.sonicscan.org/api",
+          browserURL: "https://testnet.sonicscan.org"
+        }
+      },
     ]
   },
   mocha: {
