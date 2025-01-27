@@ -102,7 +102,7 @@ const config: HardhatUserConfig = {
       ethereum: environment.etherScanKey,
       pepechain_testnet: "NONE",
       ftmTestnet: environment.ftmTestnetApiKey, // get a key from: https://ftmscan.com/myapikey
-	    sonic_testnet: environment.sonicApiKey
+      sonic_testnet: environment.sonicApiKey
     },
     customChains: [
       {
