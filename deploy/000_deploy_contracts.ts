@@ -4,21 +4,33 @@ import { PEPEMON_DECK, PEPEMON_BATTLE, PEPEMON_FACTORY, PEPEMON_CARD_ORACLE, RNG
 
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts } = hre;
-  const { deploy, log, execute } = deployments;
+  const { log, execute } = deployments;
 
   const { deployer } = await getNamedAccounts();
+
+  let deployWrapper = async (...args: any) => {
+    while (true) {
+      try {
+        return await deployments.deploy(...args);
+      } catch (e) {
+        console.log("Error: " + e)
+        console.log("Trying again")
+      }
+    }
+  }
+  const deploy = deployWrapper;
 
   log(`Deploying ${PEPEMON_CONFIG} Contract from ${deployer}...`);
   let pepemonConfig = await deploy(PEPEMON_CONFIG, { from: deployer, log: true });
 
   log(`Deploying ${PEPEMON_FACTORY} Contract from ${deployer}...`);
-  let pepemonFactory = await deploy(PEPEMON_FACTORY, { from: deployer, log: true });
+  let pepemonFactory = await deploy(PEPEMON_FACTORY, { from: deployer, log: true, gasLimit: 10000000 });
 
   log(`Deploying ${PEPEMON_CARD_ORACLE} Contract from ${deployer}...`);
-  let PepemonCardOracle = await deploy(PEPEMON_CARD_ORACLE, { from: deployer, log: true });
+  let PepemonCardOracle = await deploy(PEPEMON_CARD_ORACLE, { from: deployer, log: true, gasLimit: 10000000 });
 
   log(`Deploying ${RNG_ORACLE} Contract from ${deployer}...`);
-  let rngOracle = await deploy(RNG_ORACLE, { from: deployer, log: true });
+  let rngOracle = await deploy(RNG_ORACLE, { from: deployer, log: true, gasLimit: 10000000 });
 
   log(`Deploying ${PEPEMON_DECK} Contract from ${deployer}....`);
   let deckContract = await deploy(PEPEMON_DECK, {
@@ -26,7 +38,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     log: true, 
     args: [
       pepemonConfig.address
-    ]
+    ], gasLimit: 10000000
   });
 
   log(`Deploying ${PEPEMON_BATTLE} Contract from ${deployer}....`);
@@ -37,12 +49,12 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       log: true,
       args: [
         pepemonConfig.address
-      ]
+      ], gasLimit: 10000000
     },
   );
 
   log(`Deploying ${PEPEMON_REWARDPOOL} Contract from ${deployer}....`);
-  let rewardPoolContract = await deploy(PEPEMON_REWARDPOOL, { from: deployer, log: true });
+  let rewardPoolContract = await deploy(PEPEMON_REWARDPOOL, { from: deployer, log: true, gasLimit: 10000000 });
 
   log(`Deploying ${PEPEMON_MATCHMAKER} Contract from ${deployer}....`);
   let pepemonMatchmaker = await deploy(
@@ -53,7 +65,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       args: [
         DEFAULT_RANKING,
         pepemonConfig.address
-      ]
+      ], gasLimit: 10000000
     }
   );
 
@@ -66,7 +78,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       args: [
         DEFAULT_RANKING,
         pepemonConfig.address
-      ]
+      ], gasLimit: 10000000
     }
   );
 

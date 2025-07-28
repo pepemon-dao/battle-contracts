@@ -6,7 +6,21 @@ import { BATTLECARDS, SUPPORTCARDS, SUPPORTCARDS_ORACLE, factoryBattlecardStats,
 const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts } = hre;
   const { deployer } = await getNamedAccounts();
-  const { execute } = deployments;
+  //const { execute } = deployments;
+
+  let executeWrapper = async (...args: any) => {
+    //while (true) {
+      try {
+        console.log("Executing wrapped: " + args)
+        return await deployments.execute(...args);
+      } catch (e) {
+        console.log("Error: " + e)
+        await new Promise(f => setTimeout(f, 5000));
+      }
+    //}
+  }
+  const execute = executeWrapper;
+
 
   const makeOracleBattlecard = function (id: number, stats: (string | number)[]) {
     return [
@@ -24,17 +38,19 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   console.log(`Creating battle cards on contract: ${PEPEMON_CARD_ORACLE}...`);
   for(let i = 0; i < BATTLECARDS.length; i++){
+    await new Promise(f => setTimeout(f, 2000));
     const stats = BATTLECARDS[i];
     console.log(`Creating BattleCard: ${stats[9]} `);
-    await execute(PEPEMON_CARD_ORACLE, { from: deployer, log: true }, 'addBattleCard', 
+    await execute(PEPEMON_CARD_ORACLE, { from: deployer, log: true, gasLimit: 10000000 }, 'addBattleCard', 
       makeOracleBattlecard(i + 1, stats),  // cardData with id offset
     )
   }
 
   console.log(`Creating support cards on contract: ${PEPEMON_CARD_ORACLE}..`);
   for(const element of SUPPORTCARDS_ORACLE) {
+    await new Promise(f => setTimeout(f, 2000));
     console.log(`Creating SupportCard: ${element[2]}`);
-    await execute(PEPEMON_CARD_ORACLE, { from: deployer, log: true }, 'addSupportCard', 
+    await execute(PEPEMON_CARD_ORACLE, { from: deployer, log: true, gasLimit: 10000000 }, 'addSupportCard', 
       element   // cardData
     )
   }

@@ -80,6 +80,13 @@ const config: HardhatUserConfig = {
       url: 'https://rpc.blaze.soniclabs.com',
       accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)]
     },
+    megaeth_testnet: {
+      url: 'https://carrot.megaeth.com/rpc',
+      accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)],
+      minGasPrice: 8091966,
+      gasPrice: 60919660,
+      gas: 8091966
+    },
     pepechain_testnet: {
       url: 'https://l2-pepechain-testnet-8uk55qlld4.t.conduit.xyz',
       accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)],
