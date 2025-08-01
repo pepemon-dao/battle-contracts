@@ -10,15 +10,21 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   log(`Deploying ${PEPEMON_CONFIG} Contract from ${deployer}...`);
   let pepemonConfig = await deploy(PEPEMON_CONFIG, { from: deployer, log: true });
+  // different networks behave differently, even awaiting transactions isnt enough and the nonce isnt incremented
+  // this artificial delay is the only way to guarantee that transactions are actually done and the next one is ready
+  await new Promise(f => setTimeout(f, 5000));
 
   log(`Deploying ${PEPEMON_FACTORY} Contract from ${deployer}...`);
   let pepemonFactory = await deploy(PEPEMON_FACTORY, { from: deployer, log: true });
+  await new Promise(f => setTimeout(f, 5000));
 
   log(`Deploying ${PEPEMON_CARD_ORACLE} Contract from ${deployer}...`);
   let PepemonCardOracle = await deploy(PEPEMON_CARD_ORACLE, { from: deployer, log: true });
+  await new Promise(f => setTimeout(f, 5000));
 
   log(`Deploying ${RNG_ORACLE} Contract from ${deployer}...`);
   let rngOracle = await deploy(RNG_ORACLE, { from: deployer, log: true });
+  await new Promise(f => setTimeout(f, 5000));
 
   log(`Deploying ${PEPEMON_DECK} Contract from ${deployer}....`);
   let deckContract = await deploy(PEPEMON_DECK, {
@@ -28,6 +34,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       pepemonConfig.address
     ]
   });
+  await new Promise(f => setTimeout(f, 5000));
 
   log(`Deploying ${PEPEMON_BATTLE} Contract from ${deployer}....`);
   let pepemonBattle = await deploy(
@@ -40,9 +47,11 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       ]
     },
   );
+  await new Promise(f => setTimeout(f, 5000));
 
   log(`Deploying ${PEPEMON_REWARDPOOL} Contract from ${deployer}....`);
   let rewardPoolContract = await deploy(PEPEMON_REWARDPOOL, { from: deployer, log: true });
+  await new Promise(f => setTimeout(f, 5000));
 
   log(`Deploying ${PEPEMON_MATCHMAKER} Contract from ${deployer}....`);
   let pepemonMatchmaker = await deploy(
@@ -56,6 +65,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       ]
     }
   );
+  await new Promise(f => setTimeout(f, 5000));
 
   log(`Deploying ${PEPEMON_MATCHMAKER_PVE} Contract from ${deployer}....`);
   let pepemonMatchmakerPve = await deploy(
@@ -69,10 +79,12 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       ]
     }
   );
+  await new Promise(f => setTimeout(f, 5000));
 
   async function save_address_config(contract: string, deployment: DeployResult) {
     console.log(`Saving address of ${contract} in ${PEPEMON_CONFIG}...`)
     await execute(PEPEMON_CONFIG, { from: deployer, log: true }, "setContractAddress", contract, deployment.address, false);
+    await new Promise(f => setTimeout(f, 5000));
 
     // save this deployment to use its address in 001_set_connections.ts
     await hre.deployments.save(contract, {

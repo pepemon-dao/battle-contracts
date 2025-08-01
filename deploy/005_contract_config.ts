@@ -14,15 +14,20 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   // Set defaults
   await hre.deployments.execute(PEPEMON_DECK, { from: deployer, log: true }, 'setMinSupportCards', 1);
+  await new Promise(f => setTimeout(f, 5000));
   await hre.deployments.execute(PEPEMON_DECK, { from: deployer, log: true }, 'setMaxSupportCards', 60);
+  await new Promise(f => setTimeout(f, 5000));
 
   // allows minting test cards
-  await hre.deployments.execute(PEPEMON_FACTORY, {from: deployer }, "addMinter", deckContract.address);
+  await hre.deployments.execute(PEPEMON_FACTORY, {from: deployer, log: true  }, "addMinter", deckContract.address);
+  await new Promise(f => setTimeout(f, 5000));
   await hre.deployments.execute(PEPEMON_DECK, { from: deployer, log: true }, 'setMintingCards', firstCardId, lastCardId);
+  await new Promise(f => setTimeout(f, 5000));
 
   // Allow fighting yourself
-  await hre.deployments.execute(PEPEMON_MATCHMAKER, {from: deployer }, "setAllowBattleAgainstOneself", true);
-  await hre.deployments.execute(PEPEMON_BATTLE, {from: deployer }, "setAllowBattleAgainstOneself", true);
+  await hre.deployments.execute(PEPEMON_MATCHMAKER, {from: deployer, log: true }, "setAllowBattleAgainstOneself", true);
+  await new Promise(f => setTimeout(f, 5000));
+  await hre.deployments.execute(PEPEMON_BATTLE, {from: deployer, log: true }, "setAllowBattleAgainstOneself", true);
 };
 
 export default func;

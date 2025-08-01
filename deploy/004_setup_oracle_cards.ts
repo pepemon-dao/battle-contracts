@@ -7,7 +7,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const { deployments, getNamedAccounts } = hre;
   const { deployer } = await getNamedAccounts();
   const { execute } = deployments;
-
+  
   const makeOracleBattlecard = function (id: number, stats: (string | number)[]) {
     return [
       /*battleCardId  */ id, 
@@ -29,6 +29,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     await execute(PEPEMON_CARD_ORACLE, { from: deployer, log: true }, 'addBattleCard', 
       makeOracleBattlecard(i + 1, stats),  // cardData with id offset
     )
+    await new Promise(f => setTimeout(f, 5000));
   }
 
   console.log(`Creating support cards on contract: ${PEPEMON_CARD_ORACLE}..`);
@@ -37,8 +38,10 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     await execute(PEPEMON_CARD_ORACLE, { from: deployer, log: true }, 'addSupportCard', 
       element   // cardData
     )
+    await new Promise(f => setTimeout(f, 5000));
   }
-
+  
+  await new Promise(f => setTimeout(f, 5000));
   console.log("Cards created successfully.");
 };
 

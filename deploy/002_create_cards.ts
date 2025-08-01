@@ -19,6 +19,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       "",       // _uri
       []        // _data
     )
+    await new Promise(f => setTimeout(f, 5000));
   }
 
   console.log(`Creating support cards..`);
@@ -31,6 +32,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       "",       // _uri
       []        // _data
     )
+    await new Promise(f => setTimeout(f, 5000));
   }
 
   console.log("Cards created successfully.");
