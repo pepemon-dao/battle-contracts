@@ -46,7 +46,7 @@ const config: HardhatUserConfig = {
     hardhat: {
       forking: {
         enabled: !environment.disableForking,
-        url: 'https://rpc.ankr.com/fantom_testnet'
+        url: 'https://base-sepolia.drpc.org'
       },
       // accounts: {
       //   mnemonic: '',
@@ -78,6 +78,10 @@ const config: HardhatUserConfig = {
     },
     fantom_sonic_testnet: {
       url: 'https://rpc.testnet.soniclabs.com',
+      accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)]
+    },
+    base_sepolia_testnet: {
+      url: 'https://base-sepolia.drpc.org',
       accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)]
     },
     pepechain_testnet: {

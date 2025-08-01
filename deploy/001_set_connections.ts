@@ -13,33 +13,45 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   async function sync_config(contract: string) {
     console.log(`Setting PepemonConfig Contract as a ${contract} admin...`)
     await execute(contract, {from: deployer, log: true }, "addAdmin", pepemonConfig.address);
+    await new Promise(f => setTimeout(f, 5000));
 
     console.log(`Syncig ${contract} config...`)
     await execute(PEPEMON_CONFIG, { from: deployer, log: true }, "syncContractConfig", contract);
+    await new Promise(f => setTimeout(f, 5000));
+
   }
 
   await sync_config(PEPEMON_BATTLE);
+  await new Promise(f => setTimeout(f, 5000));
   await sync_config(PEPEMON_MATCHMAKER);
+  await new Promise(f => setTimeout(f, 5000));
   await sync_config(PEPEMON_MATCHMAKER_PVE);
+  await new Promise(f => setTimeout(f, 5000));
   await sync_config(PEPEMON_DECK);
+  await new Promise(f => setTimeout(f, 5000));
 
   let pepemonMatchmaker = await hre.deployments.get(PEPEMON_MATCHMAKER);
   let pepemonMatchmakerPve = await hre.deployments.get(PEPEMON_MATCHMAKER_PVE);
 
   console.log("Setting PepemonMatchmaker's Contract as a PepemonBattle admin...")
   await execute(PEPEMON_BATTLE, {from: deployer, log: true }, "addAdmin", pepemonMatchmaker.address);
+  await new Promise(f => setTimeout(f, 5000));
 
   console.log("Setting PepemonMatchmaker's Contract as a PepemonRewardPool admin...")
   await execute(PEPEMON_REWARDPOOL, {from: deployer, log: true }, "addAdmin", pepemonMatchmaker.address);
+  await new Promise(f => setTimeout(f, 5000));
 
   console.log("Setting PepemonMatchmakerPve's Contract as a PepemonBattle admin...")
   await execute(PEPEMON_BATTLE, {from: deployer, log: true }, "addAdmin", pepemonMatchmakerPve.address);
+  await new Promise(f => setTimeout(f, 5000));
 
   console.log("Setting PepemonMatchmakerPve's Contract as a PepemonRewardPool admin...")
   await execute(PEPEMON_REWARDPOOL, {from: deployer, log: true }, "addAdmin", pepemonMatchmakerPve.address);
+  await new Promise(f => setTimeout(f, 5000));
 
   console.log("Allow PepemonMatchmakerPve's Contract to manage Decks of the deployer (needed to add a deck to the pve)")
   await hre.deployments.execute(PEPEMON_DECK, { from: deployer, log: true }, 'setApprovalForAll', pepemonMatchmakerPve.address, true);
+  await new Promise(f => setTimeout(f, 5000));
 
   // Note: after everything is deployed, addPveDeck has to be called by the same deployer
   // to add admin decks in the pve matchmaker, this way people can fight against that deck 
