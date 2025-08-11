@@ -8,6 +8,8 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const { deployer } = await getNamedAccounts();
 
+  
+
   log(`Deploying ${PEPEMON_CONFIG} Contract from ${deployer}...`);
   let pepemonConfig = await deploy(PEPEMON_CONFIG, { from: deployer, log: true });
   // different networks behave differently, even awaiting transactions isnt enough and the nonce isnt incremented
@@ -15,11 +17,11 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   await new Promise(f => setTimeout(f, 5000));
 
   log(`Deploying ${PEPEMON_FACTORY} Contract from ${deployer}...`);
-  let pepemonFactory = await deploy(PEPEMON_FACTORY, { from: deployer, log: true });
+  let pepemonFactory = await deploy(PEPEMON_FACTORY, { from: deployer, log: true, gasLimit: 8000000});
   await new Promise(f => setTimeout(f, 5000));
 
   log(`Deploying ${PEPEMON_CARD_ORACLE} Contract from ${deployer}...`);
-  let PepemonCardOracle = await deploy(PEPEMON_CARD_ORACLE, { from: deployer, log: true });
+  let PepemonCardOracle = await deploy(PEPEMON_CARD_ORACLE, { from: deployer, log: true, gasLimit: 8000000 });
   await new Promise(f => setTimeout(f, 5000));
 
   log(`Deploying ${RNG_ORACLE} Contract from ${deployer}...`);
@@ -32,7 +34,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
     log: true, 
     args: [
       pepemonConfig.address
-    ]
+    ], gasLimit: 8000000
   });
   await new Promise(f => setTimeout(f, 5000));
 
@@ -44,13 +46,13 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       log: true,
       args: [
         pepemonConfig.address
-      ]
+      ], gasLimit: 8000000
     },
   );
   await new Promise(f => setTimeout(f, 5000));
 
   log(`Deploying ${PEPEMON_REWARDPOOL} Contract from ${deployer}....`);
-  let rewardPoolContract = await deploy(PEPEMON_REWARDPOOL, { from: deployer, log: true });
+  let rewardPoolContract = await deploy(PEPEMON_REWARDPOOL, { from: deployer, log: true, gasLimit: 8000000 });
   await new Promise(f => setTimeout(f, 5000));
 
   log(`Deploying ${PEPEMON_MATCHMAKER} Contract from ${deployer}....`);
@@ -62,7 +64,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       args: [
         DEFAULT_RANKING,
         pepemonConfig.address
-      ]
+      ], gasLimit: 8000000
     }
   );
   await new Promise(f => setTimeout(f, 5000));
@@ -76,7 +78,7 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
       args: [
         DEFAULT_RANKING,
         pepemonConfig.address
-      ]
+      ], gasLimit: 8000000
     }
   );
   await new Promise(f => setTimeout(f, 5000));

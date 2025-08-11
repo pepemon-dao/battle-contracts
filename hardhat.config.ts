@@ -84,6 +84,10 @@ const config: HardhatUserConfig = {
       url: 'https://base-sepolia.drpc.org',
       accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)]
     },
+    base_mainnet: {
+      url: 'https://base.llamarpc.com',
+      accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)]
+    },
     pepechain_testnet: {
       url: 'https://l2-pepechain-testnet-8uk55qlld4.t.conduit.xyz',
       accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)],
@@ -101,12 +105,11 @@ const config: HardhatUserConfig = {
     },
     proxyOwner: 1,
   },
+  sourcify: {
+    enabled: false
+  },
   etherscan: {
-    apiKey: {
-      ethereum: environment.etherScanKey,
-      pepechain_testnet: "NONE",
-      ftmTestnet: environment.ftmTestnetApiKey // get a key from: https://ftmscan.com/myapikey
-    },
+    apiKey: environment.etherScanKey,
     customChains: [
       {
         network: "pepechain_testnet",
