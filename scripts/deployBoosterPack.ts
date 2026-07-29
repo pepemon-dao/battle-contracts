@@ -30,6 +30,31 @@ const TIERS = [
   { id: 3, name: 'Degen', price: '0.001', battle: 2, common: 8, rare: 7, epic: 3 },
 ];
 
+/**
+ * Blocks until the RPC actually reports code at an address.
+ *
+ * A deployment receipt only proves one node saw the transaction. Public endpoints are load
+ * balanced, so the very next request can hit a node that has not caught up and reports the
+ * address as empty.
+ */
+async function waitForCode(address: string, attempts = 30) {
+  for (let i = 0; i < attempts; i++) {
+    if ((await ethers.provider.getCode(address)) !== '0x') return;
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+  }
+  throw new Error(`Timed out waiting for contract code at ${address}`);
+}
+
+/** Sends a configuration transaction and fails loudly if it reverted. */
+async function send(label: string, call: () => Promise<any>) {
+  const tx = await call();
+  const receipt = await tx.wait();
+  if (receipt.status !== 1) {
+    throw new Error(`${label.trim()} FAILED - transaction ${tx.hash} reverted`);
+  }
+  console.log(label);
+}
+
 async function main() {
   const [deployer] = await ethers.getSigners();
   console.log(`network  : ${network.name}`);
@@ -61,27 +86,44 @@ async function main() {
   }
 
   const BoosterPack = await ethers.getContractFactory('PepemonBoosterPack');
-  const booster = await BoosterPack.deploy(FACTORY, CARD_DECK);
-  await booster.deployed();
-  console.log(`booster  : ${booster.address}`);
 
-  await (await booster.setPools(BATTLE_POOL, COMMON_POOL, RARE_POOL, EPIC_POOL)).wait();
-  console.log('pools    : configured');
+  // Set BOOSTER_ADDRESS to configure a contract that is already deployed, rather than paying to
+  // deploy another one. Useful when deployment succeeded but configuration did not.
+  let booster;
+  if (process.env.BOOSTER_ADDRESS) {
+    booster = BoosterPack.attach(process.env.BOOSTER_ADDRESS);
+    console.log(`booster  : ${booster.address} (existing)`);
+  } else {
+    booster = await BoosterPack.deploy(FACTORY, CARD_DECK);
+    await booster.deployed();
+    console.log(`booster  : ${booster.address}`);
+  }
+
+  await waitForCode(booster.address);
+
+  // Explicit gas limits on every configuration call. deployed() resolving is not a promise that
+  // the next JSON-RPC request reaches a node which has the contract: public endpoints such as
+  // sepolia.base.org are load balanced, and an estimate answered by a node that has not caught
+  // up prices the call as a transfer to an empty account, about 41k gas. The transaction is then
+  // sent with that limit and runs out of gas. Fixed limits do not depend on estimation at all.
+  await send('pools    : configured', () =>
+    booster.setPools(BATTLE_POOL, COMMON_POOL, RARE_POOL, EPIC_POOL, { gasLimit: 4000000 })
+  );
 
   for (const tier of TIERS) {
-    await (
-      await booster.setTier(
+    const size = tier.battle + tier.common + tier.rare + tier.epic;
+    await send(`tier ${tier.id}   : ${tier.name.padEnd(8)} ${tier.price} ETH  ${size} cards`, () =>
+      booster.setTier(
         tier.id,
         ethers.utils.parseEther(tier.price),
         tier.battle,
         tier.common,
         tier.rare,
         tier.epic,
-        true
+        true,
+        { gasLimit: 300000 }
       )
-    ).wait();
-    const size = tier.battle + tier.common + tier.rare + tier.epic;
-    console.log(`tier ${tier.id}   : ${tier.name.padEnd(8)} ${tier.price} ETH  ${size} cards`);
+    );
   }
 
   console.log('\nPaste this address into Web3Settings.pepemonBoosterPackAddress in Unity:');
