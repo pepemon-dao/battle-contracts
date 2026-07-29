@@ -9,5 +9,6 @@ export default {
   ftmTestnetApiKey: process.env.FANTOM_API_KEY ?? '',
   infuraKey: process.env.INFURA_API_KEY ?? '',
   alchemyKey: process.env.ALCHEMY_API_KEY ?? '',
+  baseSepoliaRpc: process.env.BASE_SEPOLIA_RPC ?? 'https://sepolia.base.org',
   alchemyRinkebyKey: process.env.ALCHEMY_RINKEBY_API_KEY ?? '',
 };

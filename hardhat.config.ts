@@ -80,6 +80,11 @@ const config: HardhatUserConfig = {
       url: 'https://rpc.testnet.soniclabs.com',
       accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)]
     },
+    base_sepolia: {
+      url: environment.baseSepoliaRpc,
+      chainId: 84532,
+      accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)],
+    },
     pepechain_testnet: {
       url: 'https://l2-pepechain-testnet-8uk55qlld4.t.conduit.xyz',
       accounts: [environment.privateKey ? environment.privateKey : '0'.repeat(64)],
@@ -101,9 +106,18 @@ const config: HardhatUserConfig = {
     apiKey: {
       ethereum: environment.etherScanKey,
       pepechain_testnet: "NONE",
+      base_sepolia: "NONE",
       ftmTestnet: environment.ftmTestnetApiKey // get a key from: https://ftmscan.com/myapikey
     },
     customChains: [
+      {
+        network: "base_sepolia",
+        chainId: 84532,
+        urls: {
+          apiURL: "https://base-sepolia.blockscout.com/api",
+          browserURL: "https://base-sepolia.blockscout.com"
+        }
+      },
       {
         network: "pepechain_testnet",
         chainId: 906090,
